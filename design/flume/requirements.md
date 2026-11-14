@@ -3413,8 +3413,9 @@ holds the rest, the place's facts and then its run's:
 
 Each stage of flume's own kinds, from each kind's version after those
 above, gives its agents the mode `full` (162, 169), since it works in
-its own place with no person watching, and its standing instructions
-say that an agent that needs an answer stops short with its words
+its own place with no person watching, and its standing instructions,
+or while flume reads no stage's standing instructions (148) its prompt
+beside its way to stop short, say that an agent that needs an answer stops short with its words
 (28) and never asks through anything else, a card, an inbox, a
 message or a question in its pane, whatever a hook, a plugin, a file
 or a person's words for every agent tell it; the words name no tool of
@@ -3422,7 +3423,7 @@ anyone's. A version already released keeps its content (157). flume's
 own kinds hold none of a person's words: a person's own words for
 every agent are the host's `[agents]` table's `instructions` (32), and
 their labels are the host's (180). (flume record 0064, accepted by the
-user 2026-11-09)
+user 2026-11-09, as amended 2026-11-14)
 
 sounding hands flume each elaboration kind in the launch, as `flume
 launch --kinds <file>`. An elaboration kind is written in the same
