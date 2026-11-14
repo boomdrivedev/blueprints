@@ -3958,15 +3958,24 @@ lives:
   such a settle (208).
 - The host's deliveries are host state too, flume's store of weir's
   deliveries (weir 112): one document beside the places', holding
-  every record of weir's C.8 for the ends of the host's places in the
-  order added, each one object as weir's JSON spells it, written whole
-  by compare-and-set, every record or none. It passes weir's pack as a
-  deliverer's store (weir 113). A delivery's key is the place as its
-  agents name it, the token its launch took, and its end's key, joined
-  by `/`, so no two launches of one place share a key. `[host]
-  ends_expire`, one time written as `keep_open` is, is the span after
-  which an end pending for a recipient is expired, fixed when the end
-  is read; a week, `168h`, where it is not given (43; weir 104).
+  every record of weir's C.8 for the ends of the host's places and the
+  messages to its roles' addresses (214) in the order added, each one
+  object as weir's JSON spells it, written whole by compare-and-set,
+  every record or none. It passes weir's pack as a deliverer's store
+  (weir 113). An end's delivery key is the place as its agents name it,
+  the token its launch took, and its end's key, joined by `/`, so no
+  two launches of one place share a key. A message's delivery key is
+  `message`, the address and a token flume draws for the message,
+  joined by `/`, its one reader that address; it never begins as an
+  end's does, since a place's name always holds `--`. Beside the
+  records the document holds each claim of a delivery being handed to
+  a recipient, by the delivery's key and the recipient, taken before
+  the send and gone once its hand-over is added or its send refused,
+  so two settles hand it once (75, 214). `[host] ends_expire`, one
+  time written as `keep_open` is, is the span after which an end or a
+  message pending for a recipient is expired, fixed when it is
+  recorded; a week, `168h`, where it is not given (43; weir 104).
+  (flume record 0069)
 - The host's bound is one word of the host's own configuration,
   `$XDG_CONFIG_HOME/flume/config.toml` (`~/.config/flume/config.toml`):
   `[host] agents = <n>`, how many agents of flume's places the host
