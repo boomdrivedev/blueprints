@@ -600,15 +600,20 @@ redefine these.
     resolved at its launch: the kind's identity and its content as read
     then. A later change to any declaration, lock or package the host
     holds never changes a place already launched.
-22. flume's own kinds are fix@1, chore@1, change@1, change@2, change@3
-    and plan@1, all six simple kinds (18), and all six land. **plan** is a plan stage, which delivers
+22. flume's own kinds are fix@1, fix@2, chore@1, chore@2, change@1,
+    change@2, change@3, change@4 and plan@1, all nine simple kinds (18),
+    and all nine land. **plan** is a plan stage, which delivers
     a plan its caller accepts (163), and then fix's code stage, which
     works to the plan accepted; a failed submission sends it back to
     code. **fix** is a code stage, which delivers commits. Its
     first stage starts in a place that could not be made ready, and a
     failed submission sends it back to code. **chore** is fix's one code
     stage under a prefix of its own, so a branch's name says which it was
-    (C.2). **change** at version 3 is a construct stage, which delivers
+    (C.2). **fix** and **chore** at version 2 and **change** at version 4 are
+    their kinds' versions before, each stage giving its agents the mode
+    `full` and saying its one way to ask (C.4); fix@2's and chore@2's
+    way to stop short names no work the stage cannot deliver past
+    (flume record 0064). **change** at version 3 is a construct stage, which delivers
     the place's change written, each of its tasks naming the narrowest
     check that shows that task done and none running the repository's
     whole checks or a task group's; a code stage, one agent for the whole
@@ -3404,10 +3409,13 @@ holds the rest, the place's facts and then its run's:
 
 | kind | branch | first stage starts unready | lands; its last stage's `on_fail` | stages, each with its deliverable |
 |---|---|---|---|---|
+| **fix@2** | `fix/<name>` | yes | yes; `code` | `code`: `commits`, as fix@1's, in the mode `full`, its prompt saying its one way to ask and its way to stop short naming no work it cannot deliver past (flume record 0064) |
+| **chore@2** | `chore/<name>` | yes | yes; `code` | fix@2's stage under chore's prefix (flume record 0064) |
+| **change@4** | `change/<name>` | no | yes; `code` | change@3's stages, each in the mode `full`, its prompt saying its one way to ask. The newest, so a launch naming no version in a repository whose lock records none runs it (154, 155). (flume record 0064) |
 | **fix@1** | `fix/<name>` | yes | yes; `code` | `code`: `commits` |
 | **chore@1** | `chore/<name>` | yes | yes; `code` | `code`: `commits`; fix@1's stage under a prefix of its own, so a branch's name says which it was |
-| **change@3** | `change/<name>` | no | yes; `code` | `construct`: `change`, each task naming the narrowest check that shows it done, a test by name, a package's tests or a lint of the files it touched, and none running the repository's whole checks or a task group's; `code`: `tasks`, not repeating, one agent for the whole change; `verify`: `archived`, its prompt running the repository's whole checks once before it checks the work as change@2's does. The newest, so a launch naming no version in a repository whose lock records none runs it (154, 155). (flume record 0054, accepted by the user 2026-11-06) |
-| **change@2** | `change/<name>` | no | yes; `code` | `construct`: `change`; `code`: `tasks`, repeating per task group (140); `verify`: `archived`. The verify prompt checks the work against the change and commits its report as `verify.md` in the change's directory. It then archives the change on the place's branch, the report with it, or stops short finding, with what fails, which sends the place back to code (131). The code prompt, sent again with a failed submission's or a finding's words, fixes what they name and records the fix as a task of the change, ticked. The code stage's standing instructions hold what every repetition is told alike; its prompt holds the place's and the change's paths, then its group, the notes' path and its words, which come last (141, 148). The newest of flume's change, taken by a launch that names no version where no lock records one (154) |
+| **change@3** | `change/<name>` | no | yes; `code` | `construct`: `change`, each task naming the narrowest check that shows it done, a test by name, a package's tests or a lint of the files it touched, and none running the repository's whole checks or a task group's; `code`: `tasks`, not repeating, one agent for the whole change; `verify`: `archived`, its prompt running the repository's whole checks once before it checks the work as change@2's does. (flume record 0054, accepted by the user 2026-11-06) |
+| **change@2** | `change/<name>` | no | yes; `code` | `construct`: `change`; `code`: `tasks`, repeating per task group (140); `verify`: `archived`. The verify prompt checks the work against the change and commits its report as `verify.md` in the change's directory. It then archives the change on the place's branch, the report with it, or stops short finding, with what fails, which sends the place back to code (131). The code prompt, sent again with a failed submission's or a finding's words, fixes what they name and records the fix as a task of the change, ticked. The code stage's standing instructions hold what every repetition is told alike; its prompt holds the place's and the change's paths, then its group, the notes' path and its words, which come last (141, 148). |
 | **plan@1** | `plan/<name>` | no | yes; `code` | `plan`: `plan`, in the agent profile's planning mode, ended by its caller's finish (163); `code`: `commits`, fix@1's code stage with the plan accepted, `{{plan}}`, in its prompt, sent again with a failed submission's words |
 | **change@1** | `change/<name>` | no | yes; `code` | `construct`: `change`; `code`: `tasks`, not repeating, one agent for the whole change; `verify`: `archived`, as change@2's. Kept beside change@2 (22): a repository picks it by recording `flume/change@1` in its lock, a launch by naming `change@1`, and a place launched at it keeps it (21) |
 
