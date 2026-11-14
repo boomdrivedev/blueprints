@@ -880,6 +880,16 @@ redefine these.
 60. A candidate's checks may run on any host. A run whose executor
     stopped before reporting has no outcome: it is never read as a pass
     or a fail, and the check is run again.
+155. What a check printed is kept however its run ends, so a person
+     reads why a check failed, or why its run has no outcome, from where
+     a wait or a status names it. For each check that failed or has no
+     outcome, the run's own output and each of its tasks' are kept, a
+     run ended by its time limit, its executor stopping or its host
+     restarting among them (60, 66, 108). They are kept on the host that
+     ran it, and for a run of another host or a pool's job where C.6
+     keeps a run's output. Releasing the run's checkout removes none of
+     it. A branch keeps them for its last twenty failed combinations,
+     and a check that passed keeps none.
 72. An instance keeps a branch only by writing its records. Once the
     deployment's lease has passed with no write of that instance, any
     instance may take the branch; taking it is a write (62), after which
