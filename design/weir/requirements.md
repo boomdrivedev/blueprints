@@ -501,8 +501,9 @@ redefine these.
     alike, its agents with their settings, whether it waits on its
     caller's word, how long its agent may be quiet before the stage is
     stuck, what it makes besides its deliverable, each a non-empty name,
-    and whether it repeats per task group, worked one group of its
-    change's tasks at a time.
+    whether it repeats per task group, worked one group of its
+    change's tasks at a time, and whether it hibernates, its agent let
+    go once idle and its session resumed later, a bool.
 54. A deliverable is one of seven forms: commits; a change written;
     tasks ticked; a change archived; a report at a path; a committed
     report at a path; a plan, which an agent puts for review from its
@@ -1169,6 +1170,7 @@ deliverables = ["commits"]                        # exactly one, spelled as belo
 agents = [{ program = "claude", model = "opus" }] # with their settings (53)
 quiet = "45m"                                     # how long the agent may be quiet: a whole number of s, m or h (57)
 makes = ["preview"]                               # what the stage makes besides its deliverable, non-empty names; none when omitted (53)
+hibernate = true                                  # whether the stage hibernates, a bool; a field left out is returned left out, its meaning the reader's (53, 58)
 
 [[kinds.bump.stages]]
 name = "build"

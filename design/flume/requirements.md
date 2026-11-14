@@ -2604,11 +2604,12 @@ redefine these.
      45, 118). A conversation still ends only on its caller's finish
      (109), and a hibernating stage's place takes a finish, a stop, a
      drop or a done as any place does, with no agent to end. Its
-     hibernate time is the time its settings give, in the forms 198
-     takes, and otherwise the life of its program's prompt cache, one
-     hour, as 198's is, so an agent is kept while its cache still pays
-     and let go once it no longer does; `0` never hibernates it on its
-     idling. No process of flume's waits for the time (120): a settle
+     hibernate time is the time its settings give as `hibernate_after`,
+     the host's or the launch's alone as `keep_open` is (C.2, C.7), in
+     the forms 198 takes, and otherwise the life of its program's prompt
+     cache, one hour, as 198's is, so an agent is kept while its cache
+     still pays and let go once it no longer does; `0` never hibernates
+     it on its idling. No process of flume's waits for the time (120): a settle
      reads it. A caller's hibernate is refused, naming the place, for a
      stage whose kind does not hibernate it and for a place with no live
      agent, and an agent that is not quiet is hibernated only when
@@ -2633,7 +2634,9 @@ redefine these.
      could not be carried, and what it committed and left is in the
      place. A resumed stage is a running stage: its stop check, its
      quiet limit and working past it hold from the resume (44, 110,
-     118). A resume never begun, or whose agent is not the stage's, is
+     118). A resume's agent carries its start's identity with the
+     resume's number after it, `<stage>:<start>.<resume>`, so no other
+     agent carries it and the resume counts no start (30, 48). A resume never begun, or whose agent is not the stage's, is
      read as 146 reads a carried start. A resume is no retry: it
      restarts no stage, carries no retry's words, and runs no later
      stage again (49). (flume record 0069)
@@ -3209,9 +3212,11 @@ own kind's settings. A repository's agents tables give a program, a
 model, an effort, a mode and instructions, and carry nothing of one host: an `env` in a
 repository's `.config/flume.toml` refuses the launch naming the field
 (4), since an environment is an account's alone (144, C.7); so does a
-`keep_open` there or in a kind's declaration, since how long an agent
-is kept open is the host's or the launch's (198), and a launch gives it
-by `flume launch --agent [<stage>.]keep_open=<time>`. `mode`
+`keep_open` or a `hibernate_after` there or in a kind's declaration,
+since how long an agent is kept open or left idle before it hibernates
+is the host's or the launch's (198, 212), and a launch gives each by
+`flume launch --agent [<stage>.]keep_open=<time>` or
+`[<stage>.]hibernate_after=<time>`. `mode`
 is a field of every agents table, the kind's, a stage's, the
 repository's and the host's (C.7), and of a launch's settings, `flume
 launch --agent [<stage>.]mode=<mode>`; its values are flume's four
@@ -4078,9 +4083,10 @@ lives:
   configuration, by kind, `[kinds.<kind>.agents]`, and by repository
   and kind, `[repos."<repository>".kinds.<kind>.agents]`, the
   repository named by its location on the host as a launch names it;
-  each gives `model`, `effort`, `mode`, `instructions`, `programs` and
-  `keep_open` (C.2, 198), `keep_open` one time, `<n>`, `<n>s`, `<n>m`
-  or `<n>h`, and never a table of programs, and
+  each gives `model`, `effort`, `mode`, `instructions`, `programs`,
+  `keep_open` and `hibernate_after` (C.2, 198, 212), each of the last
+  two one time, `<n>`, `<n>s`, `<n>m` or `<n>h`, and never a table of
+  programs, and
   names one stage's by a further `.stages.<stage>` table (32). So do
   three tables that name no stage: `[repos."<repository>".agents]`, for
   every kind run in the repository, `[agents.streams.<stream>]`, for
@@ -4440,9 +4446,6 @@ These are not requirements.
   idle past its cache, which flume never answers for a person (34, 213)?
   Not decided: by a setting of the program's that keeps it shut, or by
   a resume that sends its prompt only once the agent waits.
-- What identity does a resume's agent carry, when a resume counts no
-  start of its stage and an identity names the stage's start (30, 48,
-  213)? Not decided.
 
 <!-- ANCHOR_END: questions -->
 <!-- ANCHOR: scenarios -->
