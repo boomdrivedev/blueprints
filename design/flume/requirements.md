@@ -600,15 +600,20 @@ redefine these.
     resolved at its launch: the kind's identity and its content as read
     then. A later change to any declaration, lock or package the host
     holds never changes a place already launched.
-22. flume's own kinds are fix@1, chore@1, change@1, change@2, change@3
-    and plan@1, all six simple kinds (18), and all six land. **plan** is a plan stage, which delivers
+22. flume's own kinds are fix@1, fix@2, chore@1, chore@2, change@1,
+    change@2, change@3, change@4 and plan@1, all nine simple kinds (18),
+    and all nine land. **plan** is a plan stage, which delivers
     a plan its caller accepts (163), and then fix's code stage, which
     works to the plan accepted; a failed submission sends it back to
     code. **fix** is a code stage, which delivers commits. Its
     first stage starts in a place that could not be made ready, and a
     failed submission sends it back to code. **chore** is fix's one code
     stage under a prefix of its own, so a branch's name says which it was
-    (C.2). **change** at version 3 is a construct stage, which delivers
+    (C.2). **fix** and **chore** at version 2 and **change** at version 4 are
+    their kinds' versions before, each stage giving its agents the mode
+    `full` and saying its one way to ask (C.4); fix@2's and chore@2's
+    way to stop short names no work the stage cannot deliver past
+    (flume record 0064). **change** at version 3 is a construct stage, which delivers
     the place's change written, each of its tasks naming the narrowest
     check that shows that task done and none running the repository's
     whole checks or a task group's; a code stage, one agent for the whole
@@ -2604,11 +2609,12 @@ redefine these.
      45, 118). A conversation still ends only on its caller's finish
      (109), and a hibernating stage's place takes a finish, a stop, a
      drop or a done as any place does, with no agent to end. Its
-     hibernate time is the time its settings give, in the forms 198
-     takes, and otherwise the life of its program's prompt cache, one
-     hour, as 198's is, so an agent is kept while its cache still pays
-     and let go once it no longer does; `0` never hibernates it on its
-     idling. No process of flume's waits for the time (120): a settle
+     hibernate time is the time its settings give as `hibernate_after`,
+     the host's or the launch's alone as `keep_open` is (C.2, C.7), in
+     the forms 198 takes, and otherwise the life of its program's prompt
+     cache, one hour, as 198's is, so an agent is kept while its cache
+     still pays and let go once it no longer does; `0` never hibernates
+     it on its idling. No process of flume's waits for the time (120): a settle
      reads it. A caller's hibernate is refused, naming the place, for a
      stage whose kind does not hibernate it and for a place with no live
      agent, and an agent that is not quiet is hibernated only when
@@ -2633,7 +2639,9 @@ redefine these.
      could not be carried, and what it committed and left is in the
      place. A resumed stage is a running stage: its stop check, its
      quiet limit and working past it hold from the resume (44, 110,
-     118). A resume never begun, or whose agent is not the stage's, is
+     118). A resume's agent carries its start's identity with the
+     resume's number after it, `<stage>:<start>.<resume>`, so no other
+     agent carries it and the resume counts no start (30, 48). A resume never begun, or whose agent is not the stage's, is
      read as 146 reads a carried start. A resume is no retry: it
      restarts no stage, carries no retry's words, and runs no later
      stage again (49). (flume record 0069)
@@ -2949,8 +2957,10 @@ redefine these.
      person's view would, given again whenever it changes, within a
      bound the profile states. Keys given to it go in as a person typed
      them, with nothing cleared first and no wait for receipt, until
-     the caller ends it or the agent's terminal goes. Or a refusal,
-     where the terminal offers no relay (221).
+     the caller ends it or the agent's terminal goes. A key the
+     terminal cannot type is refused, named, with nothing typed for it,
+     and the keys after it still go in. Or a refusal, where the terminal
+     offers no relay (221).
 98. The guarantee: open never runs a second agent under an identity
     already live, and close never reports an end that did not happen.
     Every operation answers within a bound the profile states, and one
@@ -3209,9 +3219,11 @@ own kind's settings. A repository's agents tables give a program, a
 model, an effort, a mode and instructions, and carry nothing of one host: an `env` in a
 repository's `.config/flume.toml` refuses the launch naming the field
 (4), since an environment is an account's alone (144, C.7); so does a
-`keep_open` there or in a kind's declaration, since how long an agent
-is kept open is the host's or the launch's (198), and a launch gives it
-by `flume launch --agent [<stage>.]keep_open=<time>`. `mode`
+`keep_open` or a `hibernate_after` there or in a kind's declaration,
+since how long an agent is kept open or left idle before it hibernates
+is the host's or the launch's (198, 212), and a launch gives each by
+`flume launch --agent [<stage>.]keep_open=<time>` or
+`[<stage>.]hibernate_after=<time>`. `mode`
 is a field of every agents table, the kind's, a stage's, the
 repository's and the host's (C.7), and of a launch's settings, `flume
 launch --agent [<stage>.]mode=<mode>`; its values are flume's four
@@ -3404,17 +3416,21 @@ holds the rest, the place's facts and then its run's:
 
 | kind | branch | first stage starts unready | lands; its last stage's `on_fail` | stages, each with its deliverable |
 |---|---|---|---|---|
+| **fix@2** | `fix/<name>` | yes | yes; `code` | `code`: `commits`, as fix@1's, in the mode `full`, its prompt saying its one way to ask and its way to stop short naming no work it cannot deliver past (flume record 0064) |
+| **chore@2** | `chore/<name>` | yes | yes; `code` | fix@2's stage under chore's prefix (flume record 0064) |
+| **change@4** | `change/<name>` | no | yes; `code` | change@3's stages, each in the mode `full`, its prompt saying its one way to ask. The newest, so a launch naming no version in a repository whose lock records none runs it (154, 155). (flume record 0064) |
 | **fix@1** | `fix/<name>` | yes | yes; `code` | `code`: `commits` |
 | **chore@1** | `chore/<name>` | yes | yes; `code` | `code`: `commits`; fix@1's stage under a prefix of its own, so a branch's name says which it was |
-| **change@3** | `change/<name>` | no | yes; `code` | `construct`: `change`, each task naming the narrowest check that shows it done, a test by name, a package's tests or a lint of the files it touched, and none running the repository's whole checks or a task group's; `code`: `tasks`, not repeating, one agent for the whole change; `verify`: `archived`, its prompt running the repository's whole checks once before it checks the work as change@2's does. The newest, so a launch naming no version in a repository whose lock records none runs it (154, 155). (flume record 0054, accepted by the user 2026-11-06) |
-| **change@2** | `change/<name>` | no | yes; `code` | `construct`: `change`; `code`: `tasks`, repeating per task group (140); `verify`: `archived`. The verify prompt checks the work against the change and commits its report as `verify.md` in the change's directory. It then archives the change on the place's branch, the report with it, or stops short finding, with what fails, which sends the place back to code (131). The code prompt, sent again with a failed submission's or a finding's words, fixes what they name and records the fix as a task of the change, ticked. The code stage's standing instructions hold what every repetition is told alike; its prompt holds the place's and the change's paths, then its group, the notes' path and its words, which come last (141, 148). The newest of flume's change, taken by a launch that names no version where no lock records one (154) |
+| **change@3** | `change/<name>` | no | yes; `code` | `construct`: `change`, each task naming the narrowest check that shows it done, a test by name, a package's tests or a lint of the files it touched, and none running the repository's whole checks or a task group's; `code`: `tasks`, not repeating, one agent for the whole change; `verify`: `archived`, its prompt running the repository's whole checks once before it checks the work as change@2's does. (flume record 0054, accepted by the user 2026-11-06) |
+| **change@2** | `change/<name>` | no | yes; `code` | `construct`: `change`; `code`: `tasks`, repeating per task group (140); `verify`: `archived`. The verify prompt checks the work against the change and commits its report as `verify.md` in the change's directory. It then archives the change on the place's branch, the report with it, or stops short finding, with what fails, which sends the place back to code (131). The code prompt, sent again with a failed submission's or a finding's words, fixes what they name and records the fix as a task of the change, ticked. The code stage's standing instructions hold what every repetition is told alike; its prompt holds the place's and the change's paths, then its group, the notes' path and its words, which come last (141, 148). |
 | **plan@1** | `plan/<name>` | no | yes; `code` | `plan`: `plan`, in the agent profile's planning mode, ended by its caller's finish (163); `code`: `commits`, fix@1's code stage with the plan accepted, `{{plan}}`, in its prompt, sent again with a failed submission's words |
 | **change@1** | `change/<name>` | no | yes; `code` | `construct`: `change`; `code`: `tasks`, not repeating, one agent for the whole change; `verify`: `archived`, as change@2's. Kept beside change@2 (22): a repository picks it by recording `flume/change@1` in its lock, a launch by naming `change@1`, and a place launched at it keeps it (21) |
 
 Each stage of flume's own kinds, from each kind's version after those
 above, gives its agents the mode `full` (162, 169), since it works in
-its own place with no person watching, and its standing instructions
-say that an agent that needs an answer stops short with its words
+its own place with no person watching, and its standing instructions,
+or while flume reads no stage's standing instructions (148) its prompt
+beside its way to stop short, say that an agent that needs an answer stops short with its words
 (28) and never asks through anything else, a card, an inbox, a
 message or a question in its pane, whatever a hook, a plugin, a file
 or a person's words for every agent tell it; the words name no tool of
@@ -3422,7 +3438,7 @@ anyone's. A version already released keeps its content (157). flume's
 own kinds hold none of a person's words: a person's own words for
 every agent are the host's `[agents]` table's `instructions` (32), and
 their labels are the host's (180). (flume record 0064, accepted by the
-user 2026-11-09)
+user 2026-11-09, as amended 2026-11-14)
 
 sounding hands flume each elaboration kind in the launch, as `flume
 launch --kinds <file>`. An elaboration kind is written in the same
@@ -3647,7 +3663,7 @@ herdr's refusal and its words:
 | close | `pane close <pane>`, `pane_not_found` read as already closed; then `pane get <pane>`, gone only on `pane_not_found` |
 | tidy | the place's recorded tab: `pane list --workspace <w>` read for panes in it, and a pane flume did not open there keeps it, named; else `tab close <tab>`, a tab already gone read as closed. Then the base's recorded workspace: where `tab list --workspace <w>` holds no tab but those of live places it made and `pane list` no pane it did not open, `workspace close <w>`; otherwise kept, and what holds it named |
 | attach | for a window, `<herdr> session attach <name>`, `<herdr>` the full path of the herdr the profile runs, so the window runs the same release whatever its `PATH`; the session's server first found or started headless as the server row says, flume's own session being `flume`; the command's environment is `XDG_CONFIG_HOME` where the profile's calls run under one, which herdr 0.9.5 reads its sessions' home from, and nothing otherwise. For the app, refused: herdr 0.9.5 has no app of its own, and the Herdr app runs on herdr-core, a backend apart with sessions of its own (187) |
-| relay | `pane read <pane> --source visible --format ansi`, read again at most every 250 milliseconds and given on only where it differs from the last read. The person's text goes by `pane send-text <pane> <text>` and their keys by `pane send-keys <pane> <keys>`, each as typed. It ends at the caller's word, or once state reads the pane stopped (221, 222) |
+| relay | `pane read <pane> --source visible --format ansi`, read again at most every 250 milliseconds and given on only where it differs from the last read. The person's text goes by `pane send-text <pane> <text>` and their keys by `pane send-keys <pane> <keys>`, each as typed. herdr 0.9.5 names no `delete`, `insert`, `home`, `end`, `pageup` or `pagedown`, bare or led, so each of those is refused, named as a key herdr 0.9.5 cannot type, and nothing is sent for it. It ends at the caller's word, or once state reads the pane stopped (221, 222) |
 | runs | one `herdr session list --json` for every part asked, its `sessions[]` read by `name` and `running` for each, flume's own session being `flume`. A session listed running runs. One listed not running, or not listed, does not, and nothing is started. The call is bounded at one second, so the list answers within its second. A listing not read within it, or refused, is read as not read for every part asked, in herdr's words (201) |
 | standing | the agents of a session by name, for an address its source declares a standing agent for (132, 193, C.7). It is read at each delivery and each status, and nothing keeps it. One `herdr session list --json` finds the session by `name` and `running`, flume's own being `flume`. A session not listed running holds no agent, and nothing is started. Then `agent list` on its socket, its `agents[]` read by `name`, `pane_id` and `agent_status`, the status read as the state row reads it. An agent of the name is reached at `herdr:<pane_id>@<socket>`, by the send and state rows, as any recipient's session is. None of the name is said so, and so is more than one. herdr 0.9.5 refuses a second agent of one name on a server, as `agent_name_taken`. A listing refused, or not read within the bound, is not read, in herdr's words |
 | show | `pane report-metadata <pane> --source flume --title "<stage> · <state>" --display-agent <kind>--<name> --token flume=<line>`, the line's short form such as `code 1/2 · run 1 · tasks 2/5 · working`; `workspace report-metadata <w> --source flume --token flume=<summary>`, the summary such as `3 running · 1 asking · 1 waiting on caller · 0 stalled`, shown where the host's herdr sidebar rows name `$flume` |
@@ -3765,6 +3781,7 @@ nonzero exit:
 | close | `block close -s <session> <block>`, a block not found read as already closed; then `process`, gone only on `block target "<block>" not found` or no Rex server running at the socket |
 | tidy | the place's recorded window: `session.view` read for blocks in it, and a block flume did not open there keeps it, named; else `session.close_window` with its `window_id`, a window already gone read as closed. Then the base's recorded Rex session: where `session.view` holds no window but those of live places it made and no block it did not open, `session.destroy`; otherwise kept, and what holds it named |
 | attach | for a window, refused: Rex 0.1.0-preview.14 has no terminal client, and only its app shows a session. For the app, the session's server found or started as the server row says, then `api call client.list` on it (`clients[]`, `info.kind` `app`, `client_id`), the app listed once a person has added the server's socket under its Remote Hosts, and `-C <client> do session.select session_id=<id>` for the newest Rex session the profile made there. Refused, naming the socket to add, where the app is no client of the server, and in Rex's words where the app refuses, as it does until a person turns on its Remote Control (187) |
+| relay | `capture -s <session> -b <block> --format vt --trim`, which keeps the block's colors and carries no cursor position, read again at most every 250 milliseconds and given on only where it differs from the last read. The person's text goes by `send -s <session> -b <block> -- <text>`, in pieces of at most 60,000 bytes as the send row cuts them, and their keys by `send-key -s <session> -b <block> <key>`, each as typed, flume's key names Rex's own: every one of them is taken, `delete`, `insert`, `home`, `end`, `pageup` and `pagedown` among them, bare or led by `ctrl+`, `alt+` and `shift+`. It ends at the caller's word, or once state reads the block stopped (221, 222) |
 | runs | `server.status` at each part's socket, every part asked at once and each call bounded at one second. A server that answers runs. One with no server at its socket does not, and nothing is started. One not answered within its second, or refused otherwise, is not read, in Rex's words; Rex keeps no list of its servers, so each part is its own call (201) |
 | standing | the agents of a session by name (132, 193, C.7), read at each delivery and each status, and nothing keeps it. `server.status` at the session's socket: a server not running holds no agent, and nothing is started. Then `session.list` and `session.view` of each of its Rex sessions, every block read by `label` and `block_id`, its state read as the state row reads it. An agent of the name is reached at `rex:<block>@<socket>`, by the send and state rows, as any recipient's session is. None of the name is said so, and so is more than one, since Rex refuses no label twice. A listing refused, or not read within the bound, is not read, in Rex's words |
 | show | `api call -s <session> session.set_label` and `session.set_window_label`, on the recorded ids, each label at most 128 characters |
@@ -4078,9 +4095,10 @@ lives:
   configuration, by kind, `[kinds.<kind>.agents]`, and by repository
   and kind, `[repos."<repository>".kinds.<kind>.agents]`, the
   repository named by its location on the host as a launch names it;
-  each gives `model`, `effort`, `mode`, `instructions`, `programs` and
-  `keep_open` (C.2, 198), `keep_open` one time, `<n>`, `<n>s`, `<n>m`
-  or `<n>h`, and never a table of programs, and
+  each gives `model`, `effort`, `mode`, `instructions`, `programs`,
+  `keep_open` and `hibernate_after` (C.2, 198, 212), each of the last
+  two one time, `<n>`, `<n>s`, `<n>m` or `<n>h`, and never a table of
+  programs, and
   names one stage's by a further `.stages.<stage>` table (32). So do
   three tables that name no stage: `[repos."<repository>".agents]`, for
   every kind run in the repository, `[agents.streams.<stream>]`, for
@@ -4378,7 +4396,7 @@ The rest of the stack, which a model builds on unless it says why not:
   | headwater | its fix key, as a fix with the release's brief | nothing |
   | sounding | each round of an elaboration, as a place of the elaboration kind it hands in the launch, a conversation's agent beside the operator's pane | the inputs, the soundings each was based on, the rounds, the operator's notes and decisions, and the record, with each round's conclusion copied from its report; its go-on is a retry with the operator's notes as words, its accept a done or a retry that releases a held submission, and its drop a drop |
   | crew | nothing by a call of its own: it is the runner's control plane, and asks the runner each launch and each act on a place, which the runner carries (the runner's row; crew's record 0056): each unit, chore or fix of a bolt, as a place of flume's own kinds, change, chore or fix, with no stage and no submission on hold, so the kind runs through and its fix round runs on its own (131); each bolt as a base place of a kind crew declares with no stages, on the branch the bolt lands on, its units' places on its branch (202); the bolt submitted by its land once the user sends it and its units are over, which the runner carries as the retry of its base place's submission (203); each agent's settings from crew's roles, marked with the bolt; a review note the user marked fix as a fix launched on the bolt's branch with the note as its brief; a fix of a base whose own checks failed after a landing, as a fix launched on that base with the failure's words as its brief, the merge queue's where it blamed and the check's own otherwise, its submission on hold where the base's landings wait on the user's word outside the merge queue's policy (7, 47) and free where the policy asks the word itself or none, with no bolt's branch between and no other place moved (record 0023) | plans, bolts, proposals, review batches, the rail and its cards; it launches a bolt's work whole, each unit as the work it follows allows, and keeps no slots: the host's room and the queue are flume's, and the user's priorities, set on the rail, reach flume as each place's priority (70); its word to a place, asked of the runner, is a retry answering a stop-short that asked, naming its key (42), with the user's own words where its role put the question to the user on a card its own code raised, or a retry or drop of a place past its kind's bound; it is a source of the host's that declares its roles once, each of a partition's roles at its address in the partition's stream, running crew's one kind for it or held by its standing agent until it moves, and names each place's recipient by the address of the role the work is for, so a role with no live run is woken to collect an end, and each partition's operator stands behind its stream (132, 193); each end is handed to its role's run and delivered once that run's confirm, which the runner carries, names it (43), and it reads the rest from the status the runner carries; a role's own work that lands is a place of its own, so no session of crew's submits; it decides no step between a unit's stages, and runs no agent of its own in the place (records 0010 and 0011) |
-  | the runner | each launch its control plane asks, passed as given, a bolt's base place and its units' places among them, each naming the runner itself a recipient beside the role's address its control plane names, which drops no default recipient the address had not dropped already (7). A retry of a base place's submission its control plane asks as a land (203), and a confirm of ends it asks, by `flume confirm` as the recipient it names, of exactly the keys it names (43) | the watch over its host: each pass, keeping or control, runs `flume settle --every <bound>` once and awaits it (208); each place's status, carried to its control plane, a tidied place's from the document kept for its end; each end pending for the runner, of a live place or of a tidied place's document, which it confirms as itself by `flume confirm`, naming each end's delivery key, only once its control plane has taken a report holding it, so the end stays owed until then and no loss of the runner's report loses it (43, 62); nothing else of a place's, and no queue of its own: sluice's rounds are moved by those settles' steps or the host's `sluice run` |
+  | the runner | each launch its control plane asks, passed as given, a bolt's base place and its units' places among them, each naming the runner itself a recipient beside the role's address its control plane names, which drops no default recipient the address had not dropped already (7). A retry of a base place's submission its control plane asks as a land (203), a confirm of ends it asks, by `flume confirm` as the recipient it names, of exactly the keys it names (43), and a hold of the move a place waits on it for, with its control plane's words and a bound, under the launch's lease (130) | the watch over its host: each pass, keeping or control, runs `flume settle --every <bound>` once and awaits it (208); each place's status, carried to its control plane, a tidied place's from the document kept for its end; each end pending for the runner, of a live place or of a tidied place's document, which it confirms as itself by `flume confirm`, naming each end's delivery key, only once its control plane has taken a report holding it, so the end stays owed until then and no loss of the runner's report loses it (43, 62); nothing else of a place's, and no queue of its own: sluice's rounds are moved by sluice's own host process (C.6) |
 
 <!-- ANCHOR_END: givens -->
 <!-- ANCHOR: questions -->
@@ -4440,9 +4458,6 @@ These are not requirements.
   idle past its cache, which flume never answers for a person (34, 213)?
   Not decided: by a setting of the program's that keeps it shut, or by
   a resume that sends its prompt only once the agent waits.
-- What identity does a resume's agent carry, when a resume counts no
-  start of its stage and an identity names the stage's start (30, 48,
-  213)? Not decided.
 
 <!-- ANCHOR_END: questions -->
 <!-- ANCHOR: scenarios -->
