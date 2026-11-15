@@ -1040,6 +1040,13 @@ redefine these.
      sluice's, and a run keeps the settings it started under. (Amended
      2026-11-09: sluice record 0107, the user's direction that day in
      agentplot-design's pane; principle 5.)
+     Every sluice process raises its soft limit on open files to its
+     hard limit as it starts, as far as the system lets one process
+     open, so a supervisor's low default, launchd's 256 among them,
+     holds neither sluice nor the runs it starts, which inherit the
+     raised limit, and no host need raise it for sluice. (Amended
+     2026-11-15: sluice record 0126, for the chore
+     `sluice-raises-its-open-files-limit-at-start`.)
 151. Where sluice's telemetry goes is the host's own setting (C.7):
      whether it sends, the collector it sends to, the service and host it
      names itself as, which of its traces, metrics and logs go, and how
