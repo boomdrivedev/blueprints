@@ -1507,8 +1507,12 @@ claim and the time. The catalogue of signed records (141) is in-toto's
 catalogue of predicates (record 0077).
 Each signer computes the keys it signs from the candidate itself. A job
 on a forge signs it keylessly with the job's workload identity; any
-other signer signs it with an SSH key whose public half the policy
-lists.
+other signer signs it with an SSH key, or with a key in a key service
+that its holder may use and never export, as timber's key-service
+signer does (timber C.7), either listed in the policy by its public
+half. A key-service signer is a pool's: no host signs as one, since no
+host's SSH key is ever listed for it, so a host that signs as one is
+not accepted, leads nothing and claims nothing (137).
 Since any instance may write the branch's state, a landing reads its
 verdict again from the signed run records before it moves the branch.
 
@@ -1592,6 +1596,12 @@ the repository's: its signing key, its systems, its places, its bound
 and the cores sluice may use (71), and where its telemetry goes (151). The defaults: a branch with no `remote` trusts its own
 host's unsigned runs (78) and nothing else; a branch with a `remote`
 and no `trust` trusts no signer, so its policy's author names them.
+A signer whose `systems` is empty may claim no system: it claims no
+run and no result it signs counts, whatever the run's system. A branch
+whose every run goes to a pool trusts its leading hosts' signer so,
+beside the pool's: their signature is accepted, so they lead (137), and
+they run none of its checks, whatever executors they keep. A branch
+whose trust names only pools' signers has no host that can lead it.
 A branch with no `hold` holds no passed candidate (117), and one with
 no `release_retries` tries a failing release three times (123).
 How often the open requests are asked for (136) is the deployment's,
