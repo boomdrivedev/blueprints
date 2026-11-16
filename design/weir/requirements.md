@@ -494,7 +494,12 @@ redefine these.
     kind that lands with stages names the stage a failed submission
     sends a place back to, and how many times a place may go back before
     it waits on its caller. A kind that lands with no stages may name its landing fix, the kind a place runs when the merge queue sends its branch back, by that kind's identity with its version, and how many landing fixes it runs before its place waits on its caller. (weir record 0005, the user's, 2026-11-07.) It may hold settings for every stage's
-    agents, which a stage's own settings come before.
+    agents, which a stage's own settings come before. It may hold its
+    title, the words a person reads for it, as a statechart kind's does
+    (94). Any kind's declaration may hold one line saying what its places
+    make and how they end. A reader is given each as written, neither
+    changes how a kind is run, and a kind with no title is shown by its
+    name.
 53. The declaration of a simple kind's stage holds its name, its prompt,
     and its deliverable or that it is a conversation. It may hold its
     standing instructions, text every agent of the stage starts with

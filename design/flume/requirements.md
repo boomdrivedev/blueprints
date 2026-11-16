@@ -939,6 +939,12 @@ redefine these.
      is what whoever waits on the submission learns (43), and a preview
      of a revision is the merge queue's, brought up at that revision by
      whoever shows the card and released by them, recorded by no stage.
+     An agent offers work it noticed that is not its stage's as a made
+     thing: a report committed on the place's branch and recorded by its
+     path and the commit that holds it. It never ends, holds or sends
+     back its stage, flume launches nothing for it (I6), and it reaches
+     the place's recipients with the stage's end as every made thing
+     does (43).
 26. A place has at most one change, named by the place's name, and a
     stage that reads a change reads only that one.
 27. A stage's prompt is filled before it is sent. Every part it asks
@@ -2407,8 +2413,12 @@ redefine these.
      to every label, and a place of a label it does not name, or of no
      label where it names any, is never given it, whatever its kind
      asks for. The list is the server's, kept with its declaration in
-     the managed layer (C.7), never a label's or a kind's. How a host's
-     servers reach an agent is not decided (section 10).
+     the managed layer (C.7), never a label's or a kind's. The managed
+     layer declares each server, `[mcp.<server>]` with how it starts or
+     where it answers, and its `labels`. At each agent's start flume
+     hands the agent's program the servers the place's label may have,
+     and a program whose profile hands it no list is given none (171).
+     (flume record 0033, the user's ruling of 2026-11-05.)
 165. A launch may give its work's points: one number of the Fibonacci
      scale, 1, 2, 3, 5, 8, 13, 21 and on, which its caller sets and
      flume never estimates, changes or judges. Points belong to the
@@ -4467,11 +4477,6 @@ These are not requirements.
   how one model's share of an account's allowance is spent is still
   not decided, and an account is spent only when its agent's own
   record says so.
-- How does an MCP server the host gives its agents reach the agents
-  flume starts, and which of them does an agent get (183)? Not
-  decided: until it is, an agent takes what its program finds in its
-  account's folder and its repository, and no server's `labels` is
-  read.
 - How does a resumed Claude Code agent's first prompt pass the
   "Resume this conversation?" dialog 2.1.322 opens for a conversation
   idle past its cache, which flume never answers for a person (34, 213)?

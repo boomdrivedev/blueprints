@@ -357,6 +357,14 @@ redefine these.
 35. Every signal has at most one standing move. Curation proposes moves
     only for unmoved signals and never judges a moved signal again, one
     a rule moved among them (129). Only the operator replaces a move.
+    The operator may also give an unmoved signal its move by hand, in no
+    batch: the move is whole, one of the six with its consequence (36),
+    names who gave it (111), and stands once written, and no surface asks
+    the operator for one (43). The operator may take a signal's standing
+    move back with none in its place: the move is kept as replaced,
+    naming who took it back (111), the signal is unmoved again, curation
+    proposes for it as for any unmoved signal, and nothing is raised for
+    anyone to decide.
 111. A move's replacement names who replaced it, as the replacing
      caller names them. millpond takes every name a caller gives for who
      asked, accepted, replaced or decided, and checks no identity.
