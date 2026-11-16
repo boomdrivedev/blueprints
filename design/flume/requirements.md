@@ -1891,7 +1891,8 @@ redefine these.
      place recorded as the submission's submitter. It holds no wait on
      the verdict: every settle that follows collects from the merge
      queue the outcomes of the place's submissions pending for the place
-     (133), and settles the place by the one delivered. A place whose kind does not land never reaches the merge
+     (133), and settles the place by the one delivered, confirming
+     each to the merge queue once it has acted on it (225). A place whose kind does not land never reaches the merge
      queue. A base place, which has no last stage, is submitted only
      as 203 says.
 112. A failed submission, one the merge queue blamed or found in
@@ -1932,7 +1933,8 @@ redefine these.
      again at the next settle, and where the merge queue moves only while
      something drives it, drives it one round (125). A host that
      restarted loses nothing, since the outcome stays pending in the
-     merge queue's records until a settle collects it. flume never
+     merge queue's records until a settle that acted on it confirms it
+     (225). flume never
      submits the place anew for it (111).
 131. A kind runs through on its own. A stage's delivery starts the next
      stage as the host's room allows (70), and the last stage's delivery
@@ -3030,13 +3032,28 @@ redefine these.
      failed, with the merge queue's words; in conflict, with the
      files contested; or held, its landing refused by the forge, with
      the forge's words, which decides nothing and leaves the submission
-     open (112); each then recorded by the merge queue as delivered
-     to the place once flume has read it as one of these, and one flume
-     cannot read left pending for it, its words in status; or that the
-     merge queue could not be read (43, 111,
-     112). A withdrawal is delivered by nothing, and read from
+     open (112); each with the submission it decides and what confirms
+     it, and given again at every inbox until the place confirms it
+     (225), one flume cannot read left pending for it, its words in
+     status; or that the merge queue could not be read (43, 111, 112).
+     A withdrawal is delivered by nothing, and read from
      read-submission (99). A base place has no inbox: its outcomes are
      read from read-submission (203).
+225. **confirm**: given a place and an outcome the inbox, or a submit
+     that found its submission decided as it took it in, gave it, that
+     outcome confirmed, so no inbox gives it again; or that the merge
+     queue could not be read, the outcome left pending for the next
+     inbox (133). flume confirms an outcome only once the settle that
+     read it has acted on it: the verdict held in the place's state,
+     where the end it makes is recorded for each of the place's
+     recipients (111, 112, 113). An outcome of a submission before the
+     one flume last made, or of one the place never made, decides
+     nothing of the place; flume confirms it and acts on it no more
+     (99, 101). An outcome a settle read and could not act on, the
+     place's state not written, is not confirmed, and the next inbox
+     gives it again (74, 124). A merge queue that keeps nothing to
+     confirm gives an outcome nothing to confirm it by, and its inbox
+     gives each once. (flume record 0072.)
 99. **read-submission**: given a repository and a branch, the newest
     submission of that branch, whoever made it, with its target and its
     state: waiting, under test, landed with the commit it landed as,
@@ -3048,7 +3065,8 @@ redefine these.
 101. The guarantee: landed is said only of a submission of that branch
      that the merge queue itself landed, never inferred from what the
      base holds (63). Submit removes no place (66, 113), and a pending
-     outcome is delivered once to the place and never again.
+     outcome the place confirmed is given to the place never again
+     (225).
 125. **step**: given a base whose queue moves only while something
      drives it, one round of that queue, returning when the round does;
      nothing where the queue moves on its own (124).
@@ -3904,7 +3922,8 @@ the session, and refuses a window.
 | operation | how sluice satisfies it |
 |---|---|
 | submit | flume runs `sluice submit <base> --no-wait --json` in the place, with no multiplexer's session in its environment, so sluice records the place's worktree as the entry's submitter and no session, pushes nothing into any pane, and answers with the entry at once; a refusal is its exit and words. flume never passes `--check` to a submit, and never runs `wt submit`, whose waiting half removes the place (111, 113). (`--check` named by flume record 0056's amendment of 2026-11-07.) A base place's submit runs in the repository, naming its branch as its head (203). |
-| inbox | `sluice inbox --confirm --json` (sluice 51), run in the place. It hands over the place's decided entries owed to it and confirms each on receipt, since flume keeps each outcome for its own recipients (43). sluice hands over nothing again once an outcome is confirmed, so each reaches the place once (101). A submit answered with a decided entry's record has it confirmed by `sluice confirm <key>` of the record's `delivery` where it is owed, run where the submit ran. Until then an inbox may hand it over too, and flume acts on it once (112). A withdrawal is read from read-submission (133). None runs for a base place, whose outcomes read-submission gives (203). (sluice record 0102 keeps an outcome owed until its reader confirms it.) |
+| inbox | `sluice inbox --json` (sluice 51), run in the place. It hands over the place's decided entries owed to it, each again at every inbox until it is confirmed, so an outcome a settle could not act on is handed to the next (124, 225). A withdrawal is read from read-submission (133). None runs for a base place, whose outcomes read-submission gives (203). (sluice record 0102 keeps an outcome owed until its reader confirms it.) |
+| confirm | `sluice confirm <key>` of the record's `delivery`, run in the place, once flume acted on the outcome, as 225 says: an inbox's record or a submit's decided answer alike, where its `delivery` is owed. sluice hands over nothing again once an outcome is confirmed (101). A record whose `delivery` is not owed, a submission by name's among them, has nothing to confirm (203). Never `sluice inbox --confirm`, which confirms each outcome before flume has acted on it |
 | read-submission | `sluice status <base> --json`, read once for each repository at each ask; the newest entry submitted from the place's branch, whoever submitted it; landed is that entry landed, its landing commit's `Sluice-*` trailers naming it |
 | step | nothing: sluice's queue moves on its own once submitted, run by sluice's host process, which the submit starts, and the settle's read of the submission starts it again where work waits and none runs, so the queue moves with nothing installed and never twice (124, 125; sluice 135). A base place's queue onto its own base and its places' queue onto its branch move alike. (sluice record 0093, accepted by the user 2026-11-06, sluice `proposals/host-process-1.md`) |
 | open | `sluice branch create <branch> --from <base>`, run in the repository, which makes the branch at the base's current revision where the policy gives it a gate (sluice 104). flume makes no branch sluice lands on itself, since sluice's protection refuses any other making (sluice 106) |
@@ -3932,7 +3951,7 @@ stripped and `GIT_TERMINAL_PROMPT=0`, a refusal read as its JSON
 | operation | sluice's commands and fields |
 |---|---|
 | submit | `sluice submit <base> --no-wait --json` answers `{ahead, branch, id}` and nothing more where intake takes the entry at once; the entry is `id`. On a base whose policy takes pull requests, sluice's statement says the submit pushes the place's branch, opens or updates its request and marks it ready, and where the request's conditions do not yet hold, a review among them, answers with the request and what it waits for and no entry (sluice C.5); the place's submission is then open and undecided until intake takes the request (124), and status names what it waits for |
-| inbox | `sluice inbox --json` answers `outcomes[]`, each with `state`: `landed` with its commit in `landed_as`; `failed`; `conflict` with the files contested in `conflict.paths`; from the sluice release that carries sluice's record 0124, `refused`, its landing held, its words its `notice` whole, which holds the forge's, as every outcome's words are. Each is confirmed by its key once flume has read it, and one in a state flume cannot read is left owed and named in status. Each one's words are its `notice`, or where it holds none its `state`, `branch` and the `task` of each of its `failed[]`. A failure's notice names the check that failed, not its log. A conflict's base revision is `tested.on` (`tested: {combination, on, submissions}`), never parsed from the notice; a conflict found while the candidate was formed, before any test, carries no `tested`, and its base is then the base's revision where the profile holds it, `<remote>/<base>` or the local base, read with no fetch. Each record carries its `delivery`, its `key`, `reader` and `state` among it, the `state` `owed`, `expired` or `done`. A submit's decided answer carries one too. `sluice confirm <key> --json` confirms one, exiting 0 where it is confirmed now or was before. The profile reads it of sluice 0.93.2 (sluice record 0102) |
+| inbox | `sluice inbox --json` answers `outcomes[]`, each with its entry's `id` and `state`: `landed` with its commit in `landed_as`; `failed`; `conflict` with the files contested in `conflict.paths`; from the sluice release that carries sluice's record 0124, `refused`, its landing held, its words its `notice` whole, which holds the forge's, as every outcome's words are. Each is confirmed by its key once flume has acted on it (225), and one in a state flume cannot read is left owed and named in status. Each one's words are its `notice`, or where it holds none its `state`, `branch` and the `task` of each of its `failed[]`. A failure's notice names the check that failed, not its log. A conflict's base revision is `tested.on` (`tested: {combination, on, submissions}`), never parsed from the notice; a conflict found while the candidate was formed, before any test, carries no `tested`, and its base is then the base's revision where the profile holds it, `<remote>/<base>` or the local base, read with no fetch. Each record carries its `delivery`, its `key`, `reader` and `state` among it, the `state` `owed`, `expired` or `done`, the key given to confirm where it is `owed` or `expired`. A submit's decided answer carries one too. `sluice confirm <key> --json` confirms one, exiting 0 where it is confirmed now or was before and 1 where nothing is owed under the key, each read as confirmed, since sluice hands over nothing under it again; any other exit is the merge queue unread, in sluice's words. The profile reads it of sluice 0.93.2 (sluice record 0102) |
 | read-submission | `sluice overview --json`, each of its `branches[].branch`, then `sluice status <branch> --all --json`, its `submissions[]`: the one with the highest `id` whose `from.worktree` is the place's branch, its `state` `queued` as waiting, `testing` as under test, `landed` (with `landed_as`), `failed`, `conflict`, `refused` as held with the forge's words in `refused.words`, or `withdrawn`; any other state is read as not understood. From the sluice release that carries sluice's record 0124, every submission record sluice prints carries a held one's `refused`, `{words, at}`, read from the branch's held landing. A held record that carries none is still held, its words saying that sluice's record gives none, and is never read through a wait. Its `submitted` is when it was submitted; when it was decided and how long its checks ran are read from sluice's records of the entry and its runs where the pinned sluice gives them, checked against it at the build, and unknown where it does not (168) |
 | submit, a base place | `sluice submit <base> --head <branch> --no-wait --json`, run in the repository, since a base place has no worktree. It submits the branch as sluice holds it, the remote's revision where its policy names one, recording no worktree and no session as the entry's submitter, and answers as any submit. No `sluice inbox` runs for it: its outcome is read-submission's entry whose `from.head` is the branch, failed and conflict with the record's words, files and `tested.on`. The profile reads it of the first pinned sluice whose submit takes a head without `--check` (sluice 124 as amended) |
 | open, close | `sluice branch create <branch> --from <base> --json` answers the revision the branch was made at. `sluice branch delete <branch> --into <base> --json` answers it removed. Each exits 1 where a branch it names does not exist, which close reads as gone, and 2 on a refusal, its `error.message` the words (sluice C.5's branch row) |
