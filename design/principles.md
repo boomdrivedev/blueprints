@@ -137,13 +137,18 @@ right." Each repository's CLAUDE.md points here.
     an instruction, a spec or a record. What a page says is kept by the
     people and agents who write and review it, never by code that greps
     it. A rule about what a page must say stays a rule its writers
-    keep, and no task enforces it. (Written 2026-11-11 by
+    keep, and no task enforces it. A tool's own validation of the
+    files it works on is no check of what a page says, and stays in the
+    gate: OpenSpec's `openspec validate` of a kit's specs and its open
+    changes, each change validated as it would archive. (Written 2026-11-11 by
     agentplot-design from the user's words that day, on sluice's
     `root:installs`, a check that greps the READMEs, skills and site
     pages for install commands: "I don't want fucking checks on
     instructions. That has got to fucking stop. That is my biggest pet
     peeve. We do not fucking write code tests against Markdown
-    files.")
+    files." Amended 2026-11-15 on the user's answer on their card,
+    "OpenSpec's own validation stays; the rule is about checks of what
+    pages say", with each open change validated as archived.)
 
 17. **A tool's plugins come with its CLI from one flake.** Wherever a
     flake installs a tool's CLI, that flake gives the tool's plugins,
