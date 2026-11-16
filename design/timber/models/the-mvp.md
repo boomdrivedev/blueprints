@@ -66,9 +66,10 @@ The MVP is four steps:
 2. **swancloud deploys through timber.** swancloud declares
    `.config/timber.toml`: one component, each machine's closure an
    artifact, the Macs following `stable` and srv waiting on the user's
-   yes. A timer of deneb's own runs `timber publish` and `timber apply`
-   after each landing, as timber's C.16 lets a host name its own step,
-   and the deployer and the releaser retire (swancloud `deploy.11`, the
+   yes. deneb's runner reports each landing to Boomdrive Cloud, and
+   the cloud starts `timber publish` and `timber apply` on that runner,
+   once for each landing and on no schedule, as it does for a single
+   host too. The deployer and the releaser retire (swancloud `deploy.11`, the
    user's decision of 2026-10-26). It is the madswan drive's to plan.
 3. **A new version is noticed and routed with no agent.**
    - headwater reads a `flake.lock` and the GitHub releases of what it
