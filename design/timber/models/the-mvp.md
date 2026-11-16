@@ -69,7 +69,9 @@ The MVP is four steps:
    yes. deneb's runner reports each landing to Boomdrive Cloud, and
    the cloud starts `timber publish` and `timber apply` on that runner,
    once for each landing and on no schedule, as it does for a single
-   host too. The deployer and the releaser retire (swancloud `deploy.11`, the
+   host too. flume and Boomdrive land, cache and publish through timber
+   the same way, as every repository of the family does (the user,
+   2026-11-16). The deployer and the releaser retire (swancloud `deploy.11`, the
    user's decision of 2026-10-26). It is the madswan drive's to plan.
 3. **A new version is noticed and routed with no agent.**
    - headwater reads a `flake.lock` and the GitHub releases of what it
@@ -95,7 +97,6 @@ update.
 
 ## What the MVP leaves for later
 
-timber publishing the family's own tools, with headwater reading
-timber's channels instead of GitHub's tags; each machine pulling its own
+headwater reading timber's channels instead of GitHub's releases; each machine pulling its own
 version on a timer (C.12's pull profile); a drive's publish as an offer
 in another drive; and the phase 2 profiles beyond Switchboard's three.
