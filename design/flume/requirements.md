@@ -1889,10 +1889,16 @@ redefine these.
      It submits the place's own branch at its head, to its base and to
      no other branch (15), through the repository's merge queue, the
      place recorded as the submission's submitter. It holds no wait on
-     the verdict: every settle that follows collects from the merge
-     queue the outcomes of the place's submissions pending for the place
-     (133), and settles the place by the one delivered, confirming
-     each to the merge queue once it has acted on it (225). A place whose kind does not land never reaches the merge
+     the verdict: every settle that follows the submission collects from
+     the merge queue the outcomes of the place's submissions pending for
+     the place (133) until it holds the submission's outcome, and
+     settles the place by the one delivered, confirming each to the
+     merge queue once it has acted on it (225). A settle of a place
+     whose submission flume has not made, or whose outcome it holds,
+     asks the merge queue's inbox nothing, since flume makes every
+     submission of a place, but once as it submits the place anew,
+     taking nothing pending then as the new submission's outcome (99,
+     101). (flume record 0012 as amended 2026-11-16.) A place whose kind does not land never reaches the merge
      queue. A base place, which has no last stage, is submitted only
      as 203 says.
 112. A failed submission, one the merge queue blamed or found in
