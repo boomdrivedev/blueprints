@@ -1879,7 +1879,20 @@ redefine these.
      by failed submission and by finding together (131),
      waits for its caller's retry or drop instead. A submission the
      merge queue refuses or withdraws leaves the place waiting for a
-     retry or a drop, and status names why. A base place, whose kind
+     retry or a drop, and status names why. A submission whose landing
+     the forge refused, which the merge queue holds with the forge's
+     words and decides no outcome for (sluice 152), neither fails nor
+     lands: flume starts no stage for it and counts no going-back, since
+     the forge may refuse every landing for a reason of its own and not
+     of the place's work. The place waits on its caller with the forge's
+     words (130), its submission still open, so each settle that follows
+     reads it again (124): its landing, once the merge queue pushes it
+     again, makes the place's work over (113), and its return to the
+     queue, once another submission the held landing carried has left,
+     ends the wait. A retry naming a stage runs it and the stages after
+     it, and the submission that follows withdraws the held one, as any
+     later submission from the place withdraws an earlier (sluice 67).
+     A base place, whose kind
      names no stage to send it back to, waits on its caller after a
      failed submission as 203 says.
 113. A submission of the place's own branch that lands makes the place's
@@ -2150,6 +2163,7 @@ redefine these.
      an agent (223), a stage for
      review (163), a stage
      reported lost (45), a prompt never begun (38), a readiness that failed (12),
+     a submission whose landing the forge refused (112),
      or a kind's last stage delivered where the kind does not land
      (114), waits on that move from the moment flume read it so, and
      status says which move and since when, and, for an answer, whether
@@ -2979,16 +2993,21 @@ redefine these.
      (113).
 133. **inbox**: given a place, every decided outcome of the place's
      submissions pending for it: landed, with the commit it landed as;
-     failed, with the merge queue's words; or in conflict, with the
-     files contested; each then recorded by the merge queue as delivered
-     to the place; or that the merge queue could not be read (43, 111,
+     failed, with the merge queue's words; in conflict, with the
+     files contested; or held, its landing refused by the forge, with
+     the forge's words, which decides nothing and leaves the submission
+     open (112); each then recorded by the merge queue as delivered
+     to the place once flume has read it as one of these, and one flume
+     cannot read left pending for it, its words in status; or that the
+     merge queue could not be read (43, 111,
      112). A withdrawal is delivered by nothing, and read from
      read-submission (99). A base place has no inbox: its outcomes are
      read from read-submission (203).
 99. **read-submission**: given a repository and a branch, the newest
     submission of that branch, whoever made it, with its target and its
     state: waiting, under test, landed with the commit it landed as,
-    failed with what it named, or withdrawn; when it was submitted and,
+    failed with what it named, held with the forge's words where the
+    forge refused its landing (112), or withdrawn; when it was submitted and,
     once decided, when, and how long its checks ran, where the merge
     queue records them; or none; or that the merge
     queue could not be read (63, 68, 71, 168).
@@ -3879,8 +3898,8 @@ stripped and `GIT_TERMINAL_PROMPT=0`, a refusal read as its JSON
 | operation | sluice's commands and fields |
 |---|---|
 | submit | `sluice submit <base> --no-wait --json` answers `{ahead, branch, id}` and nothing more where intake takes the entry at once; the entry is `id`. On a base whose policy takes pull requests, sluice's statement says the submit pushes the place's branch, opens or updates its request and marks it ready, and where the request's conditions do not yet hold, a review among them, answers with the request and what it waits for and no entry (sluice C.5); the place's submission is then open and undecided until intake takes the request (124), and status names what it waits for |
-| inbox | `sluice inbox --json` answers `outcomes[]`, each with `state`: `landed` with its commit in `landed_as`; `failed`; `conflict` with the files contested in `conflict.paths`. Each one's words are its `notice`, or where it holds none its `state`, `branch` and the `task` of each of its `failed[]`. A failure's notice names the check that failed, not its log. A conflict's base revision is `tested.on` (`tested: {combination, on, submissions}`), never parsed from the notice; a conflict found while the candidate was formed, before any test, carries no `tested`, and its base is then the base's revision where the profile holds it, `<remote>/<base>` or the local base, read with no fetch |
-| read-submission | `sluice overview --json`, each of its `branches[].branch`, then `sluice status <branch> --all --json`, its `submissions[]`: the one with the highest `id` whose `from.worktree` is the place's branch, its `state` `queued` as waiting, `testing` as under test, `landed` (with `landed_as`), `failed`, `conflict` or `withdrawn`; any other state is read as not understood. Its `submitted` is when it was submitted; when it was decided and how long its checks ran are read from sluice's records of the entry and its runs where the pinned sluice gives them, checked against it at the build, and unknown where it does not (168) |
+| inbox | `sluice inbox --json` answers `outcomes[]`, each with `state`: `landed` with its commit in `landed_as`; `failed`; `conflict` with the files contested in `conflict.paths`; from the sluice release that carries sluice's record 0124, `refused`, its landing held, with the forge's words in `refused.words`. Each is confirmed by its key once flume has read it, and one in a state flume cannot read is left owed and named in status. Each one's words are its `notice`, or where it holds none its `state`, `branch` and the `task` of each of its `failed[]`. A failure's notice names the check that failed, not its log. A conflict's base revision is `tested.on` (`tested: {combination, on, submissions}`), never parsed from the notice; a conflict found while the candidate was formed, before any test, carries no `tested`, and its base is then the base's revision where the profile holds it, `<remote>/<base>` or the local base, read with no fetch |
+| read-submission | `sluice overview --json`, each of its `branches[].branch`, then `sluice status <branch> --all --json`, its `submissions[]`: the one with the highest `id` whose `from.worktree` is the place's branch, its `state` `queued` as waiting, `testing` as under test, `landed` (with `landed_as`), `failed`, `conflict`, `refused` as held with `refused.words`, or `withdrawn`; any other state is read as not understood. Its `submitted` is when it was submitted; when it was decided and how long its checks ran are read from sluice's records of the entry and its runs where the pinned sluice gives them, checked against it at the build, and unknown where it does not (168) |
 | submit, a base place | `sluice submit <base> --head <branch> --no-wait --json`, run in the repository, since a base place has no worktree. It submits the branch as sluice holds it, the remote's revision where its policy names one, recording no worktree and no session as the entry's submitter, and answers as any submit. No `sluice inbox` runs for it: its outcome is read-submission's entry whose `from.head` is the branch, failed and conflict with the record's words, files and `tested.on`. The profile reads it of the first pinned sluice whose submit takes a head without `--check` (sluice 124 as amended) |
 | open, close | `sluice branch create <branch> --from <base> --json` answers the revision the branch was made at. `sluice branch delete <branch> --into <base> --json` answers it removed. Each exits 1 where a branch it names does not exist, which close reads as gone, and 2 on a refusal, its `error.message` the words (sluice C.5's branch row) |
 | base | the remote is the `remote` of the base's table under `[branches]` in `.config/sluice.toml`, the base's own or the first pattern with one `*` that names it, read at the local base and else at each remote's tracking copy; where it names one, `git fetch <remote> +refs/heads/<base>:refs/remotes/<remote>/<base>` once, the base at `refs/remotes/<remote>/<base>`; where the base's table names none, the local base; and where the policy names no table for the base, or no revision of it holds a policy, sluice lands no such base, and base says so (126) |
