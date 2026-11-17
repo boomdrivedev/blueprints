@@ -73,7 +73,9 @@ The MVP is four steps:
    once for each landing and on no schedule, as it does for a single
    host too. flume and Boomdrive land, cache and publish through timber
    the same way, as every repository of the family does (the user,
-   2026-11-16). The deployer and the releaser retire (swancloud `deploy.11`, the
+   2026-11-16). Their binaries then print their git revision and
+   build, never a version, and each one's release commit retires
+   (timber record 0011; statement 24, C.11). The deployer and the releaser retire (swancloud `deploy.11`, the
    user's decision of 2026-10-26). It is the madswan drive's to plan.
 3. **A new version is noticed and routed with no agent.**
    - headwater reads a `flake.lock` and the GitHub releases of what it
