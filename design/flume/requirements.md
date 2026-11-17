@@ -1832,9 +1832,13 @@ redefine these.
 208. A caller keeps watch over the host by settling every place on it
      on a bound it states to flume, as `flume settle --every <bound>`
      asks. flume keeps in the host's state when the newest such settle
-     began and the bound it stated. A caller keeps watch while that
-     settle began less than twice its bound ago, so a settle that runs
-     as long as its bound keeps it still. The watch is the host's, never
+     began, when it ended and the bound it stated. A caller keeps watch
+     while that settle runs, and until twice its bound has passed since
+     it ended, so a settle that runs longer than its bound never leaves
+     the host unwatched and never sets every other command settling
+     every place itself (119). (Amended 2026-11-17: a pass that ran
+     minutes on deneb lapsed its own watch, and each command then
+     settled every place, stalling for minutes.) The watch is the host's, never
      a terminal's or a place's: on a host that keeps the runner its
      passes keep it (section 9), and any caller of the host's own may,
      a timer among them. A caller keeping watch decides nothing of what
