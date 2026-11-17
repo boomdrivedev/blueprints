@@ -970,11 +970,19 @@ can be scoped to apart. A component's indexes, its version tags
 (`<prefix><version>`) and its channels live under the component's own
 repository, each a tag of it, so a credential scoped to one component
 makes that component's versions and moves its channels and nothing of
-another's; the declared repository (C.1 above) is the root the three
-spaces hang under. Cache entries live apart from every component, under `cache/<build>`
+another's. The binding declares a root, and each repository's three
+spaces hang under `<root>/<repository>/`, so a repository's packages are
+public or private as the repository is, and one store holds both
+(timber record 0040). Cache entries live apart from every component, under `cache/<build>`
 repositories, one per build profile (`cache/moon`), with the build
 identity as the tag, so a credential that writes `cache/` and nothing
-else can push entries and never offer, accept or move a name (135). An
+else can push entries and never offer, accept or move a name (135). On GitHub's
+registry, where no token is scoped to some of an owner's packages, the
+pool's token is the job's own, given write on its repository's cache
+packages and nothing else; the publishing host makes the repository's
+component and artifact packages before the first publish, giving the
+job none, and a name the gate has not accepted is refused wherever it
+is read (95, 96; timber record 0040). An
 artifact's pointer (138), `artifact/<ecosystem>/<name>@<version>`, is the
 repository `artifact/<ecosystem>/<name>`, lowercased and escaped as the
 distribution protocol allows, with `<version>` as its tag, so a name's
