@@ -277,7 +277,7 @@ redefine these.
     component's paths and that the rule bumps is a version of its own,
     tagged yet or not, so a revision's version never waits on an
     earlier publish and two landings never derive one (timber record
-    0037).
+    0038).
 22. A version's name is its component's, and is claimed before any
     artifact is packed under it: a publish records the name against the
     revision in the repository's history, which every publisher of the
@@ -290,7 +290,7 @@ redefine these.
 24. A build takes its version from its tree alone. A landing that
     makes a version is checked as its release commit, whose tree names
     the version, so the build a publish offers is the build the checks
-    verified and says its version (135; timber record 0037). Every
+    verified and says its version (135; timber record 0038). Every
     other build never knows the version, so it is the same build
     whatever version it later becomes; a version is in the bytes only
     where a release commit's tree or the ecosystem's form puts it.
