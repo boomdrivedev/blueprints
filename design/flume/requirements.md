@@ -601,8 +601,8 @@ redefine these.
     then. A later change to any declaration, lock or package the host
     holds never changes a place already launched.
 22. flume's own kinds are fix@1, fix@2, chore@1, chore@2, change@1,
-    change@2, change@3, change@4 and plan@1, all nine simple kinds (18),
-    and all nine land. **plan** is a plan stage, which delivers
+    change@2, change@3, change@4, change@5 and plan@1, all ten simple
+    kinds (18), and all ten land. **plan** is a plan stage, which delivers
     a plan its caller accepts (163), and then fix's code stage, which
     works to the plan accepted; a failed submission sends it back to
     code. **fix** is a code stage, which delivers commits. Its
@@ -613,7 +613,15 @@ redefine these.
     their kinds' versions before, each stage giving its agents the mode
     `full` and saying its one way to ask (C.4); fix@2's and chore@2's
     way to stop short names no work the stage cannot deliver past
-    (flume record 0064). **change** at version 3 is a construct stage, which delivers
+    (flume record 0064). **change** at version 5 is version 4 with each
+    stage working the place's change through OpenSpec's own commands
+    (C.3). Its construct writes the change through OpenSpec's
+    instructions for each of its parts, and delivers it only once
+    OpenSpec's strict check passes on it. Its code works through the
+    tasks OpenSpec's apply instructions give. Its verify archives the
+    change through OpenSpec's own archive, which applies the change's
+    specs and checks the specs they make (C.2; flume record 0077).
+    **change** at version 3 is a construct stage, which delivers
     the place's change written, each of its tasks naming the narrowest
     check that shows that task done and none running the repository's
     whole checks or a task group's; a code stage, one agent for the whole
@@ -3495,7 +3503,8 @@ holds the rest, the place's facts and then its run's:
 |---|---|---|---|---|
 | **fix@2** | `fix/<name>` | yes | yes; `code` | `code`: `commits`, as fix@1's, in the mode `full`, its prompt saying its one way to ask and its way to stop short naming no work it cannot deliver past (flume record 0064) |
 | **chore@2** | `chore/<name>` | yes | yes; `code` | fix@2's stage under chore's prefix (flume record 0064) |
-| **change@4** | `change/<name>` | no | yes; `code` | change@3's stages, each in the mode `full`, its prompt saying its one way to ask. The newest, so a launch naming no version in a repository whose lock records none runs it (154, 155). (flume record 0064) |
+| **change@5** | `change/<name>` | no | yes; `code` | change@4's stages, each working the change through OpenSpec's own commands (C.3). Each runs them as the repository's instructions run its tools, never through an agent program's skill or command for them. `construct` writes each part from `openspec instructions <part> --change <name> --json` until `openspec status` reads the change's planning complete. It commits the change only once `openspec validate <name> --strict` passes. `code` works through the tasks `openspec instructions apply --change <name> --json` gives, ticking each at its line once its own check passes. `verify` runs the repository's whole checks once and checks the work against the change, every task done and the strict check passing. It archives the change by `openspec archive <name> --yes`, and stops short finding with the archive's words where it refuses. The newest, so a launch naming no version in a repository whose lock records none runs it (154, 155). (flume record 0077, proposed) |
+| **change@4** | `change/<name>` | no | yes; `code` | change@3's stages, each in the mode `full`, its prompt saying its one way to ask. (flume record 0064) |
 | **fix@1** | `fix/<name>` | yes | yes; `code` | `code`: `commits` |
 | **chore@1** | `chore/<name>` | yes | yes; `code` | `code`: `commits`; fix@1's stage under a prefix of its own, so a branch's name says which it was |
 | **change@3** | `change/<name>` | no | yes; `code` | `construct`: `change`, each task naming the narrowest check that shows it done, a test by name, a package's tests or a lint of the files it touched, and none running the repository's whole checks or a task group's; `code`: `tasks`, not repeating, one agent for the whole change; `verify`: `archived`, its prompt running the repository's whole checks once before it checks the work as change@2's does. (flume record 0054, accepted by the user 2026-11-06) |
