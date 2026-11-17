@@ -1,0 +1,651 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style>
+<title>Timber Architecture</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: one reading column; every deployment is the same five-station figure with different labels. */
+:root {
+  --bg: #f4f6f4; --surface: #ffffff; --zone: #e9eeea; --store: #dfe9e4;
+  --ink: #18211d; --muted: #56645d; --line: #cdd6d0; --accent: #1d6b59;
+  --ok: #2b7a4b; --todo: #2f6690; --warn: #a66a00; --bad: #b0352d;
+  --sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111614; --surface: #1b2420; --zone: #171e1b; --store: #20302a;
+    --ink: #e5ebe7; --muted: #9aa8a1; --line: #303b36; --accent: #62c4a8;
+    --ok: #6fc690; --todo: #7fb4dc; --warn: #e2ab4f; --bad: #f08379; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111614; --surface: #1b2420; --zone: #171e1b; --store: #20302a;
+  --ink: #e5ebe7; --muted: #9aa8a1; --line: #303b36; --accent: #62c4a8;
+  --ok: #6fc690; --todo: #7fb4dc; --warn: #e2ab4f; --bad: #f08379; color-scheme: dark;
+}
+body { background: var(--bg); color: var(--ink); font-family: var(--sans); font-size: 16px; line-height: 1.5; }
+.wrap { max-width: 1064px; margin: 0 auto; padding-block: 40px 64px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: flex; flex-direction: column; gap: 60px; }
+h1, h2, h3, p, ul, figure { margin: 0; }
+h1 { font-size: clamp(1.7rem, 4vw, 2.4rem); line-height: 1.15; font-weight: 600; letter-spacing: -0.01em; text-wrap: balance; }
+h2 { font-size: 1.35rem; line-height: 1.25; font-weight: 600; text-wrap: balance; }
+h3 { font-size: 1rem; font-weight: 600; }
+header, section { display: flex; flex-direction: column; gap: 16px; }
+.eyebrow { font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+.lede { font-size: 1.1rem; max-width: 64ch; }
+.note { color: var(--muted); max-width: 70ch; }
+code { font-family: var(--mono); font-size: 0.85em; overflow-wrap: anywhere; }
+.legend { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 20px; font-size: 0.85rem; color: var(--muted); }
+.legend li { display: flex; align-items: center; gap: 6px; }
+.im { vertical-align: -1px; margin-right: 3px; }
+
+figure { display: flex; flex-direction: column; gap: 10px; }
+.scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); padding: 10px; }
+svg.fig { display: block; width: 100%; min-width: 940px; height: auto; color: var(--ink); }
+figcaption { color: var(--muted); font-size: 0.92rem; max-width: 78ch; }
+.fz { fill: var(--zone); stroke: var(--line); }
+.fs { fill: var(--surface); stroke: var(--ink); stroke-width: 1.3; }
+.fo { fill: none; stroke: var(--muted); stroke-width: 1.1; stroke-dasharray: 4 3; }
+.fst { fill: var(--store); stroke: var(--line); }
+.fp { fill: var(--surface); stroke: var(--accent); stroke-width: 1.3; }
+.ar { stroke: currentColor; stroke-width: 1.3; fill: none; }
+.ah { fill: currentColor; }
+.ky { fill: none; stroke: var(--muted); stroke-width: 1.2; }
+.th { font: 500 10.5px var(--mono); letter-spacing: 0.08em; fill: var(--muted); }
+.tt { font: 600 12px var(--mono); fill: var(--ink); }
+.tb { font: 400 11px var(--sans); fill: var(--ink); }
+.ton { font: 500 11px var(--sans); fill: var(--accent); }
+.tm { font: 400 10.5px var(--sans); fill: var(--muted); }
+.tz { font: 600 12px var(--sans); fill: var(--ink); }
+.te { font: 500 10px var(--mono); fill: var(--accent); }
+.mk-ok { fill: var(--ok); }
+.mk-todo { fill: none; stroke: var(--todo); stroke-width: 1.8; }
+.mk-prop { fill: var(--warn); }
+.mk-open { fill: var(--bad); font: 700 12px var(--sans); }
+
+.rules { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px 28px; }
+.rules div { border-top: 2px solid var(--ink); padding-top: 10px; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.rules p { color: var(--muted); font-size: 0.92rem; }
+
+.tscroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; min-width: 780px; font-size: 0.9rem; }
+th, td { text-align: left; vertical-align: top; padding: 9px 14px; border-bottom: 1px solid var(--line); }
+tr:last-child > * { border-bottom: 0; }
+thead th { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+tbody th { font-weight: 600; white-space: nowrap; }
+
+.rulings { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 16px; }
+.ruling { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 16px 18px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.ruling ul { padding-left: 18px; display: flex; flex-direction: column; gap: 6px; font-size: 0.93rem; }
+.ruling .pick { border-left: 3px solid var(--warn); padding-left: 10px; font-size: 0.95rem; }
+.ruling .src { color: var(--muted); font-size: 0.82rem; }
+a { color: var(--accent); }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+footer { color: var(--muted); font-size: 0.82rem; border-top: 1px solid var(--line); padding-top: 16px; }
+</style>
+
+</head><body>
+<main class="wrap">
+
+<header>
+  <p class="eyebrow">Timber · architecture</p>
+  <h1>One shape, three deployments</h1>
+  <p class="lede">Every owner of timber runs the same five steps in the same order and keeps the same two records. Boomdrive Cloud carries the news from one step to the next in every deployment, down to a single host, and a runner on a host runs each command. Deployments differ in two things only: which machine runs each step, and who holds which key. The statement beside this page holds the clauses, and its models hold the plans.</p>
+  <ul class="legend" aria-label="What the marks mean">
+<li><svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><circle cx="6" cy="6" r="4" class="mk-ok"/></svg> built</li>
+<li><svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><circle cx="6" cy="6" r="3.6" class="mk-todo"/></svg> decided, not built</li>
+<li><svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><rect x="2.4" y="2.4" width="7.2" height="7.2" transform="rotate(45 6 6)" class="mk-prop"/></svg> proposed</li>
+<li><svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><text x="6" y="10.5" class="mk-open" text-anchor="middle">?</text></svg> open</li>
+<li><svg viewBox="0 0 26 12" width="26" height="12" aria-hidden="true"><rect x="1" y="1" width="24" height="10" rx="2" class="fs"/></svg> timber's step</li>
+<li><svg viewBox="0 0 26 12" width="26" height="12" aria-hidden="true"><rect x="1" y="1" width="24" height="10" rx="2" class="fo"/></svg> another tool's step</li>
+</ul>
+</header>
+
+<section>
+  <h2>The shape</h2>
+  <figure>
+    <div class="scroll"><svg class="fig" viewBox="0 0 1040 356" role="img" aria-label="The five steps every deployment runs, the store they share and the ledger of channel moves.">
+<defs><marker id="as" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L8 4 L0 8 z" class="ah"/></marker></defs>
+<text x="12" y="16" class="th">1  CHECK</text>
+<text x="224" y="16" class="th">2  LAND</text>
+<text x="436" y="16" class="th">3  OFFER</text>
+<text x="648" y="16" class="th">4  ACCEPT</text>
+<text x="860" y="16" class="th">5  RUN</text>
+<rect x="6" y="96" width="180" height="138" rx="7" class="fz"/>
+<text x="16" y="114" class="tz">A build machine</text>
+<circle cx="20" cy="220" r="3.2" class="ky"/><path d="M23.2 220 h9 M29 220 v3.2 M32 220 v2.4" class="ky"/>
+<text x="38" y="224" class="tm">writes cache entries</text>
+<rect x="218" y="96" width="180" height="138" rx="7" class="fz"/>
+<text x="228" y="114" class="tz">The merge queue</text>
+<circle cx="232" cy="220" r="3.2" class="ky"/><path d="M235.2 220 h9 M241 220 v3.2 M244 220 v2.4" class="ky"/>
+<text x="250" y="224" class="tm">signs each verdict</text>
+<rect x="430" y="96" width="180" height="138" rx="7" class="fz"/>
+<text x="440" y="114" class="tz">A publisher</text>
+<circle cx="444" cy="220" r="3.2" class="ky"/><path d="M447.2 220 h9 M453 220 v3.2 M456 220 v2.4" class="ky"/>
+<text x="462" y="224" class="tm">the offering key</text>
+<rect x="642" y="96" width="180" height="138" rx="7" class="fz"/>
+<text x="652" y="114" class="tz">The gate</text>
+<circle cx="656" cy="220" r="3.2" class="ky"/><path d="M659.2 220 h9 M665 220 v3.2 M668 220 v2.4" class="ky"/>
+<text x="674" y="224" class="tm">the accepting key</text>
+<rect x="854" y="96" width="180" height="138" rx="7" class="fz"/>
+<text x="864" y="114" class="tz">An environment</text>
+<circle cx="868" cy="220" r="3.2" class="ky"/><path d="M871.2 220 h9 M877 220 v3.2 M880 220 v2.4" class="ky"/>
+<text x="886" y="224" class="tm">its own credentials</text>
+<rect x="12" y="124" width="168" height="80" rx="5" class="fo"/>
+<text x="22" y="143" class="tt">checks, then push</text>
+
+<text x="22" y="160" class="tb">the queue runs the checks</text>
+<text x="22" y="175" class="tb">push saves their output</text>
+<rect x="224" y="124" width="168" height="80" rx="5" class="fo"/>
+<text x="234" y="143" class="tt">the queue lands</text>
+
+<text x="234" y="160" class="tb">sluice, or a plain branch</text>
+<text x="234" y="175" class="tb">it runs nothing after</text>
+<rect x="436" y="124" width="168" height="80" rx="5" class="fs"/>
+<text x="446" y="143" class="tt">timber publish</text>
+
+<text x="446" y="160" class="tb">version, tag and notes</text>
+<text x="446" y="175" class="tb">takes the stored builds</text>
+<text x="446" y="190" class="tb">never builds again</text>
+<rect x="648" y="124" width="168" height="80" rx="5" class="fs"/>
+<text x="658" y="143" class="tt">the gate</text>
+
+<text x="658" y="160" class="tb">accepts under the policy</text>
+<text x="658" y="175" class="tb">moves beta at once</text>
+<text x="658" y="190" class="tb">held moves wait on a yes</text>
+<rect x="860" y="124" width="168" height="80" rx="5" class="fs"/>
+<text x="870" y="143" class="tt">timber apply</text>
+
+<text x="870" y="160" class="tb">checks the claims</text>
+<text x="870" y="175" class="tb">converges one environment</text>
+<text x="870" y="190" class="tb">reports what runs</text>
+<path d="M182 172 L222 172" class="ar" marker-end="url(#as)"/>
+<text x="202.0" y="166" class="te" text-anchor="middle">passed</text>
+<path d="M394 172 L434 172" class="ar" marker-end="url(#as)"/>
+<text x="414.0" y="166" class="te" text-anchor="middle">landed</text>
+<path d="M606 172 L646 172" class="ar" marker-end="url(#as)"/>
+<text x="626.0" y="166" class="te" text-anchor="middle">offered</text>
+<path d="M818 172 L858 172" class="ar" marker-end="url(#as)"/>
+<text x="838.0" y="166" class="te" text-anchor="middle">moved</text>
+<rect x="648" y="28" width="168" height="44" rx="5" class="fp"/>
+<text x="658" y="46" class="tz">An approver</text>
+<text x="658" y="62" class="tm">says yes to a held move</text>
+<path d="M776 72 L776 122" class="ar" marker-end="url(#as)"/>
+<text x="770" y="90" class="te" text-anchor="end">yes</text>
+<rect x="648" y="244" width="252" height="40" rx="5" class="fst"/>
+<text x="658" y="259" class="th">LEDGER: EVERY MOVE</text>
+<text x="658" y="275" class="tm">in order, never rewritten</text>
+
+<path d="M798 204 L798 242" class="ar" marker-end="url(#as)"/>
+<rect x="6" y="296" width="1028" height="46" rx="5" class="fst"/>
+<text x="16" y="315" class="th">STORE</text>
+<text x="16" y="332" class="tm">bytes by digest, the claims about them, the gate&#x27;s acceptance among them, and the channels&#x27; names. Always the owner&#x27;s.</text>
+
+<path d="M162 204 L162 294" class="ar" marker-end="url(#as)"/>
+<text x="156" y="272" class="te" text-anchor="end">cache entries</text>
+<path d="M586 204 L586 294" class="ar" marker-end="url(#as)"/>
+<text x="580" y="272" class="te" text-anchor="end">version, claims</text>
+<path d="M1010 296 L1010 206" class="ar" marker-end="url(#as)"/>
+<text x="1004" y="272" class="te" text-anchor="end">reads by digest</text>
+</svg></div>
+    <figcaption>Each step starts when the step before it finishes. Nothing in timber runs on a clock; only an environment that pulls looks for a new version by itself. Publish is where the version, its tag and its notes are made, by git-cliff from the commits, with no person in the loop.</figcaption>
+  </figure>
+  <div class="rules">
+    <div><h3>Built once</h3><p>Publish offers the bytes the checks built. It never builds them again, so what passed is what runs.</p></div>
+    <div><h3>Offering is not accepting</h3><p>Two keys. No machine that builds holds the accepting key, except one host that is the whole deployment and says so in its claim.</p></div>
+    <div><h3>The owner keeps everything</h3><p>The store, the ledger and the policy are the owner's in every deployment. Moving between deployments changes a host's bindings file.</p></div>
+  </div>
+</section>
+
+<section>
+  <h2>1. One host</h2>
+  <p class="note">A developer's laptop, or the fleet's deneb, under Boomdrive Cloud. Timber needs no setup here: with no bindings file it uses a store on disk, a key it makes on first use and a ledger beside the branch.</p>
+  <figure>
+    <div class="scroll"><svg class="fig" viewBox="0 0 1040 356" role="img" aria-label="One host under Boomdrive Cloud: the runner reports each landing, the cloud starts push and publish on that runner, the gate runs in the same command, and the cloud then starts apply.">
+<defs><marker id="ah" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L8 4 L0 8 z" class="ah"/></marker></defs>
+<text x="12" y="16" class="th">1  CHECK</text>
+<text x="224" y="16" class="th">2  LAND</text>
+<text x="436" y="16" class="th">3  OFFER</text>
+<text x="648" y="16" class="th">4  ACCEPT</text>
+<text x="860" y="16" class="th">5  RUN</text>
+<rect x="6" y="96" width="1028" height="138" rx="7" class="fz"/>
+<text x="16" y="114" class="tz">One host: a laptop, or deneb</text>
+<circle cx="20" cy="220" r="3.2" class="ky"/><path d="M23.2 220 h9 M29 220 v3.2 M32 220 v2.4" class="ky"/>
+<text x="38" y="224" class="tm">the runner dials out; one host key offers and accepts; targets&#x27; own credentials</text>
+<rect x="12" y="124" width="168" height="80" rx="5" class="fo"/>
+<text x="22" y="143" class="tt">sluice&#x27;s checks</text>
+<circle cx="168" cy="138" r="4" class="mk-ok"/>
+<text x="22" y="160" class="tb">moon builds and tests</text>
+<text x="22" y="175" class="tb">outputs stay on this host</text>
+<rect x="224" y="124" width="168" height="80" rx="5" class="fo"/>
+<text x="234" y="143" class="tt">sluice lands</text>
+<circle cx="380" cy="138" r="4" class="mk-ok"/>
+<text x="234" y="160" class="tb">Flume reads the outcome</text>
+<text x="234" y="175" class="tb">the runner reports it</text>
+<rect x="436" y="124" width="168" height="80" rx="5" class="fs"/>
+<text x="446" y="143" class="tt">push, then publish</text>
+<circle cx="592" cy="138" r="4" class="mk-ok"/>
+<text x="446" y="160" class="ton">on: the landing&#x27;s report</text>
+<text x="446" y="175" class="ton">by: the host&#x27;s runner</text>
+<circle cx="592" cy="171" r="3.6" class="mk-todo"/>
+<text x="446" y="190" class="tb">started by the cloud</text>
+<rect x="648" y="124" width="168" height="80" rx="5" class="fs"/>
+<text x="658" y="143" class="tt">the gate, same run</text>
+<circle cx="804" cy="138" r="4" class="mk-ok"/>
+<text x="658" y="160" class="tb">accepts what it offered</text>
+<text x="658" y="175" class="tb">and says so in the claim</text>
+<text x="658" y="190" class="tb">beta moves at once</text>
+<rect x="860" y="124" width="168" height="80" rx="5" class="fs"/>
+<text x="870" y="143" class="tt">timber apply</text>
+<circle cx="1016" cy="138" r="4" class="mk-ok"/>
+<text x="870" y="160" class="ton">on: the channel&#x27;s move</text>
+<text x="870" y="175" class="ton">by: the host&#x27;s runner</text>
+<circle cx="1016" cy="171" r="3.6" class="mk-todo"/>
+<text x="870" y="190" class="tb">the cache, then machines</text>
+<path d="M182 172 L222 172" class="ar" marker-end="url(#ah)"/>
+<text x="202.0" y="166" class="te" text-anchor="middle">passed</text>
+<path d="M606 172 L646 172" class="ar" marker-end="url(#ah)"/>
+<text x="626.0" y="166" class="te" text-anchor="middle">offered</text>
+<rect x="224" y="28" width="804" height="44" rx="5" class="fp"/>
+<text x="234" y="46" class="tz">Boomdrive Cloud</text>
+<text x="234" y="62" class="tm">hears of each landing and starts the next step on the runner. No one approves a publish; only a held move waits on a person.</text>
+<circle cx="1016" cy="40" r="3.6" class="mk-todo"/>
+<path d="M374 122 L374 74" class="ar" marker-end="url(#ah)"/>
+<text x="380" y="90" class="te">reports</text>
+<path d="M586 72 L586 122" class="ar" marker-end="url(#ah)"/>
+<text x="592" y="90" class="te">starts</text>
+<path d="M798 122 L798 74" class="ar" marker-end="url(#ah)"/>
+<text x="804" y="90" class="te">reports</text>
+<path d="M776 72 L776 122" class="ar" marker-end="url(#ah)"/>
+<text x="770" y="90" class="te" text-anchor="end">on a yes</text>
+<path d="M1010 72 L1010 122" class="ar" marker-end="url(#ah)"/>
+<text x="1004" y="90" class="te" text-anchor="end">starts</text>
+<rect x="648" y="244" width="252" height="40" rx="5" class="fst"/>
+<text x="658" y="259" class="th">LEDGER: EVERY MOVE</text>
+<text x="658" y="275" class="tm">a git ref on the remote (the default)</text>
+<circle cx="888" cy="256" r="4" class="mk-ok"/>
+<path d="M798 204 L798 242" class="ar" marker-end="url(#ah)"/>
+<rect x="6" y="296" width="1028" height="46" rx="5" class="fst"/>
+<text x="16" y="315" class="th">STORE</text>
+<text x="16" y="332" class="tm">an OCI layout on the host&#x27;s disk (the default), or a registry the host names. The cloud keeps digests only.</text>
+<circle cx="1016" cy="310" r="4" class="mk-ok"/>
+<path d="M586 204 L586 294" class="ar" marker-end="url(#ah)"/>
+<text x="580" y="272" class="te" text-anchor="end">cache entries, version, claims</text>
+<path d="M1010 296 L1010 206" class="ar" marker-end="url(#ah)"/>
+<text x="1004" y="272" class="te" text-anchor="end">reads by digest</text>
+</svg></div>
+    <figcaption>A landing reaches the publish through the cloud, by one path: Flume reads sluice's outcome, the runner reports it, and the cloud launches timber's publishing kind on that runner, a Flume job with no agent that runs <code>timber publish</code>, then <code>timber apply</code>. No one approves a publish. The one thing that waits on a person is a held move, such as srv's. Timber's own steps here are built and the runner already reports a landing. The starting is not built: Boomdrive Cloud's roadmap 2.17 launches the kind on a landing's report, after Flume's command stage and timber's kind are built.</figcaption>
+  </figure>
+</section>
+
+<section>
+  <h2>2. A team</h2>
+  <p class="note">A few people and a few hosts under Boomdrive Cloud. Checks leave the publishing host, so the store becomes a shared registry and the gate moves to a host no check can reach.</p>
+  <figure>
+    <div class="scroll"><svg class="fig" viewBox="0 0 1040 356" role="img" aria-label="A team under Boomdrive Cloud: checks run on other hosts or a pool, a publishing host offers, a gate host accepts, and the cloud starts each step on that host&#x27;s runner.">
+<defs><marker id="at" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L8 4 L0 8 z" class="ah"/></marker></defs>
+<text x="12" y="16" class="th">1  CHECK</text>
+<text x="224" y="16" class="th">2  LAND</text>
+<text x="436" y="16" class="th">3  OFFER</text>
+<text x="648" y="16" class="th">4  ACCEPT</text>
+<text x="860" y="16" class="th">5  RUN</text>
+<rect x="6" y="96" width="180" height="138" rx="7" class="fz"/>
+<text x="16" y="114" class="tz">Check hosts</text>
+<circle cx="20" cy="220" r="3.2" class="ky"/><path d="M23.2 220 h9 M29 220 v3.2 M32 220 v2.4" class="ky"/>
+<text x="38" y="224" class="tm">write cache entries</text>
+<rect x="218" y="96" width="180" height="138" rx="7" class="fz"/>
+<text x="228" y="114" class="tz">The merge queue</text>
+<circle cx="232" cy="220" r="3.2" class="ky"/><path d="M235.2 220 h9 M241 220 v3.2 M244 220 v2.4" class="ky"/>
+<text x="250" y="224" class="tm">its hosts&#x27; signers</text>
+<rect x="430" y="96" width="180" height="138" rx="7" class="fz"/>
+<text x="440" y="114" class="tz">A publishing host</text>
+<circle cx="444" cy="220" r="3.2" class="ky"/><path d="M447.2 220 h9 M453 220 v3.2 M456 220 v2.4" class="ky"/>
+<text x="462" y="224" class="tm">the offering key</text>
+<rect x="642" y="96" width="180" height="138" rx="7" class="fz"/>
+<text x="652" y="114" class="tz">The gate&#x27;s host</text>
+<circle cx="656" cy="220" r="3.2" class="ky"/><path d="M659.2 220 h9 M665 220 v3.2 M668 220 v2.4" class="ky"/>
+<text x="674" y="224" class="tm">the accepting key</text>
+<rect x="854" y="96" width="180" height="138" rx="7" class="fz"/>
+<text x="864" y="114" class="tz">A deploying host</text>
+<circle cx="868" cy="220" r="3.2" class="ky"/><path d="M871.2 220 h9 M877 220 v3.2 M880 220 v2.4" class="ky"/>
+<text x="886" y="224" class="tm">target credentials</text>
+<rect x="12" y="124" width="168" height="80" rx="5" class="fo"/>
+<text x="22" y="143" class="tt">checks, then push</text>
+<circle cx="168" cy="138" r="4" class="mk-ok"/>
+<text x="22" y="160" class="ton">on: the run&#x27;s end</text>
+<text x="22" y="175" class="ton">by: each host&#x27;s runner</text>
+<rect x="164.4" y="167.4" width="7.2" height="7.2" transform="rotate(45 168 171)" class="mk-prop"/>
+<text x="22" y="190" class="tb">or a pool job&#x27;s own step</text>
+<rect x="224" y="124" width="168" height="80" rx="5" class="fo"/>
+<text x="234" y="143" class="tt">sluice lands</text>
+<circle cx="380" cy="138" r="4" class="mk-ok"/>
+<text x="234" y="160" class="tb">one host leads at a time</text>
+<text x="234" y="175" class="tb">its runner reports it</text>
+<rect x="436" y="124" width="168" height="80" rx="5" class="fs"/>
+<text x="446" y="143" class="tt">timber publish</text>
+<circle cx="592" cy="138" r="4" class="mk-ok"/>
+<text x="446" y="160" class="ton">on: the landing&#x27;s report</text>
+<text x="446" y="175" class="ton">by: that host&#x27;s runner</text>
+<rect x="588.4" y="167.4" width="7.2" height="7.2" transform="rotate(45 592 171)" class="mk-prop"/>
+<text x="446" y="190" class="tb">reads the stored builds</text>
+<rect x="648" y="124" width="168" height="80" rx="5" class="fs"/>
+<text x="658" y="143" class="tt">the gate</text>
+<circle cx="804" cy="138" r="3.6" class="mk-todo"/>
+<text x="658" y="160" class="ton">on: the publish&#x27;s answer</text>
+<text x="658" y="175" class="ton">by: that host&#x27;s runner</text>
+<rect x="800.4" y="167.4" width="7.2" height="7.2" transform="rotate(45 804 171)" class="mk-prop"/>
+<text x="658" y="190" class="tb">kept from every build</text>
+<rect x="860" y="124" width="168" height="80" rx="5" class="fs"/>
+<text x="870" y="143" class="tt">timber apply</text>
+<circle cx="1016" cy="138" r="4" class="mk-ok"/>
+<text x="870" y="160" class="ton">on: the channel&#x27;s move</text>
+<text x="870" y="175" class="ton">by: that host&#x27;s runner</text>
+<rect x="1012.4" y="167.4" width="7.2" height="7.2" transform="rotate(45 1016 171)" class="mk-prop"/>
+<text x="870" y="190" class="tb">or the environment pulls</text>
+<path d="M182 172 L222 172" class="ar" marker-end="url(#at)"/>
+<text x="202.0" y="166" class="te" text-anchor="middle">passed</text>
+<rect x="224" y="28" width="804" height="44" rx="5" class="fp"/>
+<text x="234" y="46" class="tz">Boomdrive Cloud</text>
+<text x="234" y="62" class="tm">hears each report and starts the next step on the host whose role it is. Only a held move waits on its approver.</text>
+<circle cx="1016" cy="40" r="3.6" class="mk-todo"/>
+<path d="M374 122 L374 74" class="ar" marker-end="url(#at)"/>
+<text x="380" y="90" class="te">reports</text>
+<path d="M564 72 L564 122" class="ar" marker-end="url(#at)"/>
+<text x="558" y="90" class="te" text-anchor="end">starts</text>
+<path d="M586 122 L586 74" class="ar" marker-end="url(#at)"/>
+<text x="592" y="90" class="te">reports</text>
+<path d="M776 72 L776 122" class="ar" marker-end="url(#at)"/>
+<text x="770" y="90" class="te" text-anchor="end">starts</text>
+<path d="M798 122 L798 74" class="ar" marker-end="url(#at)"/>
+<text x="804" y="90" class="te">reports</text>
+<path d="M1010 72 L1010 122" class="ar" marker-end="url(#at)"/>
+<text x="1004" y="90" class="te" text-anchor="end">starts</text>
+<rect x="648" y="244" width="252" height="40" rx="5" class="fst"/>
+<text x="658" y="259" class="th">LEDGER: EVERY MOVE</text>
+<text x="658" y="275" class="tm">the store, or a git ref the gate pushes</text>
+<circle cx="888" cy="256" r="4" class="mk-ok"/>
+<path d="M798 204 L798 242" class="ar" marker-end="url(#at)"/>
+<rect x="6" y="296" width="1028" height="46" rx="5" class="fst"/>
+<text x="16" y="315" class="th">STORE</text>
+<text x="16" y="332" class="tm">an OCI registry the team owns. ECR and zot are proven; GHCR is designed. The cloud keeps digests only.</text>
+<circle cx="1016" cy="310" r="4" class="mk-ok"/>
+<path d="M162 204 L162 294" class="ar" marker-end="url(#at)"/>
+<text x="156" y="272" class="te" text-anchor="end">cache entries</text>
+<path d="M586 204 L586 294" class="ar" marker-end="url(#at)"/>
+<text x="580" y="272" class="te" text-anchor="end">version, claims</text>
+<path d="M1010 296 L1010 206" class="ar" marker-end="url(#at)"/>
+<text x="1004" y="272" class="te" text-anchor="end">reads by digest</text>
+</svg></div>
+    <figcaption>The steps are the same as on one host, spread over hosts by role, and no step needs GitHub Actions. Each hand-over goes up to the cloud as a report and comes down as a start on the next host. A queue shared by several hosts is built. Two pieces are not: roles a host advertises to the cloud, which are proposed, and a command that runs a gate kept apart from the publisher.</figcaption>
+  </figure>
+</section>
+
+<section>
+  <h2>3. An enterprise under a control plane</h2>
+  <p class="note">Boomdrive Cloud, a build fleet in the owner's cloud account, and a product with a control plane of its own that deploys to many installs. Switchboard is the worked case.</p>
+  <figure>
+    <div class="scroll"><svg class="fig" viewBox="0 0 1040 356" role="img" aria-label="An enterprise under Boomdrive Cloud: fleet builds push what they built, a publishing host offers, the gate sits where no build role reaches, and the product&#x27;s own control plane converges each install.">
+<defs><marker id="ae" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L8 4 L0 8 z" class="ah"/></marker></defs>
+<text x="12" y="16" class="th">1  CHECK</text>
+<text x="224" y="16" class="th">2  LAND</text>
+<text x="436" y="16" class="th">3  OFFER</text>
+<text x="648" y="16" class="th">4  ACCEPT</text>
+<text x="860" y="16" class="th">5  RUN</text>
+<rect x="6" y="96" width="180" height="138" rx="7" class="fz"/>
+<text x="16" y="114" class="tz">A fleet build</text>
+<circle cx="20" cy="220" r="3.2" class="ky"/><path d="M23.2 220 h9 M29 220 v3.2 M32 220 v2.4" class="ky"/>
+<text x="38" y="224" class="tm">a cache-only role</text>
+<rect x="218" y="96" width="180" height="138" rx="7" class="fz"/>
+<text x="228" y="114" class="tz">The merge queue</text>
+<circle cx="232" cy="220" r="3.2" class="ky"/><path d="M235.2 220 h9 M241 220 v3.2 M244 220 v2.4" class="ky"/>
+<text x="250" y="224" class="tm">fleet signers</text>
+<rect x="430" y="96" width="180" height="138" rx="7" class="fz"/>
+<text x="440" y="114" class="tz">A publishing host</text>
+<circle cx="444" cy="220" r="3.2" class="ky"/><path d="M447.2 220 h9 M453 220 v3.2 M456 220 v2.4" class="ky"/>
+<text x="462" y="224" class="tm">an offering KMS key</text>
+<rect x="642" y="96" width="180" height="138" rx="7" class="fz"/>
+<text x="652" y="114" class="tz">The gate&#x27;s place</text>
+<circle cx="656" cy="220" r="3.2" class="ky"/><path d="M659.2 220 h9 M665 220 v3.2 M668 220 v2.4" class="ky"/>
+<text x="674" y="224" class="tm">the accepting key</text>
+<rect x="854" y="96" width="180" height="138" rx="7" class="fz"/>
+<text x="864" y="114" class="tz">Its control plane</text>
+<circle cx="868" cy="220" r="3.2" class="ky"/><path d="M871.2 220 h9 M877 220 v3.2 M880 220 v2.4" class="ky"/>
+<text x="886" y="224" class="tm">each install&#x27;s role</text>
+<rect x="12" y="124" width="168" height="80" rx="5" class="fo"/>
+<text x="22" y="143" class="tt">checks, then push</text>
+<circle cx="168" cy="138" r="3.6" class="mk-todo"/>
+<text x="22" y="160" class="ton">on: the run&#x27;s end</text>
+<text x="22" y="175" class="ton">by: a step in the build</text>
+<text x="22" y="190" class="tb">the build keeps nothing</text>
+<rect x="224" y="124" width="168" height="80" rx="5" class="fo"/>
+<text x="234" y="143" class="tt">sluice lands</text>
+<circle cx="380" cy="138" r="4" class="mk-ok"/>
+<text x="234" y="160" class="tb">one lead lands in order</text>
+<text x="234" y="175" class="tb">its runner reports it</text>
+<rect x="436" y="124" width="168" height="80" rx="5" class="fs"/>
+<text x="446" y="143" class="tt">timber publish</text>
+<circle cx="592" cy="138" r="4" class="mk-ok"/>
+<text x="446" y="160" class="ton">on: the landing&#x27;s report</text>
+<text x="446" y="175" class="ton">by: that host&#x27;s runner</text>
+<rect x="588.4" y="167.4" width="7.2" height="7.2" transform="rotate(45 592 171)" class="mk-prop"/>
+<text x="446" y="190" class="tb">one per component</text>
+<rect x="648" y="124" width="168" height="80" rx="5" class="fs"/>
+<text x="658" y="143" class="tt">the gate</text>
+<circle cx="804" cy="138" r="3.6" class="mk-todo"/>
+<text x="658" y="160" class="ton">on: the publish&#x27;s answer</text>
+<text x="658" y="175" class="ton">by: that host&#x27;s runner</text>
+<rect x="800.4" y="167.4" width="7.2" height="7.2" transform="rotate(45 804 171)" class="mk-prop"/>
+<text x="658" y="190" class="tb">one write per move</text>
+<rect x="860" y="124" width="168" height="80" rx="5" class="fs"/>
+<text x="870" y="143" class="tt">a pool target</text>
+<circle cx="1016" cy="138" r="3.6" class="mk-todo"/>
+<text x="870" y="160" class="tb">reads the table&#x27;s move</text>
+<text x="870" y="175" class="tb">one converge per install</text>
+<text x="870" y="190" class="tb">a roster names installs</text>
+<path d="M182 172 L222 172" class="ar" marker-end="url(#ae)"/>
+<text x="202.0" y="166" class="te" text-anchor="middle">passed</text>
+<path d="M818 172 L858 172" class="ar" marker-end="url(#ae)"/>
+<text x="838.0" y="166" class="te" text-anchor="middle">moved</text>
+<rect x="224" y="28" width="804" height="44" rx="5" class="fp"/>
+<text x="234" y="46" class="tz">Boomdrive Cloud</text>
+<text x="234" y="62" class="tm">hears each report and starts the next step on the host whose role it is. Holds no artifact, key or credential.</text>
+<circle cx="1016" cy="40" r="3.6" class="mk-todo"/>
+<path d="M374 122 L374 74" class="ar" marker-end="url(#ae)"/>
+<text x="380" y="90" class="te">reports</text>
+<path d="M564 72 L564 122" class="ar" marker-end="url(#ae)"/>
+<text x="558" y="90" class="te" text-anchor="end">starts</text>
+<path d="M586 122 L586 74" class="ar" marker-end="url(#ae)"/>
+<text x="592" y="90" class="te">reports</text>
+<path d="M776 72 L776 122" class="ar" marker-end="url(#ae)"/>
+<text x="770" y="90" class="te" text-anchor="end">starts</text>
+<path d="M798 122 L798 74" class="ar" marker-end="url(#ae)"/>
+<text x="804" y="90" class="te">reports</text>
+<rect x="648" y="244" width="252" height="40" rx="5" class="fst"/>
+<text x="658" y="259" class="th">LEDGER: EVERY MOVE</text>
+<text x="658" y="275" class="tm">the product&#x27;s own table</text>
+<circle cx="888" cy="256" r="3.6" class="mk-todo"/>
+<path d="M798 204 L798 242" class="ar" marker-end="url(#ae)"/>
+<rect x="6" y="296" width="1028" height="46" rx="5" class="fst"/>
+<text x="16" y="315" class="th">STORE</text>
+<text x="16" y="332" class="tm">the owner&#x27;s registry, in the owner&#x27;s account.</text>
+<circle cx="1016" cy="310" r="4" class="mk-ok"/>
+<path d="M162 204 L162 294" class="ar" marker-end="url(#ae)"/>
+<text x="156" y="272" class="te" text-anchor="end">cache entries</text>
+<path d="M586 204 L586 294" class="ar" marker-end="url(#ae)"/>
+<text x="580" y="272" class="te" text-anchor="end">version, claims</text>
+<path d="M1010 296 L1010 206" class="ar" marker-end="url(#ae)"/>
+<text x="1004" y="272" class="te" text-anchor="end">reads by digest</text>
+</svg></div>
+    <figcaption>Timber stays in the owner's account. Boomdrive Cloud reaches it only through a runner that dials out, records each result by digest and never signs a claim. The product's own control plane reads each move from its table and converges its installs. A fleet machine joins as a host: it runs a runner and advertises only the roles it should carry, checks or publish and never agents, which is proposed and not decided. The fleet decided so far runs checks only, started by sluice's lead. Most of this deployment is not built: the fleet, the table ledger and the pool target.</figcaption>
+  </figure>
+</section>
+
+<section>
+  <h2>Where GitHub Actions fits</h2>
+  <p class="note">Boomdrive Cloud cannot start anything inside a GitHub Actions job. It reaches timber only through a runner, a runner dials out, and a job has none. So Actions takes the step that needs no starting from the cloud, and the rest stays on a host.</p>
+  <div class="tscroll">
+    <table>
+      <thead><tr><th scope="col">Step</th><th scope="col">In a GitHub Actions job?</th><th scope="col">What starts it</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Checks, then <code>timber push</code></th><td><svg class="im" viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><circle cx="6" cy="6" r="3.6" class="mk-todo"/></svg>Yes. The job pushes what it built to the registry before it ends, with a key that writes cache entries and nothing else.</td><td>sluice, which dispatches the job. Its hosted pool is designed; only the dispatch is built.</td></tr>
+        <tr><th scope="row">Publish, the gate, apply</th><td><svg class="im" viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><circle cx="6" cy="6" r="3.6" class="mk-todo"/></svg>No. They run on a host with a runner. Publish reads the builds from the registry, as timber's clause 135 has it, so it need not run where the checks ran. The keys that offer and accept stay off machines that build.</td><td>Boomdrive Cloud, on that host's runner.</td></tr>
+        <tr><th scope="row">Publish with no host at all</th><td>Only without the cloud: GitHub's own push event starts a workflow that runs <code>timber publish</code>. For the cloud to start it there, the job would have to bring a runner with it, which is proposed and on no roadmap.</td><td>GitHub.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note">A registry is needed as soon as one check runs off the publishing host, since that is how its builds reach the publish.</p>
+</section>
+
+<section>
+  <h2>Timber without Boomdrive</h2>
+  <p class="note">Timber also stands alone, which is how someone adopts it before Boomdrive. A person's shell, or a forge's workflow on the push to main, runs the same commands, and the store, the ledger and the policy stay as they are. Sluice and Boomdrive release from such a workflow today. It is a way in, not one of the plan's deployments.</p>
+</section>
+
+<section>
+  <h2>The nine parts, side by side</h2>
+  <div class="tscroll">
+    <table>
+      <thead><tr><th scope="col">Part</th><th scope="col">1. One host</th><th scope="col">2. A team</th><th scope="col">3. An enterprise</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Store</th><td><svg class="im" viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><circle cx="6" cy="6" r="4" class="mk-ok"/></svg>a layout on the host's disk</td><td><svg class="im" viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><circle cx="6" cy="6" r="4" class="mk-ok"/></svg>a shared registry</td><td><svg class="im" viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><circle cx="6" cy="6" r="4" class="mk-ok"/></svg>the owner's registry</td></tr>
+        <tr><th scope="row">Build</th><td><svg class="im" viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><circle cx="6" cy="6" r="4" class="mk-ok"/></svg>moon</td><td><svg class="im" viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><circle cx="6" cy="6" r="4" class="mk-ok"/></svg>moon</td><td><svg class="im" viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><circle cx="6" cy="6" r="4" class="mk-ok"/></svg>moon; <svg class="im" viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><circle cx="6" cy="6" r="3.6" class="mk-todo"/></svg>a declared command</td></tr>
+        <tr><th scope="row">Landing</th><td><svg class="im" viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><circle cx="6" cy="6" r="4" class="mk-ok"/></svg>sluice</td><td><svg class="im" viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><circle cx="6" cy="6" r="4" class="mk-ok"/></svg>sluice, its queue shared by the hosts</td><td><svg class="im" viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><circle cx="6" cy="6" r="4" class="mk-ok"/></svg>sluice, its queue on the remote</td></tr>
+        <tr><th scope="row">Signer</th><td><svg class="im" viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><circle cx="6" cy="6" r="4" class="mk-ok"/></svg>one host key</td><td><svg class="im" viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><circle cx="6" cy="6" r="4" class="mk-ok"/></svg>a key in a key service; <svg class="im" viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><circle cx="6" cy="6" r="3.6" class="mk-todo"/></svg>keyless</td><td><svg class="im" viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><circle cx="6" cy="6" r="4" class="mk-ok"/></svg>keys in a key service, one per role</td></tr>
+        <tr><th scope="row">Policy</th><td colspan="3"><svg class="im" viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><circle cx="6" cy="6" r="4" class="mk-ok"/></svg><code>.config/timber.toml</code> in the repository, the same file in every deployment</td></tr>
+        <tr><th scope="row">Renderings</th><td><svg class="im" viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><circle cx="6" cy="6" r="4" class="mk-ok"/></svg>files, images, npm, Cargo</td><td><svg class="im" viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><circle cx="6" cy="6" r="4" class="mk-ok"/></svg>the same</td><td><svg class="im" viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><circle cx="6" cy="6" r="3.6" class="mk-todo"/></svg>a CloudFormation template set</td></tr>
+        <tr><th scope="row">Targets</th><td><svg class="im" viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><circle cx="6" cy="6" r="4" class="mk-ok"/></svg>a Nix cache, a Nix fleet by push, Dash0</td><td><svg class="im" viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><circle cx="6" cy="6" r="3.6" class="mk-todo"/></svg>a registry, a site, a cluster that pulls</td><td><svg class="im" viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><circle cx="6" cy="6" r="3.6" class="mk-todo"/></svg>a pool with a roster</td></tr>
+        <tr><th scope="row">Ledger</th><td><svg class="im" viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><circle cx="6" cy="6" r="4" class="mk-ok"/></svg>a git ref on the remote</td><td><svg class="im" viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><circle cx="6" cy="6" r="4" class="mk-ok"/></svg>the store, or a git ref</td><td><svg class="im" viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><circle cx="6" cy="6" r="3.6" class="mk-todo"/></svg>a database table</td></tr>
+        <tr><th scope="row">What starts a publish</th><td colspan="3"><svg class="im" viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><circle cx="6" cy="6" r="3.6" class="mk-todo"/></svg>the runner's report of the landing; Boomdrive Cloud then launches timber's publishing kind on a runner. The user, 2026-11-16.</td></tr>
+        <tr><th scope="row">Where a yes is asked</th><td colspan="3"><svg class="im" viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><circle cx="6" cy="6" r="3.6" class="mk-todo"/></svg>Boomdrive Cloud's rail, for a held move only. A publish needs no yes.</td></tr>
+        <tr><th scope="row">Control plane</th><td><svg class="im" viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><circle cx="6" cy="6" r="3.6" class="mk-todo"/></svg>Boomdrive Cloud</td><td><svg class="im" viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><circle cx="6" cy="6" r="3.6" class="mk-todo"/></svg>Boomdrive Cloud</td><td><svg class="im" viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><circle cx="6" cy="6" r="3.6" class="mk-todo"/></svg>Boomdrive Cloud, and the product's own for its installs</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <h2>The fleet, end to end</h2>
+  <p class="note">A change to flume, followed to the fleet's machines. Every repository runs the same three steps: a landing, <code>timber publish</code>, <code>timber apply</code>. Boomdrive Cloud starts each on deneb's runner, nothing runs in GitHub Actions, and versions and builds live in GHCR.</p>
+  <figure>
+    <div class="scroll"><svg class="fig" viewBox="0 0 1040 372" role="img" aria-label="The chain from a flume change to the fleet's machines: flume, boomdrive and swancloud each run the same three steps, a landing, timber publish and timber apply.">
+<defs><marker id="ac" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L8 4 L0 8 z" class="ah"/></marker></defs>
+<rect x="6" y="24" width="1028" height="98" rx="7" class="fz"/>
+<text x="18" y="62" class="tz">flume</text>
+<text x="18" y="80" class="tm">public, on GitHub</text>
+<rect x="150" y="34" width="270" height="78" rx="5" class="fo"/>
+<text x="160" y="54" class="te">1</text>
+<text x="176" y="54" class="tz">A change lands</text>
+<circle cx="408" cy="49" r="4" class="mk-ok"/>
+<text x="160" y="74" class="tb">sluice&#x27;s checks, then main</text>
+<rect x="445" y="34" width="270" height="78" rx="5" class="fs"/>
+<text x="455" y="54" class="te">2</text>
+<text x="471" y="54" class="tt">timber publish</text>
+<circle cx="703" cy="49" r="3.6" class="mk-todo"/>
+<text x="455" y="74" class="tb">version, tag and notes from the commits</text>
+<text x="455" y="89" class="tb">the binaries become its artifacts</text>
+<path d="M422 73.0 L443 73.0" class="ar" marker-end="url(#ac)"/>
+<rect x="740" y="34" width="270" height="78" rx="5" class="fs"/>
+<text x="750" y="54" class="te">3</text>
+<text x="766" y="54" class="tt">timber apply</text>
+<circle cx="998" cy="49" r="3.6" class="mk-todo"/>
+<text x="750" y="74" class="tb">to flume&#x27;s GitHub release</text>
+<text x="750" y="89" class="tb">that target is not designed yet</text>
+<path d="M717 73.0 L738 73.0" class="ar" marker-end="url(#ac)"/>
+<rect x="6" y="140" width="1028" height="98" rx="7" class="fz"/>
+<text x="18" y="178" class="tz">boomdrive</text>
+<text x="18" y="196" class="tm">public, on GitHub</text>
+<rect x="150" y="150" width="270" height="78" rx="5" class="fo"/>
+<text x="160" y="170" class="te">4</text>
+<text x="176" y="170" class="tz">flume&#x27;s pin moves</text>
+<circle cx="408" cy="165" r="3.6" class="mk-todo"/>
+<text x="160" y="190" class="tb">headwater reads flume&#x27;s channel in timber</text>
+<text x="160" y="205" class="tb">a Flume place moves the pin; sluice lands</text>
+<rect x="445" y="150" width="270" height="78" rx="5" class="fs"/>
+<text x="455" y="170" class="te">5</text>
+<text x="471" y="170" class="tt">timber publish</text>
+<circle cx="703" cy="165" r="3.6" class="mk-todo"/>
+<text x="455" y="190" class="tb">version, tag and notes from the commits</text>
+<text x="455" y="205" class="tb">every package of the set an artifact</text>
+<path d="M422 189.0 L443 189.0" class="ar" marker-end="url(#ac)"/>
+<rect x="740" y="150" width="270" height="78" rx="5" class="fs"/>
+<text x="750" y="170" class="te">6</text>
+<text x="766" y="170" class="tt">timber apply</text>
+<circle cx="998" cy="165" r="3.6" class="mk-todo"/>
+<text x="750" y="190" class="tb">to Cachix, for three systems</text>
+<text x="750" y="205" class="tb">the cache target fills Attic only today</text>
+<path d="M717 189.0 L738 189.0" class="ar" marker-end="url(#ac)"/>
+<rect x="6" y="256" width="1028" height="98" rx="7" class="fz"/>
+<text x="18" y="294" class="tz">swancloud</text>
+<text x="18" y="312" class="tm">private</text>
+<rect x="150" y="266" width="270" height="78" rx="5" class="fo"/>
+<text x="160" y="286" class="te">7</text>
+<text x="176" y="286" class="tz">boomdrive&#x27;s pin moves</text>
+<circle cx="408" cy="281" r="3.6" class="mk-todo"/>
+<text x="160" y="306" class="tb">the same update; sluice lands</text>
+<rect x="445" y="266" width="270" height="78" rx="5" class="fs"/>
+<text x="455" y="286" class="te">8</text>
+<text x="471" y="286" class="tt">timber publish</text>
+<circle cx="703" cy="281" r="3.6" class="mk-todo"/>
+<text x="455" y="306" class="tb">one version for the fleet</text>
+<text x="455" y="321" class="tb">a small artifact names each machine&#x27;s build</text>
+<path d="M422 305.0 L443 305.0" class="ar" marker-end="url(#ac)"/>
+<rect x="740" y="266" width="270" height="78" rx="5" class="fs"/>
+<text x="750" y="286" class="te">9</text>
+<text x="766" y="286" class="tt">timber apply</text>
+<circle cx="998" cy="281" r="3.6" class="mk-todo"/>
+<text x="750" y="306" class="tb">Attic first, then each machine by clan</text>
+<text x="750" y="321" class="tb">Macs on their own; srv, boxes on a yes</text>
+<path d="M717 305.0 L738 305.0" class="ar" marker-end="url(#ac)"/>
+<path d="M580.0 113 L580.0 131 L210 131 L210 148" class="ar" marker-end="url(#ac)"/>
+<text x="572.0" y="127" class="te" text-anchor="end">beta moved</text>
+<path d="M580.0 229 L580.0 247 L210 247 L210 264" class="ar" marker-end="url(#ac)"/>
+<text x="572.0" y="243" class="te" text-anchor="end">beta moved</text>
+</svg></div>
+    <figcaption>This is the target. Today flume and Boomdrive tag from GitHub workflows of their own, and swancloud's releaser and deployer run on two five-minute timers.</figcaption>
+  </figure>
+  <h3>What flume and Boomdrive need before step 2 can run</h3>
+  <div class="tscroll">
+    <table>
+      <thead><tr><th scope="col">Piece</th><th scope="col">Today</th><th scope="col">Under timber</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">A policy file</th><td>Neither repository has one.</td><td><svg class="im" viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><circle cx="6" cy="6" r="3.6" class="mk-todo"/></svg><code>.config/timber.toml</code> names the component and its outputs.</td></tr>
+        <tr><th scope="row">Who builds the release</th><td>A GitHub workflow builds flume's binaries for three systems. Sluice's checks do not.</td><td><svg class="im" viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><circle cx="6" cy="6" r="3.6" class="mk-todo"/></svg>The checks build them, on a host of each system or cross-built, because publish never builds (timber record 0037).</td></tr>
+        <tr><th scope="row">The version in the binary</th><td>A release commit writes the version into the tree before the build, so <code>flume --version</code> prints it.</td><td><svg class="im" viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><circle cx="6" cy="6" r="3.6" class="mk-todo"/></svg>The checks build the release commit, so the binary they verified says its version, and publish tags that same commit. Timber record 0037, boomdrive-design's decision of 2026-11-16.</td></tr>
+        <tr><th scope="row">Where a release goes</th><td>The GitHub release, and Cachix through Boomdrive's workflow.</td><td><svg class="im" viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><rect x="2.4" y="2.4" width="7.2" height="7.2" transform="rotate(45 6 6)" class="mk-prop"/></svg>Two targets: a GitHub release, which timber's statement does not list, and a Nix cache that is Cachix, where the built one fills Attic only.</td></tr>
+        <tr><th scope="row">Noticing a new version</th><td>Nothing automatic.</td><td><svg class="im" viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><circle cx="6" cy="6" r="3.6" class="mk-todo"/></svg>headwater reads timber's channel, as its statement has it. headwater is not built.</td></tr>
+        <tr><th scope="row">Sharing builds between hosts</th><td>Each host builds for itself.</td><td><svg class="im" viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><circle cx="6" cy="6" r="4" class="mk-ok"/></svg><code>timber push</code> and <code>timber sync</code> share what moon's tasks built. Cargo's own compile cache stays on each host.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <h2>Decided</h2>
+  <div class="rules">
+    <div><h3>Boomdrive Cloud starts a publish</h3><p>On the report of a landing, on a runner, with no schedule and no change to sluice. The user, 2026-11-16.</p></div>
+    <div><h3>Boomdrive Cloud on every host</h3><p>The single host included. The user, 2026-11-16.</p></div>
+    <div><h3>Timber in every repository</h3><p>flume and Boomdrive as well as swancloud, with <code>timber publish</code> making each version, tag and notes. The user, 2026-11-16.</p></div>
+    <div><h3>One version for the fleet</h3><p>swancloud is one timber component whose version is git-cliff's over main, with each machine's build one artifact of it. The user, 2026-10-26, in the reading of swancloud's rule deploy.11.</p></div>
+    <div><h3>The family's store is GHCR</h3><p>Under the boomdrivedev organization: public for the tools, private packages for swancloud. The user, 2026-11-16. Timber's registry store is designed for GHCR and not proven.</p></div>
+    <div><h3>The checks build the release commit</h3><p>A landing that makes a version is checked as its release commit, so the published binary says its version and is the build the checks ran. Two queued landings never claim one version. Timber record 0037.</p></div>
+  </div>
+</section>
+
+<section>
+  <h2>What is not built, by deployment</h2>
+  <div class="tscroll">
+    <table>
+      <thead><tr><th scope="col">Deployment</th><th scope="col">Missing</th><th scope="col">Where it is decided</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">1. One host</th><td>Timber's publishing kind, which Flume runs with no agent, and Flume's command stage under it. The cloud launching it on a landing's report and recording its result. Timber's registry store proven on GHCR, and a rule that prunes cached builds. A card for a promotion on the rail, which the cloud does not have yet. swancloud's policy file. Publish still asks moon to build where it should only read.</td><td>Flume's clause 223; Boomdrive Cloud's roadmap 2.17 and record 0058; swancloud record 0048; timber's open list, clause 135</td></tr>
+        <tr><th scope="row">2. A team</th><td>Roles a host advertises to the cloud. A command that runs a gate apart from the publisher. Room for the push step in sluice's hosted pool. Keyless signing. Targets that pull.</td><td>cloud pack item 12, proposed; timber record 0020; sluice record 0034; timber phase 2</td></tr>
+        <tr><th scope="row">3. An enterprise</th><td>The build fleet, which covers checks only. The table ledger, the pool target and the template set.</td><td>sluice record 0119; Switchboard record 0090; timber phase 2</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<footer>Drawn from timber's statement, records and code, the MVP and the 2026-11-11 research, sluice's and Boomdrive Cloud's rules, and swancloud's and Switchboard's records, all read on their main branches on 2026-11-16.</footer>
+
+</main>
+</body></html>

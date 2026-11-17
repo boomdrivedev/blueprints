@@ -1,5 +1,7 @@
 # timber — the MVP
 
+How the steps below fit together is drawn in `../architecture.html`.
+
 A model for agentplot-planner, 2026-11-12, from the user's two roadmap
 milestones for timber, given that day in agentplot-design's pane:
 "Define what's necessary to use it in Switchboard" and "Get the minimal

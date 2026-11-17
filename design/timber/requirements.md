@@ -2,7 +2,8 @@
 <!-- ANCHOR: preamble -->
 
 A statement of what timber must always do and never do, written to
-admit any model that satisfies it.
+admit any model that satisfies it. How its steps fit together in each
+deployment is drawn in `architecture.html` beside it.
 
 The statement is in three parts. Part A is what must hold of timber
 on its own: what an artifact is and how it is named, what a claim about
@@ -1233,7 +1234,10 @@ host's bindings file (130), as a `[gate]` table naming the host's own publish st
 which runs the publish confined with the job's own identity as its
 signer; the driver that submitted the work and waited on its landing,
 running the publish as its next step (sluice 50, 51); a watcher of the
-landing's records on a host; a store's own event delivered to the gate;
+landing's records on a host; a control plane that hears of the landing
+from the host's runner and launches a kind that publishes there, once
+per landing, as Boomdrive Cloud does in every deployment (Boomdrive
+Cloud's roadmap 2.17); a store's own event delivered to the gate;
 a person at a surface, or a program that asks as one. Never a hook in
 the landing tool: the merge queue lands and decides nothing more, and
 nothing it runs after a landing publishes, so a landing's tool never
