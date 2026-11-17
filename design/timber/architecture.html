@@ -90,7 +90,7 @@ footer { color: var(--muted); font-size: 0.82rem; border-top: 1px solid var(--li
 <header>
   <p class="eyebrow">Timber · architecture</p>
   <h1>One shape, three deployments</h1>
-  <p class="lede">Every owner of timber runs the same five steps in the same order and keeps the same two records. Boomdrive Cloud carries the news from one step to the next in every deployment, down to a single host, and a runner on a host runs each command. Deployments differ in two things only: which machine runs each step, and who holds which key. The statement beside this page holds the clauses, and its models hold the plans.</p>
+  <p class="lede">Every owner of timber runs the same five steps in the same order and keeps the same two records. Boomdrive Cloud carries the news from one step to the next in every deployment, down to a single host, and on each host the runner launches the job that runs the command. Deployments differ in two things only: which machine runs each step, and who holds which key. The statement beside this page holds the clauses, and its models hold the plans.</p>
   <ul class="legend" aria-label="What the marks mean">
 <li><svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><circle cx="6" cy="6" r="4" class="mk-ok"/></svg> built</li>
 <li><svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><circle cx="6" cy="6" r="3.6" class="mk-todo"/></svg> decided, not built</li>
@@ -216,19 +216,19 @@ footer { color: var(--muted); font-size: 0.82rem; border-top: 1px solid var(--li
 <text x="22" y="143" class="tt">sluice&#x27;s checks</text>
 <circle cx="168" cy="138" r="4" class="mk-ok"/>
 <text x="22" y="160" class="tb">moon builds and tests</text>
-<text x="22" y="175" class="tb">outputs stay on this host</text>
+<text x="22" y="175" class="tb">its last task: timber push</text>
 <rect x="224" y="124" width="168" height="80" rx="5" class="fo"/>
 <text x="234" y="143" class="tt">sluice lands</text>
 <circle cx="380" cy="138" r="4" class="mk-ok"/>
 <text x="234" y="160" class="tb">Flume reads the outcome</text>
 <text x="234" y="175" class="tb">the runner reports it</text>
 <rect x="436" y="124" width="168" height="80" rx="5" class="fs"/>
-<text x="446" y="143" class="tt">push, then publish</text>
+<text x="446" y="143" class="tt">timber publish</text>
 <circle cx="592" cy="138" r="4" class="mk-ok"/>
 <text x="446" y="160" class="ton">on: the landing&#x27;s report</text>
-<text x="446" y="175" class="ton">by: the host&#x27;s runner</text>
+<text x="446" y="175" class="ton">by: a Flume job</text>
 <circle cx="592" cy="171" r="3.6" class="mk-todo"/>
-<text x="446" y="190" class="tb">started by the cloud</text>
+<text x="446" y="190" class="tb">launched by the cloud</text>
 <rect x="648" y="124" width="168" height="80" rx="5" class="fs"/>
 <text x="658" y="143" class="tt">the gate, same run</text>
 <circle cx="804" cy="138" r="4" class="mk-ok"/>
@@ -238,28 +238,28 @@ footer { color: var(--muted); font-size: 0.82rem; border-top: 1px solid var(--li
 <rect x="860" y="124" width="168" height="80" rx="5" class="fs"/>
 <text x="870" y="143" class="tt">timber apply</text>
 <circle cx="1016" cy="138" r="4" class="mk-ok"/>
-<text x="870" y="160" class="ton">on: the channel&#x27;s move</text>
-<text x="870" y="175" class="ton">by: the host&#x27;s runner</text>
+<text x="870" y="160" class="ton">on: the publish&#x27;s end</text>
+<text x="870" y="175" class="ton">by: the same Flume job</text>
 <circle cx="1016" cy="171" r="3.6" class="mk-todo"/>
 <text x="870" y="190" class="tb">the cache, then machines</text>
 <path d="M182 172 L222 172" class="ar" marker-end="url(#ah)"/>
 <text x="202.0" y="166" class="te" text-anchor="middle">passed</text>
 <path d="M606 172 L646 172" class="ar" marker-end="url(#ah)"/>
 <text x="626.0" y="166" class="te" text-anchor="middle">offered</text>
+<path d="M818 172 L858 172" class="ar" marker-end="url(#ah)"/>
+<text x="838.0" y="166" class="te" text-anchor="middle">moved</text>
 <rect x="224" y="28" width="804" height="44" rx="5" class="fp"/>
 <text x="234" y="46" class="tz">Boomdrive Cloud</text>
-<text x="234" y="62" class="tm">hears of each landing and starts the next step on the runner. No one approves a publish; only a held move waits on a person.</text>
+<text x="234" y="62" class="tm">hears of each landing and launches timber&#x27;s publishing kind on the runner. No one approves a publish; only a held move waits on a person.</text>
 <circle cx="1016" cy="40" r="3.6" class="mk-todo"/>
 <path d="M374 122 L374 74" class="ar" marker-end="url(#ah)"/>
 <text x="380" y="90" class="te">reports</text>
 <path d="M586 72 L586 122" class="ar" marker-end="url(#ah)"/>
-<text x="592" y="90" class="te">starts</text>
+<text x="592" y="90" class="te">launches</text>
 <path d="M798 122 L798 74" class="ar" marker-end="url(#ah)"/>
 <text x="804" y="90" class="te">reports</text>
 <path d="M776 72 L776 122" class="ar" marker-end="url(#ah)"/>
 <text x="770" y="90" class="te" text-anchor="end">on a yes</text>
-<path d="M1010 72 L1010 122" class="ar" marker-end="url(#ah)"/>
-<text x="1004" y="90" class="te" text-anchor="end">starts</text>
 <rect x="648" y="244" width="252" height="40" rx="5" class="fst"/>
 <text x="658" y="259" class="th">LEDGER: EVERY MOVE</text>
 <text x="658" y="275" class="tm">a git ref on the remote (the default)</text>
@@ -313,8 +313,8 @@ footer { color: var(--muted); font-size: 0.82rem; border-top: 1px solid var(--li
 <text x="22" y="143" class="tt">checks, then push</text>
 <circle cx="168" cy="138" r="4" class="mk-ok"/>
 <text x="22" y="160" class="ton">on: the run&#x27;s end</text>
-<text x="22" y="175" class="ton">by: each host&#x27;s runner</text>
-<rect x="164.4" y="167.4" width="7.2" height="7.2" transform="rotate(45 168 171)" class="mk-prop"/>
+<text x="22" y="175" class="ton">by: sluice's run there</text>
+<circle cx="168" cy="171" r="3.6" class="mk-todo"/>
 <text x="22" y="190" class="tb">or a pool job&#x27;s own step</text>
 <rect x="224" y="124" width="168" height="80" rx="5" class="fo"/>
 <text x="234" y="143" class="tt">sluice lands</text>
@@ -325,41 +325,41 @@ footer { color: var(--muted); font-size: 0.82rem; border-top: 1px solid var(--li
 <text x="446" y="143" class="tt">timber publish</text>
 <circle cx="592" cy="138" r="4" class="mk-ok"/>
 <text x="446" y="160" class="ton">on: the landing&#x27;s report</text>
-<text x="446" y="175" class="ton">by: that host&#x27;s runner</text>
+<text x="446" y="175" class="ton">by: a Flume job there</text>
 <rect x="588.4" y="167.4" width="7.2" height="7.2" transform="rotate(45 592 171)" class="mk-prop"/>
 <text x="446" y="190" class="tb">reads the stored builds</text>
 <rect x="648" y="124" width="168" height="80" rx="5" class="fs"/>
 <text x="658" y="143" class="tt">the gate</text>
 <circle cx="804" cy="138" r="3.6" class="mk-todo"/>
 <text x="658" y="160" class="ton">on: the publish&#x27;s answer</text>
-<text x="658" y="175" class="ton">by: that host&#x27;s runner</text>
+<text x="658" y="175" class="ton">by: a Flume job there</text>
 <rect x="800.4" y="167.4" width="7.2" height="7.2" transform="rotate(45 804 171)" class="mk-prop"/>
 <text x="658" y="190" class="tb">kept from every build</text>
 <rect x="860" y="124" width="168" height="80" rx="5" class="fs"/>
 <text x="870" y="143" class="tt">timber apply</text>
 <circle cx="1016" cy="138" r="4" class="mk-ok"/>
 <text x="870" y="160" class="ton">on: the channel&#x27;s move</text>
-<text x="870" y="175" class="ton">by: that host&#x27;s runner</text>
+<text x="870" y="175" class="ton">by: a Flume job there</text>
 <rect x="1012.4" y="167.4" width="7.2" height="7.2" transform="rotate(45 1016 171)" class="mk-prop"/>
 <text x="870" y="190" class="tb">or the environment pulls</text>
 <path d="M182 172 L222 172" class="ar" marker-end="url(#at)"/>
 <text x="202.0" y="166" class="te" text-anchor="middle">passed</text>
 <rect x="224" y="28" width="804" height="44" rx="5" class="fp"/>
 <text x="234" y="46" class="tz">Boomdrive Cloud</text>
-<text x="234" y="62" class="tm">hears each report and starts the next step on the host whose role it is. Only a held move waits on its approver.</text>
+<text x="234" y="62" class="tm">hears each report and launches the next step on the host whose role it is. Only a held move waits on its approver.</text>
 <circle cx="1016" cy="40" r="3.6" class="mk-todo"/>
 <path d="M374 122 L374 74" class="ar" marker-end="url(#at)"/>
 <text x="380" y="90" class="te">reports</text>
 <path d="M564 72 L564 122" class="ar" marker-end="url(#at)"/>
-<text x="558" y="90" class="te" text-anchor="end">starts</text>
+<text x="558" y="90" class="te" text-anchor="end">launches</text>
 <path d="M586 122 L586 74" class="ar" marker-end="url(#at)"/>
 <text x="592" y="90" class="te">reports</text>
 <path d="M776 72 L776 122" class="ar" marker-end="url(#at)"/>
-<text x="770" y="90" class="te" text-anchor="end">starts</text>
+<text x="770" y="90" class="te" text-anchor="end">launches</text>
 <path d="M798 122 L798 74" class="ar" marker-end="url(#at)"/>
 <text x="804" y="90" class="te">reports</text>
 <path d="M1010 72 L1010 122" class="ar" marker-end="url(#at)"/>
-<text x="1004" y="90" class="te" text-anchor="end">starts</text>
+<text x="1004" y="90" class="te" text-anchor="end">launches</text>
 <rect x="648" y="244" width="252" height="40" rx="5" class="fst"/>
 <text x="658" y="259" class="th">LEDGER: EVERY MOVE</text>
 <text x="658" y="275" class="tm">the store, or a git ref the gate pushes</text>
@@ -426,14 +426,14 @@ footer { color: var(--muted); font-size: 0.82rem; border-top: 1px solid var(--li
 <text x="446" y="143" class="tt">timber publish</text>
 <circle cx="592" cy="138" r="4" class="mk-ok"/>
 <text x="446" y="160" class="ton">on: the landing&#x27;s report</text>
-<text x="446" y="175" class="ton">by: that host&#x27;s runner</text>
+<text x="446" y="175" class="ton">by: a Flume job there</text>
 <rect x="588.4" y="167.4" width="7.2" height="7.2" transform="rotate(45 592 171)" class="mk-prop"/>
 <text x="446" y="190" class="tb">one per component</text>
 <rect x="648" y="124" width="168" height="80" rx="5" class="fs"/>
 <text x="658" y="143" class="tt">the gate</text>
 <circle cx="804" cy="138" r="3.6" class="mk-todo"/>
 <text x="658" y="160" class="ton">on: the publish&#x27;s answer</text>
-<text x="658" y="175" class="ton">by: that host&#x27;s runner</text>
+<text x="658" y="175" class="ton">by: a Flume job there</text>
 <rect x="800.4" y="167.4" width="7.2" height="7.2" transform="rotate(45 804 171)" class="mk-prop"/>
 <text x="658" y="190" class="tb">one write per move</text>
 <rect x="860" y="124" width="168" height="80" rx="5" class="fs"/>
@@ -448,16 +448,16 @@ footer { color: var(--muted); font-size: 0.82rem; border-top: 1px solid var(--li
 <text x="838.0" y="166" class="te" text-anchor="middle">moved</text>
 <rect x="224" y="28" width="804" height="44" rx="5" class="fp"/>
 <text x="234" y="46" class="tz">Boomdrive Cloud</text>
-<text x="234" y="62" class="tm">hears each report and starts the next step on the host whose role it is. Holds no artifact, key or credential.</text>
+<text x="234" y="62" class="tm">hears each report and launches the next step on the host whose role it is. Holds no artifact, key or credential.</text>
 <circle cx="1016" cy="40" r="3.6" class="mk-todo"/>
 <path d="M374 122 L374 74" class="ar" marker-end="url(#ae)"/>
 <text x="380" y="90" class="te">reports</text>
 <path d="M564 72 L564 122" class="ar" marker-end="url(#ae)"/>
-<text x="558" y="90" class="te" text-anchor="end">starts</text>
+<text x="558" y="90" class="te" text-anchor="end">launches</text>
 <path d="M586 122 L586 74" class="ar" marker-end="url(#ae)"/>
 <text x="592" y="90" class="te">reports</text>
 <path d="M776 72 L776 122" class="ar" marker-end="url(#ae)"/>
-<text x="770" y="90" class="te" text-anchor="end">starts</text>
+<text x="770" y="90" class="te" text-anchor="end">launches</text>
 <path d="M798 122 L798 74" class="ar" marker-end="url(#ae)"/>
 <text x="804" y="90" class="te">reports</text>
 <rect x="648" y="244" width="252" height="40" rx="5" class="fst"/>
@@ -488,7 +488,7 @@ footer { color: var(--muted); font-size: 0.82rem; border-top: 1px solid var(--li
       <thead><tr><th scope="col">Step</th><th scope="col">In a GitHub Actions job?</th><th scope="col">What starts it</th></tr></thead>
       <tbody>
         <tr><th scope="row">Checks, then <code>timber push</code></th><td><svg class="im" viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><circle cx="6" cy="6" r="3.6" class="mk-todo"/></svg>Yes. The job pushes what it built to the registry before it ends, with a key that writes cache entries and nothing else.</td><td>sluice, which dispatches the job. Its hosted pool is designed; only the dispatch is built.</td></tr>
-        <tr><th scope="row">Publish, the gate, apply</th><td><svg class="im" viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><circle cx="6" cy="6" r="3.6" class="mk-todo"/></svg>No. They run on a host with a runner. Publish reads the builds from the registry, as timber's clause 135 has it, so it need not run where the checks ran. The keys that offer and accept stay off machines that build.</td><td>Boomdrive Cloud, on that host's runner.</td></tr>
+        <tr><th scope="row">Publish, the gate, apply</th><td><svg class="im" viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><circle cx="6" cy="6" r="3.6" class="mk-todo"/></svg>No. They run on a host with a runner. Publish reads the builds from the registry, as timber's clause 135 has it, so it need not run where the checks ran. The keys that offer and accept stay off machines that build.</td><td>Boomdrive Cloud, through that host's runner.</td></tr>
         <tr><th scope="row">Publish with no host at all</th><td>Only without the cloud: GitHub's own push event starts a workflow that runs <code>timber publish</code>. For the cloud to start it there, the job would have to bring a runner with it, which is proposed and on no roadmap.</td><td>GitHub.</td></tr>
       </tbody>
     </table>
@@ -525,7 +525,7 @@ footer { color: var(--muted); font-size: 0.82rem; border-top: 1px solid var(--li
 
 <section>
   <h2>The fleet, end to end</h2>
-  <p class="note">A change to flume, followed to the fleet's machines. Every repository runs the same three steps: a landing, <code>timber publish</code>, <code>timber apply</code>. Boomdrive Cloud starts each on deneb's runner, nothing runs in GitHub Actions, and versions and builds live in GHCR.</p>
+  <p class="note">A change to flume, followed to the fleet's machines. Every repository runs the same three steps: a landing, <code>timber publish</code>, <code>timber apply</code>. Boomdrive Cloud launches each on deneb's runner, nothing runs in GitHub Actions, and versions and builds live in GHCR.</p>
   <figure>
     <div class="scroll"><svg class="fig" viewBox="0 0 1040 372" role="img" aria-label="The chain from a flume change to the fleet's machines: flume, boomdrive and swancloud each run the same three steps, a landing, timber publish and timber apply.">
 <defs><marker id="ac" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L8 4 L0 8 z" class="ah"/></marker></defs>
