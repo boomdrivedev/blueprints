@@ -272,12 +272,7 @@ redefine these.
 21. A version is derived from the repository's history by the authors'
     rule, read at a landed revision, and from nothing a publisher
     supplies. The same revision under the same rule always derives the
-    same version. Counting from a component's newest tag, each
-    landing on the branch's first-parent line that touches the
-    component's paths and that the rule bumps is a version of its own,
-    tagged yet or not, so a revision's version never waits on an
-    earlier publish and two landings never derive one (timber record
-    0038).
+    same version.
 22. A version's name is its component's, and is claimed before any
     artifact is packed under it: a publish records the name against the
     revision in the repository's history, which every publisher of the
@@ -287,13 +282,10 @@ redefine these.
 23. Two versions of one artifact name are ordered by the ecosystem's
     own version rules, and timber never orders them by time, by
     spelling or by the order a store lists them.
-24. A build takes its version from its tree alone. A landing that
-    makes a version is checked as its release commit, whose tree names
-    the version, so the build a publish offers is the build the checks
-    verified and says its version (135; timber record 0038). Every
-    other build never knows the version, so it is the same build
-    whatever version it later becomes; a version is in the bytes only
-    where a release commit's tree or the ecosystem's form puts it.
+24. The build that left the outputs never knows the version, so a
+    build is the same build whatever version it later becomes; a
+    version is in the bytes only where the ecosystem's form requires
+    it.
 110. One publish gives every artifact of a component one version,
     and the component's index names one version; a projection whose
     ecosystem versions an artifact name by that name's own history does
@@ -1167,8 +1159,8 @@ edit before `cargo package --no-verify`. A projection never opens the
 packager's archive to edit it; a wheel with compiled extensions, whose
 build is its packaging, is repacked with the `wheel` tool's own
 unpack and pack around its metadata and is the one exception. A
-compiled binary carries the revision and the build identity, and the
-version only where its release commit's tree names it (24). Determinism is the packager's, and a projection
+compiled binary carries the revision and the build identity, never
+the version (24). Determinism is the packager's, and a projection
 whose packager cannot promise it says so (87).
 
 | ecosystem | pack | render | serve |
