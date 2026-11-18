@@ -976,6 +976,14 @@ another's. A repository's components and its cache entries hang under
 `<root>/<owner>/<name>/`, the owner and name its remote gives,
 lowercased (114, 138), so a repository's packages are public or private
 as the repository is, and one store holds both (timber record 0040).
+The repository's record of claimed versions names the root it publishes
+under (22, 62), so a rename or a move of owner is read from git alone,
+and the first publish after one carries the repository's history to its
+new root before it publishes: each channel's chain goes on from its head
+(105), every version it published stays promotable there, and a read of
+a channel at the old root is answered with where it moved, never as
+current. No person runs anything for it, cache entries are not carried,
+and no other repository's history writes under a root one left.
 Cache entries live apart from every component, under `cache/<build>`
 repositories, one per build profile (`cache/moon`), with the build
 identity as the tag, so a credential that writes `cache/` and nothing
