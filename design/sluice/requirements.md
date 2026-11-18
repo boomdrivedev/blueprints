@@ -1061,7 +1061,10 @@ redefine these.
      or a signal off, and name the collector only where the host's
      settings name none, so a caller's settings for its own tools never
      send sluice's elsewhere. A run's checks are handed the collector and
-     the signals sluice sends. No host wraps sluice or sets its
+     the traces and logs sluice sends, never metrics: a run's tools take
+     the run's ids only on their resource, which every signal they send
+     carries, so their metrics would grow with every run (sluice record
+     0014 as amended 2026-11-18). No host wraps sluice or sets its
      environment for its telemetry (principle 14), and nothing sluice
      decides reads its telemetry back. (Added 2026-11-09: sluice record
      0106, the user's direction that day in agentplot-design's pane;
