@@ -164,3 +164,57 @@ right." Each repository's CLAUDE.md points here.
     acceptable if it means the flake is pinning the plugin to the same
     version of the CLI that's being installed." Which flakes, and that
     the Claude Code plugin comes the same way, are agentplot-design's.)
+
+## Writing
+
+18. **Write what was decided, never what something is today.** A
+    record, rule, comment, page, brief or card says what must be true
+    and why. It never states another thing's current state as a
+    standing fact: a version, or whether something is built, cached,
+    deployed, running or waiting. Whoever needs that reads it from its
+    source when they need it. A reading kept as evidence says where it
+    was read and on what date. Rules out: a comment saying a tool's
+    flake publishes no cache; a brief saying a step is not built yet;
+    a record saying a tool is at some version. (Proposed 2026-11-18 by
+    boomdrive-design, on the user's card; accepted only on their yes.
+    The user's words that day, on agents repeating what was written
+    instead of checking it: "why are we writing things down that can
+    easily get dated like that?")
+
+19. **What the person reads is plain English.** Every card, proposal,
+    summary, page and message written for the person names what they
+    see and do, in plain words. Of the family's own words it uses only
+    those in the list below, each in the sense the list gives. Any other
+    word coined for a design stays in records, specs and code, and never
+    reaches the person, and a record's opening paragraph, which a card
+    shows, keeps this rule. Writers and reviewers keep it, never a
+    check (16). (Proposed 2026-11-18 by boomdrive-design, on the user's
+    card; accepted only on their yes. The user's words that day: "We
+    need to fix number three: the coined language. This is driving me
+    crazy.")
+
+### The person's words
+
+| word | what it means |
+|---|---|
+| Boomdrive | the product |
+| Boomdrive Cloud | the website where you sign in and see your drives |
+| drive | one project Boomdrive works on, with its repositories |
+| host | a computer that does a drive's work |
+| runner | Boomdrive's program on a host, which takes work and runs it |
+| bolt | a group of changes built together on one branch and merged together |
+| unit | one change in a bolt |
+| chore | upkeep that changes no behavior, such as moving a version |
+| fix | a correction to work under way or already merged |
+| proposal | the planner's suggested bolts, for you to approve |
+| record | a decision written down, with its reason |
+| rule | something every change must keep true |
+| card | a question waiting for you in Pending You |
+| merged | on main, after its checks passed |
+| flume | runs each piece of work in its own copy of the repository |
+| sluice | merges a branch once its checks pass |
+| crew | the agents that plan, design and keep things running |
+| timber | publishes releases |
+| Boom | keeps the decisions and rules |
+| herdr | the terminal the agents run in |
+| Pending You | where questions reach you |
