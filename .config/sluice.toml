@@ -4,7 +4,9 @@
 # App. No check reads Markdown (blueprints principle 16), so main requires
 # none: a change lands as it is, in the order it was submitted.
 [tests]
-runner = "moon"
+# blueprints has no task runner; with no required check, nothing runs.
+runner = "command"
+command = "true"
 
 [branches.main]
 # no checks: lands untested, by choice
