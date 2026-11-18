@@ -175,8 +175,8 @@ right." Each repository's CLAUDE.md points here.
     source when they need it. A reading kept as evidence says where it
     was read and on what date. Rules out: a comment saying a tool's
     flake publishes no cache; a brief saying a step is not built yet;
-    a record saying a tool is at some version. (Proposed 2026-11-18 by
-    boomdrive-design, on the user's card; accepted only on their yes.
+    a record saying a tool is at some version. (Written 2026-11-18 by
+    boomdrive-design and accepted by the user that day, on their card.
     The user's words that day, on agents repeating what was written
     instead of checking it: "why are we writing things down that can
     easily get dated like that?")
@@ -188,8 +188,8 @@ right." Each repository's CLAUDE.md points here.
     word coined for a design stays in records, specs and code, and never
     reaches the person, and a record's opening paragraph, which a card
     shows, keeps this rule. Writers and reviewers keep it, never a
-    check (16). (Proposed 2026-11-18 by boomdrive-design, on the user's
-    card; accepted only on their yes. The user's words that day: "We
+    check (16). (Written 2026-11-18 by boomdrive-design and accepted by the
+    user that day, on their card. The user's words that day: "We
     need to fix number three: the coined language. This is driving me
     crazy.")
 
