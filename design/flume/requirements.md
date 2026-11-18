@@ -384,9 +384,9 @@ redefine these.
   allows.
 - **settle**: of a place, flume reading every fact of it again and
   taking each step Part A then allows.
-- **watch**: a caller settling every place on the host, on a bound it
-  states to flume, whether or not an agent is in a place, while flume
-  itself runs nothing (208).
+- **watch**: a caller settling every place on the host where something
+  is pending, on a bound it states to flume, whether or not an agent is
+  in a place, while flume itself runs nothing (208, 225).
 - **attended**: of flume on a host, that no caller keeps watch over it
   (119, 208).
 - **window**: a window of the host's display, which a person looks at
@@ -1804,7 +1804,8 @@ redefine these.
     place whose last stage delivered. It sends a place back when its
     submission fails, and tidies a place whose work is over (63). flume
     settles a place whenever its agent goes quiet (121), and every place
-    on the host whenever a caller keeping watch settles (208). No
+    on the host where something is pending (225) whenever a caller
+    keeping watch settles (208). No
     terminal settles a place (122). Each settle reads the outcome of the place's
     open submission (111). Where the merge queue moves only while
     something drives it, the settle drives the place's base one round
@@ -1816,7 +1817,8 @@ redefine these.
     alike (202).
 119. Where no caller keeps watch over the host (208), flume runs
      attended: every command of flume's that acts on places settles
-     every place on its host before it acts. An agent that ended with no
+     every place on its host where something is pending (225) before it
+     acts. An agent that ended with no
      word from its program, a prompt never received and an agent working
      past its limit are then read only at such a command, since no
      terminal settles (38, 45, 118, 122). Status and a prompt's rendering
@@ -1830,21 +1832,39 @@ redefine these.
      submission's outcome is read at the settles that follow it (111,
      124).
 208. A caller keeps watch over the host by settling every place on it
-     on a bound it states to flume, as `flume settle --every <bound>`
-     asks. flume keeps in the host's state when the newest such settle
-     began, when it ended and the bound it stated. A caller keeps watch
-     while that settle runs, and until twice its bound has passed since
-     it ended, so a settle that runs longer than its bound never leaves
-     the host unwatched and never sets every other command settling
-     every place itself (119). (Amended 2026-11-17: a pass that ran
-     minutes on deneb lapsed its own watch, and each command then
-     settled every place, stalling for minutes.) The watch is the host's, never
+     where something is pending (225) on a bound it states to flume, as
+     `flume settle --every <bound>` asks. flume keeps in the host's state
+     when the newest such settle began, when it ended and the bound it
+     stated. A caller keeps watch while that settle runs, and until twice
+     its bound has passed since it ended, so a settle that runs longer
+     than its bound never leaves the host unwatched (119). The watch is
+     renewed by that settle alone, never by a word apart from it, so a
+     host reads watched only while its places are being settled. The watch is the host's, never
      a terminal's or a place's: on a host that keeps the runner its
      passes keep it (section 9), and any caller of the host's own may,
      a timer among them. A caller keeping watch decides nothing of what
      a settle does (46). Status gives the host's watch, its bound and
      when it last settled, or that no caller keeps it and since when
      (56, 119).
+225. Something is pending on a place while a change that calls flume
+     nothing may have moved it: it is being made, or its work is over
+     and it is not yet tidied away (63); a stage of it starts or runs,
+     whose agent may have ended with no word, never received its prompt
+     or worked past its limit (38, 45, 118); its submission is in flight
+     (111, 124); it is a base place, whose base may have moved (202,
+     203); a time it waits on has come, a hold's end, its stall's bound,
+     a kept agent's time or an account's reset among them (130, 146,
+     198); it waits for room the host now has (70); or an end of it, or
+     a wake for it, waits to be handed on (37, 43, 132). A place that
+     waits only on an answer, its caller's word or a drop has nothing
+     pending: what moves it calls flume (42, 47, 49, 53). A settle of
+     the watch's, or of a command where none keeps watch, reads no
+     place with nothing pending, neither its merge queue nor its
+     terminal nor its agent, and moves every place no later than a
+     settle of every place would. flume alone reads what is pending,
+     and a caller names nothing of it (208). `flume settle` naming no
+     place and stating no bound still settles every place, at a
+     caller's or a person's asking.
 47. A stage or a submission that waits on its caller's word, by the
     launch, by a hold the caller put after it (130), or, for a base
     place's submission, by its kind having no stages (203), starts only
@@ -2749,7 +2769,7 @@ redefine these.
      - each start's time to its end;
      - each wait's time, by whom and which move;
      - the stalls and stuck stages, counted;
-     - at a settle of every place on the host (121, 208), the places
+     - at a settle of the watch's (208), the places
        standing, by kind, state and whom they wait on, and each
        stream's agents running and its room.
 
@@ -4308,11 +4328,12 @@ decision #46, accepted by the user on 2026-11-11).
   its kind names (111, 112).
 - **I8.** flume runs no process of its own between its commands. An
   agent going quiet, or a command stage's command exiting, settles its
-  place, and a caller keeping watch every
-  place, and every settle reads the outcome of
+  place, and a caller keeping watch every place where something is
+  pending (225), and every settle reads the outcome of
   its open submission and drives its base where the merge queue moves
   only so (124). While no caller keeps watch, every command of flume's
-  that acts settles every place first (46, 119, 120, 208).
+  that acts settles every place where something is pending first (46,
+  119, 120, 208, 225).
 
 <!-- ANCHOR_END: invariants -->
 <!-- ANCHOR: non-goals -->
@@ -4412,7 +4433,7 @@ The rest of the stack, which a model builds on unless it says why not:
   `flume settle --every <bound>` once and awaits it. A host where no
   caller keeps watch runs attended. Its places move at its agents'
   quiet and its callers' commands, each command
-  settling every place first, and its queues move in sluice's own host
+  settling every place where something is pending first, and its queues move in sluice's own host
   process, which a submit and a settle's read start (124, C.6;
   sluice 135).
 - The profiles of Part C: plain git worktrees, the kind format in
@@ -4609,8 +4630,9 @@ These are not requirements.
 - **S27.** No caller keeps watch over the host. A code stage's agent
   is killed with nothing delivered. Nothing
   reads it until the operator next acts through flume, dropping another
-  place: that command settles every place first, and status then
-  reports the stage lost.
+  place: that command settles every place where something is pending
+  first, the killed stage's among them, and status then reports the
+  stage lost.
 - **S28.** On a host whose runner keeps watch, under herdr with flume's
   plugin, a code stage's agent crashes with nothing delivered, and its
   stop hook never runs. Within the watch's bound, at the runner's next
@@ -5265,7 +5287,8 @@ These are not requirements.
   running `flume settle --every 2m`, a chore's code stage delivers, its
   agent ends, and flume submits the place, which starts sluice's host
   process. No caller asks anything else of flume. At each pass flume
-  settles every place, the chore's among them with no agent in it, and
+  settles every place where something is pending, the chore's among
+  them with its submission in flight and no agent in it, and
   reads its submission, driving no round of the queue, which sluice's
   host process moves on its own. Where that process ended before the
   submission was decided, the next settle's read starts it again. The
@@ -5349,14 +5372,15 @@ These are not requirements.
   stage delivers, and the settle its agent's quiet runs ends the agent
   and submits the place (121). Nothing settles after it, herdr and its
   plugin settling nothing, until the operator drops another place, and
-  that command settles every place first, stepping the chore's base.
+  that command settles every place where something is pending first,
+  stepping the chore's base.
   The runner then starts on the host, its passes running `flume
   settle --every 2m`. Status gives the watch's bound and when it last
   settled, and the chore lands at a later pass with no command of the
-  operator's. The runner stops, and four minutes after its last pass
-  began status says no caller keeps watch and since when, and the
-  operator's next drop settles every place first again (46, 119, 122,
-  208).
+  operator's. The runner stops, and four minutes after its last settle
+  ended status says no caller keeps watch and since when, and the
+  operator's next drop settles every place where something is pending
+  first again (46, 119, 122, 208, 225).
 - **S119.** A change is launched naming no version in a repository
   whose lock records none, and runs change@3. Its construct writes four
   task groups, each task naming its own check, such as one test by name
