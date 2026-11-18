@@ -113,13 +113,19 @@ redefine these.
   time, and transitions out of each state in priority order, each with
   a guard over evidence and the effects it performs (175).
 - **template**: a statechart a state of a statechart kind runs inside
-  it. A statechart kind is built from three: the stage template, which
-  runs its sessions and joins them; the session template, one agent's
-  life; and the place template, the worktree its sessions work in
-  (175). A command stage runs a fourth, the command template (223).
+  it, which flume declares and binds. A statechart kind is built from
+  the stage template, which runs a stage's sessions side by side and
+  joins them, each session one agent's life by flume's own rules for an
+  agent, in the place, the worktree its sessions work in (175). A
+  command stage runs a second, the command template (223).
 - **atom**: a name a statechart's guard reads as evidence, or its
   transition performs as an effect, each effect with the evidence that
   proves it done; flume binds each to one seam (178).
+- **session**: of a statechart kind's stage, one agent's life, from its
+  start through working, waiting and asking to its end or its loss,
+  delivering its stage's deliverables (175).
+- **decision**: a state of a statechart kind that waits on a person's
+  answer while it is active (176).
 - **engine**: the family's code that ticks a statechart: given its
   states and one reading of its evidence, it gives the transitions that
   fire and the effects to perform, and decides nothing else (176).
@@ -436,9 +442,14 @@ redefine these.
    than flume runs of a kind (23), or names a deliverable flume cannot
    read (24) is refused naming the kind, and makes nothing. While flume
    runs no statechart kind, a launch of one is refused so, naming the
-   kind and its format. Once flume runs them, a launch is refused only
-   for what neither format holds, or for an atom or a template flume
-   does not bind (175, 178). So is a
+   kind and its format. Once flume runs them, a launch of one is
+   refused only for what neither format holds; for a template, a rule
+   or an atom flume does not bind, naming it; for a state that runs the
+   stage template and names no prompt or no deliverable, names a file in
+   a deliverable where its agents are no rule's, or joins by a count
+   above the agents it lists, naming the state; and for its landing fix,
+   naming the field, while 175 leaves how that fix lands to a change of
+   its own (175, 178). So is a
    launch of a kind that lands where the repository binds no merge
    queue (105). A launch that gives no brief while a stage of its kind
    asks for one is refused naming the stage, and makes nothing (27).
@@ -806,8 +817,8 @@ redefine these.
      declaration refuses each launch that names its source, naming the
      declaration and why, and no other launch (4); status names it (56).
 175. A statechart kind is a statechart in the family's kind format
-     (weir 94), built from the stage, session and place templates, and,
-     for a command stage, the command template (223). Its
+     (weir 94), built from the stage template, and, for a command stage,
+     the command template (223). Its
      regions run side by side, each in one of its states at a time. A
      state may be final, may carry a decision a person answers, may hold
      regions of its own, and may run a template or another statechart
@@ -818,21 +829,34 @@ redefine these.
      stage that runs the stage template runs its sessions side by side,
      one to each of its agents, which it lists or names by a rule read
      against the place, and joins them by all, any or a count. It names
-     its deliverables, each one of the forms of 24, and sends the place
-     back to a stage it names up to a bound, past which the place waits
-     on its caller (112). A statechart kind that lands may name its landing fix and how
+     its sessions' prompt and its deliverables, each one of the forms of
+     24, and sends the place back to a stage it names up to a bound,
+     past which the place waits on its caller (112). Each session
+     delivers its stage's deliverables, each read as 24 and 25 read a
+     stage's, made since that session started; a deliverable's path may
+     name the session, so that each session's is its own (C.2). The stage
+     ends passed once its join is met by sessions that delivered; sent
+     back once a session found work (131), while the stage has been sent
+     back fewer times than its bound; and stopped once a session found
+     work past that bound, or once its sessions are too few for its
+     join. The kind's own transitions take each end, and a session
+     still live once its stage ended is ended once quiet (31). A statechart kind that lands may name its landing fix and how
      many it runs (weir 94): when the merge queue sends its place's
      branch back, a conflict with its base or a check of the base
      failing on it, the fix runs as a place of that kind, as a base
      place's does (203), and the statechart never runs again for it;
      how that fix lands beside the statechart's own place is designed
-     when flume runs statechart kinds (177). (Weir record 0005, the
-     user's, 2026-11-07.) A session is one agent's life, from its start
-     through working, waiting and asking to its end or its loss, and the
-     place is the worktree its sessions work in (9). A statechart kind
-     composes the templates and the atoms by their names, so a kind
-     added changes no code of flume's, and one naming a template or an
-     atom flume does not bind is refused naming it (4, 178). It carries
+     by a change of its own, and until then a launch of a statechart
+     kind that names its landing fix is refused naming it (4). (Weir
+     record 0005, the user's, 2026-11-07.) A session is one agent's
+     life, from its start through working, waiting and asking to its
+     end or its loss, run by flume's own rules for an agent (30 to 50,
+     109, 110, 198), and the place is the worktree its sessions work in,
+     made at the launch and tidied as every place is (9, 60 to 67). A
+     statechart kind composes the templates, the rules and the atoms by
+     their names, so a kind added changes no code of flume's, and one
+     naming a template, a rule or an atom flume does not bind is refused
+     naming it (4, 178). It carries
      a title, the words a person reads for it, and may declare its
      label as any kind does (180). Like every kind it is
      named by its identity, resolved, packaged and locked as 19 and 154
@@ -850,9 +874,24 @@ redefine these.
      atom is bound to (178). It keeps what the engine holds of a place
      in the place's held state, written as every held state is (75,
      103): each region's state and when it was entered, its record and
-     counters, and the answers it applied. A decision stands while its
-     state is active, and an answer to it is applied once and never
-     again (74). Nothing ticks between flume's commands (120): an agent
+     counters, and the answers it applied. A statechart's run is over
+     once each of its top regions holds a final state. The place of a
+     kind that lands is then submitted as 111 says of a last stage's
+     delivery, once no session of it is live, and the place of one that
+     does not land waits on its caller as 114 says. The submission's
+     outcome is evidence its statechart reads (178): a transition out of
+     a final state that takes a failed or conflicting submission moves
+     the run on, the sessions of the stage it enters next given the
+     merge queue's words as 112 gives a stage's, and a submission so
+     failed that no transition takes leaves the place waiting on its
+     caller (130), whose retry submits it again. A decision stands while
+     its state is active, and the place waits on its caller while one
+     stands (130). A caller answers it by `flume answer`, naming the
+     place, the region whose state carries it and the answer; the answer
+     is taken only while that decision stands, and refused, naming the
+     answer taken, while an answer given it is not yet applied. The next
+     settle gives it to the tick, and the engine applies it once and
+     never again (74). Nothing ticks between flume's commands (120): an agent
      going quiet, the host's watch and a caller's command settle a
      place under a statechart kind as under a simple
      kind (46).
@@ -2178,7 +2217,15 @@ redefine these.
     settle read of its branch, when and what it found, and each fix
     flume launched for it, why and how it ended; for a place flume
     launched as a base place's fix, that base place (203) (flume record 0056's amendment of 2026-11-07.); a stage for review's plan
-    with where it lives (163); for the host and for each of
+    with where it lives (163); for a place of a statechart kind, each
+    region of its statechart with the state it holds and since when, and
+    whether that state is final, its counters, whether its run is over,
+    each decision standing with its region, its kind, the answers it
+    takes and what it shows, each answer given it with who gave it, when
+    and whether the engine applied it, and each stage it entered with
+    its entry, its join, how many times it was sent back and its
+    sessions, each session given as a stage is above (175, 176); for
+    the host and for each of
     its streams, its agents running, the bound it states, its room, its
     points queued and in flight, and
     the places waiting for room in the order they would start, each with
@@ -2210,8 +2257,11 @@ redefine these.
      review (163), a stage
      reported lost (45), a prompt never begun (38), a readiness that failed (12),
      a submission whose landing the forge refused (112),
-     or a kind's last stage delivered where the kind does not land
-     (114), waits on that move from the moment flume read it so, and
+     a decision of a statechart kind standing, or its submission failed
+     where no transition of its statechart takes the failure (176),
+     or a kind's last stage delivered where the kind does not land,
+     or a statechart kind's run over where it does not land (114),
+     waits on that move from the moment flume read it so, and
      status says which move and since when, and, for an answer, whether
      the stage's agent is kept open for it and until when (198); an
      agent let go leaves the move and its since as they were. A caller may put a place's
@@ -3164,13 +3214,25 @@ redefine these.
      queue (4, 111). Parts A and B do not change to admit a profile.
 106. One conformance suite holds every profile to Parts A and B; a
      profile that fails it is not one.
-178. Each atom the stage, session, place and command templates name is
-     bound to one operation of one seam above, and served or performed through it
-     alone (105): an evidence a guard reads, or an effect a transition
-     performs with the evidence that proves it. An atom no operation
-     serves is not one flume runs, and a statechart kind that names it is
-     refused (4). The conformance suite holds each binding as it holds
-     its operation (106).
+178. Each atom the stage and command templates name, and each a
+     statechart kind names, is bound to one operation of one seam above,
+     or of git's history beside them (section 9), and served or
+     performed through it alone (105): an evidence a guard reads, or an
+     effect a transition performs with the evidence that proves it. The
+     stage template's are `start_sessions`, the store's write of its
+     stage's sessions into the place's held state (103), proved by
+     `stage.started`, read from that state; and `stage.end`, its stage's
+     end as the place's held state records its sessions' ends. A kind
+     may name `region.entered`, when a region entered the state it
+     holds, read from the place's held state; and `place.submission`,
+     the outcome of the place's newest submission, and
+     `place.submissions`, how many times flume submitted it, each read
+     from the merge queue's record as flume confirmed it (133). A kind
+     names no effect. The stage template's one rule, `every-file`, reads
+     the files of the place's branch at the settle's head from git's
+     history. An atom no operation serves is not one flume runs, and a
+     statechart kind that names it is refused (4). The conformance suite
+     holds each binding as it holds its operation (106).
 
 <!-- ANCHOR_END: part-b -->
 <!-- ANCHOR: part-c -->
@@ -3373,7 +3435,32 @@ the same revision (176). So the format a kind is read in and the tick
 that runs it never come from two revisions. A table that holds both
 `regions` and `stages` is refused naming the field (weir 95). While
 flume runs no statechart kind, a declaration of one refuses the launch
-naming the kind and its format (4).
+naming the kind and its format (4). A package of a statechart kind is
+refused as weir's read-package refuses it, so a statechart kind comes
+from a repository's declaration or a launch's (19, 157).
+
+flume binds the stage template as `stage`, a statechart of flume's own
+in the same format, held with each place of a statechart kind as its
+launch read it (21). Its one region, `run`, starts at `working`, asks
+there for its stage's sessions until they are recorded, and ends
+`passed`, `sent-back` or `stopped` (175), which the kind's transitions
+read by `{ final = "<end>" }` (weir C.4). Beside the five parameters
+weir names, a state that runs it gives `prompt`, its sessions' prompt,
+a path beside the declaration as a simple stage's is (23), with every
+part 27 names and two more: `{{session}}`, the session's number in its
+stage's entry, from 1, and `{{file}}`, the file its rule gave it.
+`agents` is a list of entries, each one session with its settings
+(32), or `{ rule = "every-file", pattern = "<glob>" }`: one session for
+each file of the place's branch at the settle's head whose path
+matches the glob, `*` within one part of a path, `**` across parts and
+`?` one character. `join` is `all` where it is left out, and
+`max_send_backs` flume's bound for a kind's goings-back (23). A
+`committed:` or `report:` deliverable's path may name `{{session}}` or
+`{{file}}`, so that each session's deliverable is its own. A session's
+identity names its stage by the state's path, its entry and its
+number, `<path>#<entry>/<n>` (33), and a hold or a retry names a stage
+so. Every other key of `params` is ignored, as a section a reader does
+not know is (23).
 
 A command stage (223) is a state whose `machine` is `command`, flume's
 command template. Its `params` are `command`, the program and its
@@ -4454,7 +4541,8 @@ The rest of the stack, which a model builds on unless it says why not:
     writes a lock (155); `open`, which shows a person a stream's
     agents in its view (186); `list`, which says at a glance what flume
     holds and what a person can open (200); `needs` for an agent;
-    `hold`, `wait`, `inbox` and `wake` for its callers; and
+    `hold`, `wait`, `inbox`, `wake` and `answer`, which answers a
+    statechart kind's decision (176), for its callers; and
     `settle`, which the Claude Code plugin's hooks run at an agent's
     quiet and a caller keeping watch runs with its bound (121, 208);
   - a Claude Code plugin that gives every session `/launch` and serves
