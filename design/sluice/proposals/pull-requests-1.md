@@ -5,10 +5,11 @@ forge and whose work arrives as pull requests, on any deployment and
 with any executor. The checks run where sluice runs them: on one
 machine, that machine. A forge's job service as the executor and the
 stepper is a pool in `../requirements.md` (88, C.8), which
-uses these rows and adds nothing to them. The operator ratified 118,
-119, S50, S51 and the C.2 moon row's edit on 2026-10-22: they are in
-`../requirements.md`, which wins where they differ. The rest waits for
-the operator's ruling.
+uses these rows and adds nothing to them. All of it is in
+`../requirements.md`, which wins where they differ: 118, 119, S50, S51
+and the C.2 moon row's edit, ratified by the operator on 2026-10-22;
+the C.5 and C.7 rows, with clause 120 and many-hosts-3; and S21 to S24
+and the non-goal, folded in by the design agent on 2026-11-18.
 
 ## What it answers
 

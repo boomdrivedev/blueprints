@@ -216,7 +216,7 @@ footer { color: var(--muted); font-size: 0.82rem; border-top: 1px solid var(--li
 <text x="22" y="143" class="tt">sluice&#x27;s checks</text>
 <circle cx="168" cy="138" r="4" class="mk-ok"/>
 <text x="22" y="160" class="tb">moon builds and tests</text>
-<text x="22" y="175" class="tb">its last task: timber push</text>
+<text x="22" y="175" class="tb">after them: timber push</text>
 <rect x="224" y="124" width="168" height="80" rx="5" class="fo"/>
 <text x="234" y="143" class="tt">sluice lands</text>
 <circle cx="380" cy="138" r="4" class="mk-ok"/>
@@ -611,7 +611,7 @@ footer { color: var(--muted); font-size: 0.82rem; border-top: 1px solid var(--li
         <tr><th scope="row">A policy file</th><td>Neither repository has one.</td><td><svg class="im" viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><circle cx="6" cy="6" r="3.6" class="mk-todo"/></svg><code>.config/timber.toml</code> names the component and its outputs.</td></tr>
         <tr><th scope="row">Who builds the release</th><td>A GitHub workflow builds flume's binaries for three systems. Sluice's checks do not.</td><td><svg class="im" viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><circle cx="6" cy="6" r="3.6" class="mk-todo"/></svg>The checks build them, on a host of each system or cross-built, because publish never builds (clause 135).</td></tr>
         <tr><th scope="row">The version in the binary</th><td>A release commit writes the version into the tree before the build, so <code>flume --version</code> prints it.</td><td><svg class="im" viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><circle cx="6" cy="6" r="3.6" class="mk-todo"/></svg>The checks build once, and the binary carries its revision and its build, never a version (clause 24). Its version is the name timber's publish gives those same bytes.</td></tr>
-        <tr><th scope="row">Where a release goes</th><td>The GitHub release, and Cachix through Boomdrive's workflow.</td><td><svg class="im" viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><rect x="2.4" y="2.4" width="7.2" height="7.2" transform="rotate(45 6 6)" class="mk-prop"/></svg>Two targets: a GitHub release, which timber's statement does not list, and a Nix cache that is Cachix, where the built one fills Attic only.</td></tr>
+        <tr><th scope="row">Where a release goes</th><td>The GitHub release, and Cachix through Boomdrive's workflow.</td><td><svg class="im" viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><rect x="2.4" y="2.4" width="7.2" height="7.2" transform="rotate(45 6 6)" class="mk-prop"/></svg>Two targets: a GitHub release and a Nix cache that is Cachix (C.12), where the built cache target fills Attic only.</td></tr>
         <tr><th scope="row">Noticing a new version</th><td>Nothing automatic.</td><td><svg class="im" viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><circle cx="6" cy="6" r="3.6" class="mk-todo"/></svg>headwater reads timber's channel, as its statement has it. headwater is not built.</td></tr>
         <tr><th scope="row">Sharing builds between hosts</th><td>Each host builds for itself.</td><td><svg class="im" viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><circle cx="6" cy="6" r="4" class="mk-ok"/></svg><code>timber push</code> and <code>timber sync</code> share what moon's tasks built. Cargo's own compile cache stays on each host.</td></tr>
       </tbody>
@@ -638,7 +638,7 @@ footer { color: var(--muted); font-size: 0.82rem; border-top: 1px solid var(--li
       <thead><tr><th scope="col">Deployment</th><th scope="col">Missing</th><th scope="col">Where it is decided</th></tr></thead>
       <tbody>
         <tr><th scope="row">1. One host</th><td>Timber's publishing kind, which Flume runs with no agent, and Flume's command stage under it. The cloud launching it on a landing's report and recording its result. Timber's registry store proven on GHCR, and a rule that prunes cached builds. A card for a promotion on the rail, which the cloud does not have yet. swancloud's policy file. Publish still asks moon to build where it should only read.</td><td>Flume's clause 223; Boomdrive Cloud's roadmap 2.17 and record 0058; swancloud record 0048; timber's open list, clause 135</td></tr>
-        <tr><th scope="row">2. A team</th><td>Roles a host advertises to the cloud. A command that runs a gate apart from the publisher. Room for the push step in sluice's hosted pool. Keyless signing. Targets that pull.</td><td>cloud pack item 12, proposed; timber record 0020; sluice record 0034; timber phase 2</td></tr>
+        <tr><th scope="row">2. A team</th><td>Roles a host advertises to the cloud. A command that runs a gate apart from the publisher. Room for the push step in sluice's hosted pool. Keyless signing. Targets that pull.</td><td>cloud pack item 12, proposed; timber record 0020; timber 135; timber phase 2</td></tr>
         <tr><th scope="row">3. An enterprise</th><td>The build fleet, which covers checks only. The table ledger, the pool target and the template set.</td><td>sluice record 0119; Switchboard record 0090; timber phase 2</td></tr>
       </tbody>
     </table>

@@ -1,8 +1,7 @@
 # A branch on a forge, and pull requests
 
-The design below is under review in `design/sluice/proposals/
-pull-requests-1.md` and is not yet built. It holds on one machine and
-on many, with any executor: the checks run where sluice runs them.
+This design holds on one machine and on many, with any executor: the
+checks run where sluice runs them.
 
 A repository's shared branch often lives on a forge such as GitHub,
 and its work arrives as pull requests that wait for review, for a QA
@@ -127,10 +126,10 @@ decides nothing (119). Nothing on the request is read back by a gate.
 
 ## When the branch moves outside the queue
 
-Only sluice's identity may move the branch on the forge, by the forge's
-own rules (1). While that identity is a person's own account, that
-person's direct pushes and merge-button clicks still get through, and
-sluice treats each one as the branch moving under its queue. The
+Only sluice's identity, its GitHub App, may move the branch on the
+forge, by the forge's own rules (1). Where the forge still lets a
+person push or merge with its button, sluice treats each such move as
+the branch moving under its queue. The
 landing's push names the revision the candidate was formed on, and the
 forge refuses it when the branch has moved. sluice reports the refusal
 and never retries it blind (24); the next round forms the chain again

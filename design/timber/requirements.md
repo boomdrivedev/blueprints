@@ -573,6 +573,13 @@ redefine these.
 54. A cache entry may be removed at any time, and a build whose entry is
     gone builds again and is no worse for it. Nothing accepted or
     released is ever removed because of what the cache does.
+145. The store keeps a repository's cache entries for as long as its
+     owner's settings say, thirty days from their push unless they say
+     otherwise, and timber removes each entry once that time has
+     passed, with a credential that may remove cache entries and
+     nothing else. It never removes for the cache anything accepted
+     or released (54), the record of versions claimed (22), or the
+     ledger (34). (Added 2026-11-18, the design agent's.)
 55. A verifier's rebuild (30) reads no cache entry it did not write.
 135. A host pushes the cache entries of the tasks it ran with the
     credential it has, as a cache entry and nothing more (52, 53), before
@@ -1209,7 +1216,8 @@ whose packager cannot promise it says so (87).
 | a function | push: point the function at the version's image by digest |
 | Kubernetes | pull: the channel's tag, verified by Flux or Argo against the gate's signature; current reported by a watcher |
 | a Nix fleet | two profiles, bound by the environment (44). Push: apply runs the fleet's own deploy tool against one machine from a host that holds that machine's key, and report is what the machine answers after, a claim the host that ran the apply signs as what it observed (11); current is the closure the machine runs. Pull: each machine, on its own timer, reads its channel's tag in the store with its own credential, verifies the gate's claim, realises the version's store paths from the cache and switches; the system profile is its marker (119) and its report a claim it signs. The push profile comes first and the pull profile replaces it machine by machine |
-| a Nix binary cache | push: the version's store paths pushed to the cache |
+| a Nix binary cache (Attic, Cachix) | push: the version's store paths pushed to the cache, with the cache's own credential |
+| a GitHub release | push: the release of the version's tag made or updated, its notes (134) as the release's text and the version's artifacts the policy names as its assets, with the target's own credential; current is the release GitHub marks latest |
 | an observability backend's dashboards (Dash0) | push: apply runs the backend's own CLI, `dash0 apply`, on each dashboard file the version holds, by its fixed identifier, into the dataset at the API the environment's table names, `api` and `dataset`, and removes each dashboard an earlier version applied that this one does not hold, never one timber did not apply; the token is the host's credential the table names (118), handed to the CLI by its path, `--auth-token-file`, every other setting by its flag, with a configuration folder of the run's own, so no profile or `DASH0_*` variable of the host's is read; current is the version the dataset's dashboards were last applied from, which apply records with them |
 | a pool: a control plane's roster of environments (126) | push: apply is the control plane's request to converge one environment, run by its own executors with credentials that are the control plane's, reached at the moment of use; current and report are read from what it records |
 

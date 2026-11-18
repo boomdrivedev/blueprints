@@ -1683,7 +1683,8 @@ driver wrote (53), and Boomdrive imports nothing when it takes over
 - Approving or reviewing work. A verdict is evidence for a person or a
   platform, never an approval.
 - Submissions that span repositories.
-- The forge's own pull-request flow for contributors outside the fleet.
+- The forge's own pull-request flow for contributors outside the
+  repository: a request from a fork is never submitted.
 
 <!-- ANCHOR_END: non-goals -->
 <!-- ANCHOR: givens -->
@@ -1782,6 +1783,21 @@ section asked is answered by a clause.
 - **S20.** A host stops mid-run and returns after its claim lapsed and
   the checks were run elsewhere. It releases the places it left before it
   claims again, and writes no outcome for the lapsed run.
+- **S21.** A pull request is out of draft and approved, and waits for
+  `qa/approved`. Two others behind it are submitted, tested and land.
+  QA approves; the request is submitted, tested on the branch the other
+  two left, and lands.
+- **S22.** A queued request gets a new commit. Its entry is withdrawn,
+  its review is stale, and it waits again; the entries behind it are
+  formed again without it.
+- **S23.** A person opens a pull request by hand from a branch of the
+  repository. The next round finds it, posts its forecast, and submits
+  it once it is ready and its conditions hold.
+- **S24.** On a forge that still lets a person merge with its button, a
+  person merges a pull request between a candidate's verdict and its
+  landing. The landing's push is refused and the chain is formed again
+  on the new revision (S8). The merged request is closed, which
+  withdraws its entry if it had one.
 - **S36.** A planner asks for `bolt/x` from `main` at M. sluice makes
   `bolt/x` at M. A second ask is refused because `bolt/x` is present. On
   another host, an ask made at the same time finds the remote's branch present and is
