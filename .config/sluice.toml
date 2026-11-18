@@ -8,6 +8,9 @@
 runner = "command"
 command = "true"
 
+[signers.sessions]
+ssh = "deneb ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHGx/Ip3yodP/Rg3DdMAjJXoYuBmMxTLpPrka3ei69M/ sluice deneb"
+
 [branches.main]
 # no checks: lands untested, by choice
 required = []
@@ -16,6 +19,7 @@ batch = false
 flaky = "fail"
 timeout = "10m"
 remote = "origin"
+trust = ["sessions"]
 
 [branches.main.pull_requests]
 reviews = 0
