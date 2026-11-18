@@ -1,0 +1,23 @@
+# flume's binding for Blueprints: its places are plain git worktrees and
+# its work lands through sluice. It declares one kind of its own,
+# research, beside flume's built-in fix and chore. Each prompt is read
+# from this file's folder.
+[profiles]
+place = "git-worktree"
+merge_queue = "sluice"
+
+# research: a talk the person holds with the design agent's researcher
+# about one design question. Its one stage is a conversation; what it
+# settles is written as a page under design/ and lands once the person
+# says the talk is done.
+[kinds.research]
+branch = "research"
+starts_unready = true
+lands = true
+
+[[kinds.research.stages]]
+name = "talk"
+prompt = "flume/research-talk.md"
+conversation = true
+deliverables = ["commits"]
+agents = [{}]
