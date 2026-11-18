@@ -954,10 +954,12 @@ agrees on (87). A name found elsewhere is repaired from the ledger
 (109). The profile declares whether its names are conditional; the
 suite's refusal of a move from a stale place runs on a profile that
 says yes, and on one that says no the suite runs the repair in its
-stead. The binding declares one repository, and every blob,
-manifest, referrer and tag lives in it, the ecosystem name escaped into
-the tag: the seam addresses by digest alone, which a registry resolves
-only within a repository. A tag names a manifest, never a blob, so a
+stead. The binding declares a registry and a root, and every name of the
+store is a tag of a repository under that root, in the spaces below. The
+seam addresses by digest alone, which a registry resolves only within a
+repository, so every blob, manifest and referrer a name reaches is held
+in that name's repository, mounted from another repository under the
+root where the registry takes a mount and copied where it does not. A tag names a manifest, never a blob, so a
 cache entry (52) is named through a manifest of timber's cache-entry
 type, whose one layer is the entry's bytes and whose config is the empty
 descriptor, which the profile writes when asked to name a digest held as
@@ -970,10 +972,11 @@ can be scoped to apart. A component's indexes, its version tags
 (`<prefix><version>`) and its channels live under the component's own
 repository, each a tag of it, so a credential scoped to one component
 makes that component's versions and moves its channels and nothing of
-another's. The binding declares a root, and each repository's three
-spaces hang under `<root>/<repository>/`, so a repository's packages are
-public or private as the repository is, and one store holds both
-(timber record 0040). Cache entries live apart from every component, under `cache/<build>`
+another's. A repository's components and its cache entries hang under
+`<root>/<owner>/<name>/`, the owner and name its remote gives,
+lowercased (114, 138), so a repository's packages are public or private
+as the repository is, and one store holds both (timber record 0040).
+Cache entries live apart from every component, under `cache/<build>`
 repositories, one per build profile (`cache/moon`), with the build
 identity as the tag, so a credential that writes `cache/` and nothing
 else can push entries and never offer, accept or move a name (135). On GitHub's
@@ -984,14 +987,18 @@ component and artifact packages before the first publish, giving the
 job none, and a name the gate has not accepted is refused wherever it
 is read (95, 96; timber record 0040). An
 artifact's pointer (138), `artifact/<ecosystem>/<name>@<version>`, is the
-repository `artifact/<ecosystem>/<name>`, lowercased and escaped as the
+repository `<root>/artifact/<ecosystem>/<name>`, one space for the whole
+store and under no repository's own, so a consumer finds a pin by
+ecosystem, name and version alone; each name is a repository of its
+own, public or private as its publisher's repository is, made by the
+publishing host before the name's first publish and given to no job. It is lowercased and escaped as the
 distribution protocol allows, with `<version>` as its tag, so a name's
 versions are the repository's tag list and no tag carries a package
 name; a tag's characters the protocol refuses, `+` among them, are
 escaped one way and read back. On a registry that makes a repository on
 push only by a creation template, Amazon ECR among them, the operator's
-setup makes the repositories, or a creation template covering `cache/`,
-`artifact/` and the components' names, before the first publish, and a
+setup makes the repositories, or a creation template covering each
+repository's root and `artifact/`, before the first publish, and a
 push refused for a missing repository is reported in the registry's
 words naming the repository (58); the self-hosting guide says so, and a
 fleet that adopts timber makes the templates in its own configuration.
