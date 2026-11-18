@@ -367,10 +367,15 @@ redefine these.
      says why
      (16). It is never recorded or read under its key, no entry is
      attributed for it (18), and the check is run again.
-115. A candidate whose checks could not run (114) in as many of its runs
-     in a row as the deployment states is read as not passed, as one
-     whose run its time limit ended is (66), and the culprit's session is
-     told each check that could not run, and why (20).
+115. A candidate whose checks could not run (114), or whose run's claim
+     lapsed, its executor stopping before it reported or its pool losing
+     its job before the run's record was written (60, 77, 88), in as many
+     of its runs in a row as the deployment states is read as not passed,
+     as one whose run its time limit ended is (66), and the culprit's
+     session is told each check that could not run, and why (20). A run
+     whose place could not be made never began, and counts toward none
+     (agentplot/sluice record 0118); a run whose claim lapsed does
+     (agentplot/sluice record 0031 as amended 2026-11-18).
 139. A check that did not pass, in a run whose executor reports that it
      refused the run something the run tried, has no outcome (114): its
      record names what was refused, and it is never recorded or read
