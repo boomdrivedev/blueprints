@@ -19,5 +19,4 @@ lands = true
 name = "talk"
 prompt = "flume/research-talk.md"
 conversation = true
-deliverables = ["commits"]
 agents = [{}]
