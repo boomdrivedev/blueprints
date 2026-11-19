@@ -611,9 +611,10 @@ redefine these.
     resolved at its launch: the kind's identity and its content as read
     then. A later change to any declaration, lock or package the host
     holds never changes a place already launched.
-22. flume's own kinds are fix@1, fix@2, chore@1, chore@2, change@1,
-    change@2, change@3, change@4, change@5 and plan@1, all ten simple
-    kinds (18), and all ten land. **plan** is a plan stage, which delivers
+22. flume's own kinds are fix@1 to fix@3, chore@1 to chore@3, change@1
+    to change@6 and plan@1, and all thirteen land. fix@3, chore@3 and
+    change@6 are statechart kinds (175), and the other ten are simple
+    kinds (18). **plan** is a plan stage, which delivers
     a plan its caller accepts (163), and then fix's code stage, which
     works to the plan accepted; a failed submission sends it back to
     code. **fix** is a code stage, which delivers commits. Its
@@ -646,7 +647,32 @@ redefine these.
     the change archived. **change** at version 1 is the same, but its
     code stage does not repeat. A failed submission, and a verify
     finding (131), send a change back to code, which is the kind's fix
-    round. Every version of change is flume's own side by side: a
+    round.
+
+    **fix** at version 3 is fix@2 as a statechart kind. Its one region
+    starts at `code`, fix@2's code stage, which starts in a place that
+    could not be made ready. Once code passes, `check` runs the merge
+    queue's checks on the place's head against its base with no agent
+    (223, 227). Once check passes, the run is over and the place is
+    submitted (176). A failed check, and a failed or conflicting
+    submission, send the place back to code with the merge queue's
+    words. Each counts toward the kind's one bound on going back, past
+    which the place waits on its caller (23, 112, 223). An agent asks
+    only by stopping short, and the place waits on its caller until the
+    caller answers (28, 130). **chore** at version 3 is fix@3 under
+    chore's prefix. **change** at version 6 is change@5 as a statechart
+    kind. `construct`, `code` and `verify` are change@5's stages, `check`
+    follows code as in fix@3, and `archive` follows verify: a command
+    stage that archives the change through OpenSpec's own archive and
+    commits it (C.2, C.3). verify checks the work against the change and
+    commits its report, and runs none of the checks, since check ran
+    them. A verify finding, a failed check or archive, and a failed or
+    conflicting submission send the place back to code, within the
+    kind's one bound. construct still commits the change only once
+    OpenSpec's strict check passes, since that check commits nothing and
+    a command stage of a kind's own command delivers commits (223).
+    Every stage of the three gives its agents what change@5's and
+    fix@2's give (C.2). Every version of change is flume's own side by side: a
     repository picks one by its lock (155) and a launch by naming it
     (154). Every other kind, each of sounding's among them, is a
     repository's, a launch's or a package's (19).
@@ -774,9 +800,13 @@ redefine these.
      kind, so no stage of it extends, includes or hands over to another
      kind's. A package whose name or version is not the identity it is
      held at, or that refers outside itself, refuses the launch naming
-     it (4). flume's own kinds are packages too, one per version, so
-     change@1, change@2 and change@3 each carry their own construct and
-     verify. A kind that lands with no stages may name the kind its
+     it (4). A package holds a kind in either format, a simple kind or a
+     statechart kind, read as weir's read-package reads either (weir 89,
+     92), and a statechart kind's package from a host's source is
+     trusted, locked and resolved as a simple kind's is (154 to 156).
+     flume's own kinds are packages too, one per version in the format
+     that version has, so change@1, change@2 and change@3 each carry
+     their own construct and verify, and change@6 its statechart (22). A kind that lands with no stages may name the kind its
      fixes run as (23). That is a name its reader resolves as a launch's
      name resolves (154), and no part of the package, whose hash covers
      the name and not the kind it names. (flume record 0056's amendment of 2026-11-07.)
@@ -908,7 +938,15 @@ redefine these.
      its kind in the format it launched with (21). A repository, a
      launch and a host may hold kinds of both formats, and flume reads
      each kind's format as the family's format spells it (weir 94),
-     never guessing it.
+     never guessing it. Which format a next version takes is 226's.
+226. No new version of a simple kind is made of flume's own kinds, or
+     of a kind the Boomdrive family publishes, crew's bolt kind,
+     timber's kinds and the update kind among them. Each next version is
+     a statechart kind (175), declared beside the simple versions before
+     it (177). The simple versions already made stay their source's and
+     run as 177 says, and a kind from outside the family may still be
+     simple. (The user's decision of 2026-11-19, relayed by
+     boomdrive-unstick.)
 223. A statechart kind may hold a command stage: a state that runs the
      command template in place of an agent. It runs one command the kind
      declares, in the place, and delivers the commits that command makes
@@ -952,9 +990,13 @@ redefine these.
      Status gives a command stage's state and, once it ended, its exit
      and where its output lies (56).
 
-     flume's own kinds hold no command stage, and fix's code stage
-     starts with its agent (22). A source or a repository declares a
-     kind that holds one. update@1 is such a kind: it runs a release's
+     flume's own simple kinds hold no command stage. fix@3, chore@3 and
+     change@6 each hold a check stage, and change@6 holds its archive
+     too (22). fix's code stage starts with its agent. A check stage is
+     a command stage whose command is the merge queue's check (227),
+     and it delivers once the check passes, committing nothing (24). A
+     source or a repository declares a kind that holds a command stage
+     too. update@1 is such a kind: it runs a release's
      move as its command stage, and reaches an agent only where that
      move or the merge queue's gate fails. It carries the label
      `operation` (180), so a stream's agents owed to operation take its
@@ -3136,6 +3178,11 @@ redefine these.
      gives it again (74, 124). A merge queue that keeps nothing to
      confirm gives an outcome nothing to confirm it by, and its inbox
      gives each once. (flume record 0072.)
+227. **check**: given a place, the checks the merge queue runs before
+     it lands the place's head on its base, run once in the place
+     against that base, with their outcome and the merge queue's words.
+     It submits nothing and decides no submission (111). A kind's check
+     stage runs it (223).
 99. **read-submission**: given a repository and a branch, the newest
     submission of that branch, whoever made it, with its target and its
     state: waiting, under test, landed with the commit it landed as,
@@ -3453,9 +3500,12 @@ the same revision (176). So the format a kind is read in and the tick
 that runs it never come from two revisions. A table that holds both
 `regions` and `stages` is refused naming the field (weir 95). While
 flume runs no statechart kind, a declaration of one refuses the launch
-naming the kind and its format (4). A package of a statechart kind is
-refused as weir's read-package refuses it, so a statechart kind comes
-from a repository's declaration or a launch's (19, 157).
+naming the kind and its format (4). A package holds a kind in either
+format, read as weir's read-package reads either (weir 89, 92): a
+statechart kind's package from a host's source is trusted, locked and
+resolved as a simple kind's is (154 to 156), and flume's own kinds are
+one package per version in whichever format that version has (22,
+157).
 
 flume binds the stage template as `stage`, a statechart of flume's own
 in the same format, held with each place of a statechart kind as its
@@ -3485,7 +3535,10 @@ command template. Its `params` are `command`, the program and its
 arguments as a list of words, run with no shell; `deliverables`, which
 is `["commits"]`; and `on_fail` and `max_send_backs`, as the stage
 template's, `on_fail` naming a state that runs the stage template
-(4, 223). The program is a path relative to the declaration's file, a
+(4, 223). A check stage's `command` is the word `check` in place of a
+list, and it names no `deliverables`: flume runs the bound merge-queue
+profile's check (227, C.6) through the launcher as it runs any
+command, and the stage passes once the check passes (223). The program is a path relative to the declaration's file, a
 part of the package within its hash (156, 157), or a program's name, found
 on the host user's login `PATH` (29). A path outside the repository or
 the package, by `..`, an absolute path or a link, refuses the launch
@@ -3606,9 +3659,12 @@ holds the rest, the place's facts and then its run's:
 
 | kind | branch | first stage starts unready | lands; its last stage's `on_fail` | stages, each with its deliverable |
 |---|---|---|---|---|
+| **fix@3** | `fix/<name>` | yes | yes; `code` | a statechart kind (175) of one region: `code`, fix@2's stage; then `check`, a check stage (223, 227); then the region's final state, and the place is submitted (176). A failed check, a failed submission or a conflict, read from `stage.end` and `place.submission` (178), sends it back to code with the merge queue's words. Each counts toward one bound, `max_send_backs` and the submissions `place.submissions` counts, past which the place waits on its caller (22, 23) |
+| **chore@3** | `chore/<name>` | yes | yes; `code` | fix@3's states under chore's prefix (22) |
+| **change@6** | `change/<name>` | no | yes; `code` | a statechart kind (175) of one region: change@5's `construct` and `code`; `check`, a check stage (223, 227); `verify`, which checks the work against the change and commits its report as change@5's does, and runs no checks of the repository; then `archive`, a command stage running a program of flume's own package. That program archives the change the place's branch holds by `openspec archive <name> --yes` and commits it (C.3). Then the region's final state, and the place is submitted (176). A verify finding, a failed check or archive, a failed submission or a conflict sends it back to code, within one bound as in fix@3. The newest change on a release that runs statechart kinds, so a launch naming no version there in a repository whose lock records none runs it (154, 155) (22) |
 | **fix@2** | `fix/<name>` | yes | yes; `code` | `code`: `commits`, as fix@1's, in the mode `full`, its prompt saying its one way to ask and its way to stop short naming no work it cannot deliver past (flume record 0064) |
 | **chore@2** | `chore/<name>` | yes | yes; `code` | fix@2's stage under chore's prefix (flume record 0064) |
-| **change@5** | `change/<name>` | no | yes; `code` | change@4's stages, each working the change through OpenSpec's own commands (C.3). Each runs them as the repository's instructions run its tools, never through an agent program's skill or command for them. `construct` writes each part from `openspec instructions <part> --change <name> --json` until `openspec status` reads the change's planning complete. It commits the change only once `openspec validate <name> --strict` passes. `code` works through the tasks `openspec instructions apply --change <name> --json` gives, ticking each at its line once its own check passes. `verify` runs the repository's whole checks once and checks the work against the change, every task done and the strict check passing. It archives the change by `openspec archive <name> --yes`, and stops short finding with the archive's words where it refuses. The newest, so a launch naming no version in a repository whose lock records none runs it (154, 155). (flume record 0077, proposed) |
+| **change@5** | `change/<name>` | no | yes; `code` | change@4's stages, each working the change through OpenSpec's own commands (C.3). Each runs them as the repository's instructions run its tools, never through an agent program's skill or command for them. `construct` writes each part from `openspec instructions <part> --change <name> --json` until `openspec status` reads the change's planning complete. It commits the change only once `openspec validate <name> --strict` passes. `code` works through the tasks `openspec instructions apply --change <name> --json` gives, ticking each at its line once its own check passes. `verify` runs the repository's whole checks once and checks the work against the change, every task done and the strict check passing. It archives the change by `openspec archive <name> --yes`, and stops short finding with the archive's words where it refuses. The newest on a release that runs no statechart kind, so a launch naming no version there in a repository whose lock records none runs it (154, 155). (flume record 0077, proposed) |
 | **change@4** | `change/<name>` | no | yes; `code` | change@3's stages, each in the mode `full`, its prompt saying its one way to ask. (flume record 0064) |
 | **fix@1** | `fix/<name>` | yes | yes; `code` | `code`: `commits` |
 | **chore@1** | `chore/<name>` | yes | yes; `code` | `code`: `commits`; fix@1's stage under a prefix of its own, so a branch's name says which it was |
@@ -4062,6 +4118,7 @@ the session, and refuses a window.
 | open | `sluice branch create <branch> --from <base>`, run in the repository, which makes the branch at the base's current revision where the policy gives it a gate (sluice 104). flume makes no branch sluice lands on itself, since sluice's protection refuses any other making (sluice 106) |
 | close | `sluice branch delete <branch> --into <base>`, run in the repository once the base place is removed, which removes the branch only when nothing on it is open and its revision is contained in the base's (sluice 105). A refusal keeps the branch, named (67, 204) |
 | forecast | `sluice submit <base> --check --head <branch>`, run in the repository, which forms the candidate sluice 64 forms for a head not yet submitted and submits nothing (203, 210). (flume record 0056's amendment of 2026-11-07.) |
+| check | `sluice exec <base>`, run in the place by flume's launcher, which runs the checks sluice runs before it lands the place's head on the base. Its exit is the outcome, and the checks it names failed are the words (227). It submits nothing |
 
 On landing sluice removes nothing, and flume tidies every landed place
 itself, through the place profile's teardown (C.1), and its branch as
