@@ -1,0 +1,26 @@
+{
+  "schema": "sluice/submission@1",
+  "id": 3,
+  "branch": "main",
+  "head": "8fbd5cc8d8e632152857b768455faeb337440832",
+  "from": {
+    "agent": "boomdrive-design",
+    "worktree": "pull/9",
+    "head": "design/an-idle-repository-costs-a-call-a-minute"
+  },
+  "submitted": "2026-11-19T18:57:36Z",
+  "after": [],
+  "priority": 0,
+  "attempt": 1,
+  "state": "landed",
+  "tested": {
+    "combination": "8bdd02796d09bd49bc593c78f8808175f03ab07c",
+    "on": "14fa6c47db16bdbbf50077bf36dca5f67c716db7",
+    "submissions": [
+      3
+    ]
+  },
+  "result": "passed",
+  "landed_as": "8b733469d6a8594ea9d685ea325db90188a6fc41",
+  "subject": "design/an-idle-repository-costs-a-call-a-minute"
+}

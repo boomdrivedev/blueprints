@@ -1,0 +1,26 @@
+{
+  "schema": "sluice/submission@1",
+  "id": 1,
+  "branch": "main",
+  "head": "03c1879084d339b078381b60f6b621bb5e899646",
+  "from": {
+    "agent": "openspec-init",
+    "worktree": "pull/7",
+    "head": "openspec-init"
+  },
+  "submitted": "2026-11-19T13:56:37Z",
+  "after": [],
+  "priority": 0,
+  "attempt": 1,
+  "state": "landed",
+  "tested": {
+    "combination": "f538dbd2344cb4132e8a172e7a7d04769a6fc0c0",
+    "on": "863a511da0a3a8e67864144c3fca5567766d2bea",
+    "submissions": [
+      1
+    ]
+  },
+  "result": "passed",
+  "landed_as": "085cdfdd294c3c13b42f20cac74f85e98c7e2fe2",
+  "subject": "Initialize OpenSpec with Claude Code skills"
+}

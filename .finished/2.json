@@ -1,0 +1,26 @@
+{
+  "schema": "sluice/submission@1",
+  "id": 2,
+  "branch": "main",
+  "head": "efaca371781e3b52f2ab79bad84e936c8e1d9c64",
+  "from": {
+    "agent": "boomdrive-design",
+    "worktree": "pull/8",
+    "head": "design/a-bolt-takes-main-in-with-no-agent"
+  },
+  "submitted": "2026-11-19T13:57:33Z",
+  "after": [],
+  "priority": 0,
+  "attempt": 1,
+  "state": "landed",
+  "tested": {
+    "combination": "2058b8c49fa3946e898db4807aece866c81afa8b",
+    "on": "085cdfdd294c3c13b42f20cac74f85e98c7e2fe2",
+    "submissions": [
+      2
+    ]
+  },
+  "result": "passed",
+  "landed_as": "14fa6c47db16bdbbf50077bf36dca5f67c716db7",
+  "subject": "design/a-bolt-takes-main-in-with-no-agent"
+}

@@ -1,0 +1,26 @@
+{
+  "schema": "sluice/submission@1",
+  "id": 6,
+  "branch": "main",
+  "head": "34344b609895334de44f6f71cf9022d06fbcf2c8",
+  "from": {
+    "agent": "boomdrive-design",
+    "worktree": "pull/12",
+    "head": "design/a-decisions-answer-carries-words"
+  },
+  "submitted": "2026-11-19T19:12:50Z",
+  "after": [],
+  "priority": 0,
+  "attempt": 1,
+  "state": "landed",
+  "tested": {
+    "combination": "e9eea06599804eb3d5e9ed51c80517c4e8cefce3",
+    "on": "226237a44425e368856ef02859aec4decca362e5",
+    "submissions": [
+      6
+    ]
+  },
+  "result": "passed",
+  "landed_as": "b1a3ee93046ebd870b14c35ff03c649e82331e4b",
+  "subject": "design/a-decisions-answer-carries-words"
+}
