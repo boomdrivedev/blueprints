@@ -879,12 +879,16 @@ redefine these.
     nothing written, and the file is for pointing a host at a registry,
     a key service or a shared ledger.
     Its `[credentials]` names each credential a target needs, by the
-    name the environment's target table gives it, as the absolute path
-    of a file that holds only that credential. The bindings file never
-    holds one: timber hands the path to the target's own tool, which
-    alone reads it. An environment whose credential the file doesn't
-    name is unread, naming the credential and the file (45, 64; timber
-    record 0033). On nix-darwin and NixOS, timber's own module,
+    name the environment's target table gives it, in one of two ways:
+    the absolute path of a file that holds only that credential, or a
+    secret of the host's SecretSpec, by its name. timber asks the host's
+    SecretSpec for a secret through SecretSpec's resolver session as a
+    file leased for the one run, and never as its value. The bindings
+    file never holds a credential: timber hands the path to the
+    target's own tool, which alone reads it, and a leased file ends with
+    the run. An environment whose credential the file doesn't name, or
+    whose SecretSpec answers no file for it, is unread, naming the
+    credential and the file or the secret (45, 64; timber record 0033). On nix-darwin and NixOS, timber's own module,
     `services.timber`, writes the file from `services.timber.settings`,
     one option per key, each named as the file names it, so a host
     names a credential as
@@ -1160,8 +1164,8 @@ profile refuses. An environment names its channel, and two
 words make the rest: `policy`, `auto` unless written, where `manual`
 gives it a channel of its own bound to the one it names, moved only by
 a person's yes (41, 97), and a later word names who may say yes, the
-approval a hosted gate asks for; `after` names the environments it must
-never be ahead of, and gives it a channel bound to theirs that moves
+approval a hosted gate asks for; `depends_on` names the environments it
+depends on, which it must never be ahead of, and gives it a channel bound to theirs that moves
 once every environment named reports it runs the version (37, 43,
 91). The channels these two words make are the
 statement's channels and are read as such (131), and a reader may
@@ -1220,6 +1224,15 @@ whose packager cannot promise it says so (87).
 | a GitHub release | push: the release of the version's tag made or updated, its notes (134) as the release's text and the version's artifacts the policy names as its assets, with the target's own credential; current is the release GitHub marks latest |
 | an observability backend's dashboards (Dash0) | push: apply runs the backend's own CLI, `dash0 apply`, on each dashboard file the version holds, by its fixed identifier, into the dataset at the API the environment's table names, `api` and `dataset`, and removes each dashboard an earlier version applied that this one does not hold, never one timber did not apply; the token is the host's credential the table names (118), handed to the CLI by its path, `--auth-token-file`, every other setting by its flag, with a configuration folder of the run's own, so no profile or `DASH0_*` variable of the host's is read; current is the version the dataset's dashboards were last applied from, which apply records with them |
 | a pool: a control plane's roster of environments (126) | push: apply is the control plane's request to converge one environment, run by its own executors with credentials that are the control plane's, reached at the moment of use; current and report are read from what it records |
+| a command: any tool whose apply is one run of its own command line | push: apply runs the program and arguments the environment's table names, each `{{…}}` in them filled from the version (its digest, its tag, the paths of the files it holds) or from the table's own settings, and each credential the table names handed by its path (118); the run's own folder is its working and configuration folder, so nothing of the host's settings for the tool is read; current is the version of the last run that exited 0, which apply records, or what a reading command the table names prints, where it names one |
+
+A tool whose apply is one run of its command line is reached through
+the command target and has no profile of its own: adding one is a table
+in the repository's policy, never code in timber. A profile stands
+only where timber reads more of the target than one run says, a
+registry's listing, a stack's recorded version, a watcher's report or
+a machine's answer, or where its apply reconciles across versions, as
+Dash0's removes the dashboards a later version no longer holds.
 
 ### C.13 The ledger: a git ref
 
