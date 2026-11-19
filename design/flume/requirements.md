@@ -655,10 +655,11 @@ redefine these.
     OpenSpec's instructions for it, and commits it only once OpenSpec's
     strict check passes, as change@5's construct does. `apply` works
     through the tasks OpenSpec's apply instructions give, as change@5's
-    code does. Its standing instructions tell its agent to check the
-    code it changes with `sluice exec <base>` where sluice is the merge
-    queue, which runs only the checks the worktree's own changes affect
-    (C.6; sluice record 0130). `verify` checks the work against the
+    code does. Its prompt tells its agent to check the code it changes
+    with the merge queue's command for checking a place's own changes
+    against its base, `{{check}}`, which the bound merge-queue profile
+    fills, so no kind of flume's names a merge queue (227, C.6).
+    `verify` checks the work against the
     change as change@5's verify does and commits its report. Its last
     act archives the change through OpenSpec's archive, and it delivers
     the change archived. A verify finding, a failed submission or a
@@ -666,8 +667,8 @@ redefine these.
     counting toward the kind's one bound on going back (23, 112).
     **fix** at version 3 is fix@2 as a statechart kind of one region and
     one stage, `code`. It starts in a place that could not be made
-    ready, and its standing instructions carry apply's `sluice exec`
-    instruction. A failed submission or a conflict sends it back to code
+    ready, and its prompt carries apply's `{{check}}` instruction. A
+    failed submission or a conflict sends it back to code
     within the bound. **chore** at version 3 is fix@3 under chore's
     prefix. Past the bound, a stage of the three ends stopped (175), and
     the region enters `waiting`, one decision state for every stage of
@@ -923,7 +924,11 @@ redefine these.
      caller (130), whose retry submits it again. A decision stands while
      its state is active, and the place waits on its caller while one
      stands (130). A caller answers it by `flume answer`, naming the
-     place, the region whose state carries it and the answer; the answer
+     place, the region whose state carries it and the answer, and may
+     give words with it. Words given are handed to the sessions of the
+     stage the answer leads into, as a retry's words are handed to a
+     simple kind's stage (49), so a caller past a bound can say what to
+     do differently. The answer
      is taken only while that decision stands, and refused, naming the
      answer taken, while an answer given it is not yet applied. The next
      settle gives it to the tick, and the engine applies it once and
@@ -3180,6 +3185,11 @@ redefine these.
      gives it again (74, 124). A merge queue that keeps nothing to
      confirm gives an outcome nothing to confirm it by, and its inbox
      gives each once. (flume record 0072.)
+227. **check-command**: given a place, the command an agent in it runs
+     to check the place's own changes against its base, as the words of
+     the command. The agent runs it; flume runs nothing of it and reads
+     nothing of its outcome. A prompt's `{{check}}` is filled from it,
+     and fills only where a merge queue is bound (C.2).
 99. **read-submission**: given a repository and a branch, the newest
     submission of that branch, whoever made it, with its target and its
     state: waiting, under test, landed with the commit it landed as,
@@ -3616,10 +3626,12 @@ part of the package (157).
 
 A prompt's parts are `{{brief}}`, `{{name}}`, `{{kind}}`, `{{stage}}`,
 `{{branch}}`, `{{base}}`, `{{place}}`, `{{change}}`, `{{report}}`,
-`{{made}}`, `{{group}}`, `{{notes}}`, `{{plan}}`, `{{words}}`, `{{unready}}` and
+`{{made}}`, `{{group}}`, `{{notes}}`, `{{plan}}`, `{{words}}`, `{{unready}}`,
+`{{check}}` (the merge queue's command for checking the place's own
+changes, 227) and
 `{{needs}}` (the way to stop short, C.4). `{{#words}}…{{/words}}` renders its body only when there are
 words: a retry's, with the question of the stop-short it answers before
-them (49), or, for a stage that delivers a plan, with the path of the
+them (49), a decision's answer's (176), or, for a stage that delivers a plan, with the path of the
 plan last put for review before them (163), a failed submission's, the checks blamed and their logs or
 the files contested (112), or a finding's (131). `{{plan}}` is the
 path of the plan the place's last plan stage had accepted, flume's
@@ -3653,9 +3665,9 @@ holds the rest, the place's facts and then its run's:
 
 | kind | branch | first stage starts unready | lands; its last stage's `on_fail` | stages, each with its deliverable |
 |---|---|---|---|---|
-| **fix@3** | `fix/<name>` | yes | yes; `code` | a statechart kind (175) of one region: `code`, fix@2's stage, its standing instructions telling its agent to check the code it changes with `sluice exec <base>` where sluice is the merge queue (C.6); then the region's final state, and the place is submitted (176). A failed submission or a conflict, read from `place.submission` (178), sends it back to code with the merge queue's words, within one bound, `max_send_backs` and the submissions `place.submissions` counts. A stage ended `stopped` past it enters `waiting`, a decision the caller answers `retry`, back to code (22, 176) |
+| **fix@3** | `fix/<name>` | yes | yes; `code` | a statechart kind (175) of one region: `code`, fix@2's stage, its prompt telling its agent to check the code it changes with `{{check}}`, the merge queue's command for it (227, C.6); then the region's final state, and the place is submitted (176). A failed submission or a conflict, read from `place.submission` (178), sends it back to code with the merge queue's words, within one bound, `max_send_backs` and the submissions `place.submissions` counts. A stage ended `stopped` past it enters `waiting`, a decision the caller answers `retry`, back to code (22, 176) |
 | **chore@3** | `chore/<name>` | yes | yes; `code` | fix@3's states under chore's prefix (22) |
-| **change@6** | `change/<name>` | no | yes; `apply` | a statechart kind (175) of one region, its stages named for OpenSpec's three steps: `propose`, change@5's construct; `apply`, change@5's code, with fix@3's `sluice exec <base>` instruction; `verify`, change@5's verify, which commits its report and, as its last act, archives the change by `openspec archive <name> --yes` and delivers it archived (C.3). Then the region's final state, and the place is submitted (176). A verify finding, a failed submission or a conflict sends it back to apply within one bound as in fix@3, and a stage ended `stopped` past it enters `waiting`, answered `retry`, back to apply. The newest change on a release that runs statechart kinds, so a launch naming no version there in a repository whose lock records none runs it (154, 155) (22) |
+| **change@6** | `change/<name>` | no | yes; `apply` | a statechart kind (175) of one region, its stages named for OpenSpec's three steps: `propose`, change@5's construct; `apply`, change@5's code, with fix@3's `{{check}}` instruction; `verify`, change@5's verify, which commits its report and, as its last act, archives the change by `openspec archive <name> --yes` and delivers it archived (C.3). Then the region's final state, and the place is submitted (176). A verify finding, a failed submission or a conflict sends it back to apply within one bound as in fix@3, and a stage ended `stopped` past it enters `waiting`, answered `retry`, back to apply. The newest change on a release that runs statechart kinds, so a launch naming no version there in a repository whose lock records none runs it (154, 155) (22) |
 | **fix@2** | `fix/<name>` | yes | yes; `code` | `code`: `commits`, as fix@1's, in the mode `full`, its prompt saying its one way to ask and its way to stop short naming no work it cannot deliver past (flume record 0064) |
 | **chore@2** | `chore/<name>` | yes | yes; `code` | fix@2's stage under chore's prefix (flume record 0064) |
 | **change@5** | `change/<name>` | no | yes; `code` | change@4's stages, each working the change through OpenSpec's own commands (C.3). Each runs them as the repository's instructions run its tools, never through an agent program's skill or command for them. `construct` writes each part from `openspec instructions <part> --change <name> --json` until `openspec status` reads the change's planning complete. It commits the change only once `openspec validate <name> --strict` passes. `code` works through the tasks `openspec instructions apply --change <name> --json` gives, ticking each at its line once its own check passes. `verify` runs the repository's whole checks once and checks the work against the change, every task done and the strict check passing. It archives the change by `openspec archive <name> --yes`, and stops short finding with the archive's words where it refuses. The newest on a release that runs no statechart kind, so a launch naming no version there in a repository whose lock records none runs it (154, 155). (flume record 0077, proposed) |
@@ -4112,6 +4124,7 @@ the session, and refuses a window.
 | open | `sluice branch create <branch> --from <base>`, run in the repository, which makes the branch at the base's current revision where the policy gives it a gate (sluice 104). flume makes no branch sluice lands on itself, since sluice's protection refuses any other making (sluice 106) |
 | close | `sluice branch delete <branch> --into <base>`, run in the repository once the base place is removed, which removes the branch only when nothing on it is open and its revision is contained in the base's (sluice 105). A refusal keeps the branch, named (67, 204) |
 | forecast | `sluice submit <base> --check --head <branch>`, run in the repository, which forms the candidate sluice 64 forms for a head not yet submitted and submits nothing (203, 210). (flume record 0056's amendment of 2026-11-07.) |
+| check-command | `sluice exec <base>`, the words a place's `{{check}}` fills with: run by the agent in the place, it runs the checks the worktree's own changes affect against the base, the default of exec (sluice record 0130). flume runs nothing of it (227) |
 
 On landing sluice removes nothing, and flume tidies every landed place
 itself, through the place profile's teardown (C.1), and its branch as
