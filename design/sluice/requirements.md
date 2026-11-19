@@ -997,8 +997,21 @@ redefine these.
      it and its combinations, so a branch on a remote is read as the
      tick's fetch last brought it, never older than a tick while the
      remote answers, and no branch is fetched on its own until a round
-     forms on it (121) or its intake is due (136). An idle reader costs
-     its host nothing a person can measure. A watch of a newer sluice than the live reader's takes the
+     forms on it (121) or its intake is due (136). Where nothing is in
+     play in a repository, its remote is asked once a minute at most,
+     and a submit, a landing or a watch's opening asks it at once: the
+     host's own writes need no asking, so a branch only another host
+     moves is read a minute late at most. Every asking carries the token
+     the host process keeps for that repository until five minutes
+     before its end, and never asks the credential command for each call
+     (sluice record 0108). A read of a branch's requests asks the forge
+     only whether anything changed since its last answer, which the
+     forge charges nothing against its allowance when nothing has (136).
+     An idle reader costs its host nothing a person can measure.
+     (Amended 2026-11-19 by boomdrive-design, on the user's word that
+     day to fix deneb's host process now: it fetched every repository
+     every three seconds and asked for a token on about a third of its
+     git calls.) A watch of a newer sluice than the live reader's takes the
      reader's lease at its next tick, and the older reader, finding the
      lease no longer its own, follows it; so a host whose sluice was
      replaced reads with the new one as soon as any session watches
