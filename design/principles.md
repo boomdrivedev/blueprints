@@ -125,12 +125,25 @@ right." Each repository's CLAUDE.md points here.
     Timber measures of their runs, never by a rule written ahead of the
     numbers. A public repository's runs cost time, not money, so
     running a check in two places is no reason alone to drop one.
+    A landing waits only on the checks its change can break. A slow
+    layer, one that drives real programs such as herdr, Rex, a terminal,
+    git or a forge, runs on a landing only where the landing changes
+    what the layer tests: the code that talks to those programs, the
+    layer's own tests, or the versions of those programs the repository
+    pins. The layer's task names exactly those as its inputs, so every
+    other landing replays its last verdict, and the fast checks, format
+    among them, answer in seconds.
     (Written 2026-11-10 by agentplot-design from the user's words that
     day, declining a chore that dropped CI's macOS checks beside
     sluice's gate: "I don't think we need to do this. We only ran out of
     minutes because the repo was private. The repo will be public and it
     won't matter. We will want to optimize as we go but we want to make
-    sure to optimize with Timber.")
+    sure to optimize with Timber." Amended 2026-11-19 by boomdrive-design
+    from the user's words that day, once work landed on main directly
+    and flume's tools tests, 5 to 16 minutes on deneb, ran on every
+    landing: "you also need to step back and ask yourselves why you're
+    running super long tests all the time. A format check shouldn't
+    take 10 minutes to time out; it should take 3 seconds.")
 
 16. **No check reads Markdown.** No check, test or gate task in any
     kit reads a Markdown file: a doc, a README, a skill, a site page,
