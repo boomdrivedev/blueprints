@@ -2057,6 +2057,24 @@ redefine these.
      retry. (flume record 0056, accepted 2026-11-07, and its amendment of the same day.) The
      base place's landing makes its work over (63), and flume tidies it
      as 204 says.
+212. A caller may ask a base place to take its base in. flume submits
+     the base's current revision to the base place's branch through the
+     merge queue, named by the base's branch as the merge queue holds it
+     (117). The place is recorded as the submission's submitter, and
+     flume holds no wait on the verdict (111). A take that lands brings
+     the base's work onto the branch with the branch's checks and no
+     agent, and the base place goes on as before. A take that conflicts,
+     or that the merge queue blames, launches the base place's fix as a
+     conflict its forecast finds does, with the merge queue's words as
+     its brief (203). A take the merge queue refuses or withdraws leaves
+     the base place as it was, said and delivered (43). The ask is
+     refused while the base place's own submission is open, its work is
+     over, or its fix is live, naming why (111, 63, 203). An ask while a
+     take is open gets that take's answer. flume takes nothing in on its
+     own: when to take the base in is its caller's. (flume record 0056
+     as amended on 2026-11-19, on the user's decision that taking a base
+     into a branch is the merge queue's work and only a conflict goes to
+     an agent.)
 204. A launch on a live place's branch is refused where that place is
      no base place, naming it (10). It is refused
      too where the base place's submission is open or its work is over
