@@ -883,7 +883,9 @@ redefine these.
     the absolute path of a file that holds only that credential, or a
     secret of the host's SecretSpec, by its name. timber asks the host's
     SecretSpec for a secret through SecretSpec's resolver session as a
-    file leased for the one run, and never as its value. The bindings
+    file leased for the one run, and never as its value. (Proposed
+    2026-11-19, timber record 0033's amendment, on the user's card;
+    the SecretSpec secret is accepted only on their yes.) The bindings
     file never holds a credential: timber hands the path to the
     target's own tool, which alone reads it, and a leased file ends with
     the run. An environment whose credential the file doesn't name, or
@@ -1227,8 +1229,15 @@ whose packager cannot promise it says so (87).
 | a command: any tool whose apply is one run of its own command line | push: apply runs the program and arguments the environment's table names, each `{{…}}` in them filled from the version (its digest, its tag, the paths of the files it holds) or from the table's own settings, and each credential the table names handed by its path (118); the run's own folder is its working and configuration folder, so nothing of the host's settings for the tool is read; current is the version of the last run that exited 0, which apply records, or what a reading command the table names prints, where it names one |
 
 A tool whose apply is one run of its command line is reached through
-the command target and has no profile of its own: adding one is a table
-in the repository's policy, never code in timber. A profile stands
+the command target and has no profile of its own. Each such tool is a
+command target's definition in TOML: its name, the program and
+arguments apply runs, the settings its environments' tables give and
+the credentials they name, and its reading command where it has one.
+timber carries its own definitions for the tools it knows, and a
+repository's policy or the host's timber settings may define more. A
+definition by the same name in the repository stands over the host's,
+which stands over timber's own, so adding a tool is a definition and
+never code in timber. A profile stands
 only where timber reads more of the target than one run says, a
 registry's listing, a stack's recorded version, a watcher's report or
 a machine's answer, or where its apply reconciles across versions, as
