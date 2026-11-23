@@ -92,7 +92,7 @@ redefine these.
 - **caller**: whoever asks flume to launch, or to act on a place it
   launched.
 - **launch**: one ask to start a piece of work: a repository, a kind, a
-  name, a base, and the caller's brief, settings, stages on hold,
+  name, a base, the input its kind takes, and the caller's brief, settings, stages on hold,
   submission's hold and mark, and, where it gives them, its parameters,
   the stream it runs in, the intent it serves with the intent's brief,
   the goals and the work's points.
@@ -180,6 +180,13 @@ redefine these.
 - **intent**: a caller's name for the work several places serve, such
   as a bolt, with the brief that says what it is for; a place whose
   launch names none serves the intent of its repository and base (147).
+- **input**: what a kind takes from its launch, which its declaration
+  names: an intent, a unit or a failed landing (228).
+- **unit**: one piece of work of a caller's plan that its approver
+  approved, given to a kind with the intent it serves, its claims, its
+  context packet and the plan's approval (228).
+- **failed landing**: a submission the merge queue failed, given to a
+  kind with the merge queue's blame (112, 228).
 - **prompt cache**: what an agent program's maker keeps of the leading
   text of a request, for one account and for a lifetime it sets, so a
   later request that begins with the same text reads it rather than
@@ -425,7 +432,7 @@ redefine these.
    names, is launched by flume at a settle (203), since its caller asked
    for it in launching the base place. (flume record 0056, accepted 2026-11-07.)
 2. A launch names a repository on the host, a kind, a name and a base,
-   a brief wherever a stage of its kind asks for one (4), and
+   the input its kind takes (228), a brief wherever a stage of its kind asks for one (4), and
    parameters wherever a command stage's command asks for them (224).
    Either it
    makes one place, records it, and starts its first stage, puts it on
@@ -453,6 +460,10 @@ redefine these.
    launch of a kind that lands where the repository binds no merge
    queue (105). A launch that gives no brief while a stage of its kind
    asks for one is refused naming the stage, and makes nothing (27).
+   So is a launch whose input is not the one its kind declares, or
+   lacks a part of it, naming the kind, the input it takes and the
+   input or part given, so an intent given to a kind that takes a unit,
+   such as change@3, makes nothing (228).
    So is a launch that gives no parameters while a command stage's
    command asks for them, and one whose kind sends a place back to a
    command stage, each naming the stage (223, 224).
@@ -530,7 +541,7 @@ redefine these.
    (193). A recipient a launch names is a session's name, or a role's
    address written whole (132). flume keeps the mark with the place and
    reports it, and decides nothing by it.
-8. A place's kind, brief, parameters, base, stream, intent with its brief and goals,
+8. A place's kind, input (228), brief, parameters, base, stream, intent with its brief and goals,
    points, and the settings its launch carries, are fixed by its launch, and
    nothing after the launch changes them; the host's configuration of
    its agents' settings is read at each start (32), and the account each
@@ -539,6 +550,37 @@ redefine these.
    a change of priority (70). Its recipients are fixed at its launch;
    the answerer behind its stream, as the sources declare it when a
    stall is read, is delivered its stalls besides (130, 193).
+228. Every kind declares the one input it takes, and a launch carries
+     that input whole:
+     - an **intent**: its name, and its statement, its goals and its
+       signals, each by hash;
+     - a **unit** of a caller's approved plan: its intent, its claims,
+       its context packet and the plan's approval, each by hash;
+     - a **failed landing**: the submission the merge queue failed, by
+       the merge queue's name for it, and its blame (112).
+
+     flume keeps the input with the place as the launch gave it, names
+     it in status (56), and hands it whole to each stage whose prompt
+     asks for it (27). It checks that the launch gives the input its
+     kind declares, with each of its parts (4). Past that it never
+     reads, resolves, rewrites or judges the input (5). A place whose
+     input is an intent serves that intent, and one whose input is a
+     unit serves the unit's intent (147).
+
+     A kind that takes an intent does one of two things. It delivers
+     outputs that a caller's plan takes as its inputs by commit: a
+     committed report, commits that do not land, or the things it
+     makes (129). Or it lands, as a chore does. An intent never goes
+     straight to a kind that takes a unit. A caller's plan takes the
+     intent, and once that plan is approved, each of its units is
+     launched with its own input (4).
+
+     A caller asks flume which kinds a repository can run: flume's own,
+     the repository's own, and those of the repository's lock and the
+     host's that the host holds (19, 155, 159). flume names each with
+     the input it takes and whether it lands. A caller that offers a
+     person the routes for an intent offers the kinds of that list that
+     take an intent, and no other. (The user's ruling of 2026-11-23.)
 
 ### A.2 Places
 
@@ -614,7 +656,9 @@ redefine these.
 22. flume's own kinds are fix@1 to fix@3, chore@1 to chore@3, change@1
     to change@6 and plan@1, and all thirteen land. fix@3, chore@3 and
     change@6 are statechart kinds (175), and the other ten are simple
-    kinds (18). **plan** is a plan stage, which delivers
+    kinds (18). Each takes one input (228): plan@1 and chore@1 to
+    chore@3 take an intent, change@1 to change@6 take a unit, and fix@1
+    to fix@3 take a failed landing. **plan** is a plan stage, which delivers
     a plan its caller accepts (163), and then fix's code stage, which
     works to the plan accepted; a failed submission sends it back to
     code. **fix** is a code stage, which delivers commits. Its
@@ -683,8 +727,8 @@ redefine these.
     repository picks one by its lock (155) and a launch by naming it
     (154). Every other kind, each of sounding's among them, is a
     repository's, a launch's or a package's (19).
-23. A simple kind's declaration holds its version, its stages in
-    order, how its places' branches are named, whether its first stage
+23. A simple kind's declaration holds its version, the input it takes
+    (228), its stages in order, how its places' branches are named, whether its first stage
     starts in a place that could not be made ready, and whether it
     lands. One that lands names the stage a failed submission sends a
     place back to, and how many times a place may go back before it
@@ -702,7 +746,11 @@ redefine these.
     several agents or with several deliverables, is refused (4); a
     statechart kind holds them (175). flume ignores a section of a kind
     it does not know, such as the elaboration section sounding reads,
-    and nothing else a declaration holds changes what flume does. (Its sentence on a kind with no stages from flume record 0056's amendment of 2026-11-07.)
+    and nothing else a declaration holds changes what flume does. A
+    kind whose declaration names no input takes none: a launch of it
+    carries none, and no caller offers it as a route for an intent
+    (228). One that names an input other than the three is refused
+    naming the field (4). (Its sentence on a kind with no stages from flume record 0056's amendment of 2026-11-07.)
 24. Every deliverable is one of seven forms, each read where it lives:
     - **commits**: the place's branch holds a commit made since the
       stage started;
@@ -893,7 +941,8 @@ redefine these.
      statechart kind composes the templates, the rules and the atoms by
      their names, so a kind added changes no code of flume's, and one
      naming a template, a rule or an atom flume does not bind is refused
-     naming it (4, 178). It carries
+     naming it (4, 178). It declares the input it takes as a simple
+     kind does (23, 228). It carries
      a title, the words a person reads for it, and may declare its
      label as any kind does (180). Like every kind it is
      named by its identity, resolved, packaged and locked as 19 and 154
@@ -2239,7 +2288,8 @@ redefine these.
 ### A.10 Status
 
 56. For every place on its host, status gives the place's repository,
-    kind with its version and the declaration it came from, its name,
+    kind with its version and the declaration it came from, its input
+    (228), its name,
     branch, base with where its revision was read (C.1) and mark, and
     whether its kind lands; each stage's
     state, how it ended, and how many times it started; the current
@@ -3381,6 +3431,7 @@ attribution = { commit = "Assisted-by: Claude Code", pr = "" }   # Claude Code's
 
 [kinds.bump]
 version = 2               # status names the kind bump@2 (19); 1 when omitted
+input = "unit"            # the one input it takes: intent, unit or failed-landing (228); none when omitted
 branch = "bump"           # the prefix of its places' branches; the kind's name when omitted
 starts_unready = false    # whether its first stage starts in a place that could not be made ready (12)
 lands = true              # flume submits each place after its last stage (111); false when omitted
@@ -3628,7 +3679,8 @@ A prompt's parts are `{{brief}}`, `{{name}}`, `{{kind}}`, `{{stage}}`,
 `{{branch}}`, `{{base}}`, `{{place}}`, `{{change}}`, `{{report}}`,
 `{{made}}`, `{{group}}`, `{{notes}}`, `{{plan}}`, `{{words}}`, `{{unready}}`,
 `{{check}}` (the merge queue's command for checking the place's own
-changes, 227) and
+changes, 227), `{{input}}` (the path of flume's copy of the launch's
+input, 228) and
 `{{needs}}` (the way to stop short, C.4). `{{#words}}…{{/words}}` renders its body only when there are
 words: a retry's, with the question of the stop-short it answers before
 them (49), a decision's answer's (176), or, for a stage that delivers a plan, with the path of the
@@ -3657,27 +3709,55 @@ gives them all in that one file. Each names the version it moves from
 and the one it moves to, the release's level and its move (the
 update-ladder talk, 2026-11-12).
 
+A launch gives its input by `--input-file <file>`, which flume copies
+byte for byte into the place's own folder as `input`. flume checks that
+it is the input its kind declares, with each of its parts, and reads
+nothing else of it (4, 228). It is TOML:
+
+```toml
+input = "intent"          # intent, unit or failed-landing, as the kind declares
+name = "accounts"         # the intent's name (147)
+statement = "sha256:…"
+goals = "sha256:…"
+signals = ["sha256:…", "sha256:…"]
+```
+
+A unit's names `intent`, `claims`, a list, `context` and `approval`,
+each by hash. A failed landing's names `submission`, the merge queue's
+name for it, and `blame`, the merge queue's words: the checks blamed
+and their logs, or the files contested (112). A landing fix flume
+launches at a settle carries its base place's failed landing (203).
+
+`flume kinds list --repository <path> --json` gives every kind a launch
+in that repository can name: flume's own, the repository's own at its
+default branch, and those of its lock and the host's that the host
+holds (19, 155, 159). It names each by identity, with the input it
+takes, whether it lands, its title and its label (180, 228). It reads what `flume
+launch` reads and changes nothing. `--input <input>` lists only the
+kinds that take that input, so `--input intent` gives the routes a
+caller offers for an intent.
+
 flume's own kinds, their prompts shipped with flume, each version a
 package of its own with its prompts inside it (157). Each stage's text
 that is the same for every place, what the stage is for, how it works
 and what it delivers, is its standing instructions, and its prompt
 holds the rest, the place's facts and then its run's:
 
-| kind | branch | first stage starts unready | lands; its last stage's `on_fail` | stages, each with its deliverable |
-|---|---|---|---|---|
-| **fix@3** | `fix/<name>` | yes | yes; `code` | a statechart kind (175) of one region: `code`, fix@2's stage, its prompt telling its agent to check the code it changes with `{{check}}`, the merge queue's command for it (227, C.6); then the region's final state, and the place is submitted (176). A failed submission or a conflict, read from `place.submission` (178), sends it back to code with the merge queue's words while flume has submitted it at most three times, as `place.submissions` counts; past that no transition takes it and the place waits on its caller, whose retry submits it again (130, 176). Code's own goings-back, a session that found work, keep a bound of their own, `max_send_backs`, three, counted in the place's held state over the place's life. The two counts stay apart because each is read where its cause is recorded, the submissions in the merge queue's record and the goings-back in the held state (178), and a caller past either reads which one ran out. A stage ended `stopped` past its bound enters `waiting`, a decision the caller answers `retry`, back to code (22, 176) |
-| **chore@3** | `chore/<name>` | yes | yes; `code` | fix@3's states under chore's prefix (22) |
-| **change@6** | `change/<name>` | no | yes; `apply` | a statechart kind (175) of one region, its stages named for OpenSpec's three steps: `propose`, change@5's construct; `apply`, change@5's code, with fix@3's `{{check}}` instruction; `verify`, change@5's verify, which commits its report and, as its last act, archives the change by `openspec archive <name> --yes` and delivers it archived (C.3). Then the region's final state, and the place is submitted (176). A verify finding sends it back to apply within verify's own bound, `max_send_backs`, three, and a failed submission or a conflict sends it back to apply within the submissions' bound, each counted as in fix@3. A stage ended `stopped` past its bound enters `waiting`, answered `retry`, back to apply. The newest change on a release that runs statechart kinds, so a launch naming no version there in a repository whose lock records none runs it (154, 155) (22) |
-| **fix@2** | `fix/<name>` | yes | yes; `code` | `code`: `commits`, as fix@1's, in the mode `full`, its prompt saying its one way to ask and its way to stop short naming no work it cannot deliver past (flume record 0064) |
-| **chore@2** | `chore/<name>` | yes | yes; `code` | fix@2's stage under chore's prefix (flume record 0064) |
-| **change@5** | `change/<name>` | no | yes; `code` | change@4's stages, each working the change through OpenSpec's own commands (C.3). Each runs them as the repository's instructions run its tools, never through an agent program's skill or command for them. `construct` writes each part from `openspec instructions <part> --change <name> --json` until `openspec status` reads the change's planning complete. It commits the change only once `openspec validate <name> --strict` passes. `code` works through the tasks `openspec instructions apply --change <name> --json` gives, ticking each at its line once its own check passes. `verify` runs the repository's whole checks once and checks the work against the change, every task done and the strict check passing. It archives the change by `openspec archive <name> --yes`, and stops short finding with the archive's words where it refuses. The newest on a release that runs no statechart kind, so a launch naming no version there in a repository whose lock records none runs it (154, 155). (flume record 0077, proposed) |
-| **change@4** | `change/<name>` | no | yes; `code` | change@3's stages, each in the mode `full`, its prompt saying its one way to ask. (flume record 0064) |
-| **fix@1** | `fix/<name>` | yes | yes; `code` | `code`: `commits` |
-| **chore@1** | `chore/<name>` | yes | yes; `code` | `code`: `commits`; fix@1's stage under a prefix of its own, so a branch's name says which it was |
-| **change@3** | `change/<name>` | no | yes; `code` | `construct`: `change`, each task naming the narrowest check that shows it done, a test by name, a package's tests or a lint of the files it touched, and none running the repository's whole checks or a task group's; `code`: `tasks`, not repeating, one agent for the whole change; `verify`: `archived`, its prompt running the repository's whole checks once before it checks the work as change@2's does. (flume record 0054, accepted by the user 2026-11-06) |
-| **change@2** | `change/<name>` | no | yes; `code` | `construct`: `change`; `code`: `tasks`, repeating per task group (140); `verify`: `archived`. The verify prompt checks the work against the change and commits its report as `verify.md` in the change's directory. It then archives the change on the place's branch, the report with it, or stops short finding, with what fails, which sends the place back to code (131). The code prompt, sent again with a failed submission's or a finding's words, fixes what they name and records the fix as a task of the change, ticked. The code stage's standing instructions hold what every repetition is told alike; its prompt holds the place's and the change's paths, then its group, the notes' path and its words, which come last (141, 148). |
-| **plan@1** | `plan/<name>` | no | yes; `code` | `plan`: `plan`, in the agent profile's planning mode, ended by its caller's finish (163); `code`: `commits`, fix@1's code stage with the plan accepted, `{{plan}}`, in its prompt, sent again with a failed submission's words |
-| **change@1** | `change/<name>` | no | yes; `code` | `construct`: `change`; `code`: `tasks`, not repeating, one agent for the whole change; `verify`: `archived`, as change@2's. Kept beside change@2 (22): a repository picks it by recording `flume/change@1` in its lock, a launch by naming `change@1`, and a place launched at it keeps it (21) |
+| kind | input | branch | first stage starts unready | lands; its last stage's `on_fail` | stages, each with its deliverable |
+|---|---|---|---|---|---|
+| **fix@3** | failed landing | `fix/<name>` | yes | yes; `code` | a statechart kind (175) of one region: `code`, fix@2's stage, its prompt telling its agent to check the code it changes with `{{check}}`, the merge queue's command for it (227, C.6); then the region's final state, and the place is submitted (176). A failed submission or a conflict, read from `place.submission` (178), sends it back to code with the merge queue's words while flume has submitted it at most three times, as `place.submissions` counts; past that no transition takes it and the place waits on its caller, whose retry submits it again (130, 176). Code's own goings-back, a session that found work, keep a bound of their own, `max_send_backs`, three, counted in the place's held state over the place's life. The two counts stay apart because each is read where its cause is recorded, the submissions in the merge queue's record and the goings-back in the held state (178), and a caller past either reads which one ran out. A stage ended `stopped` past its bound enters `waiting`, a decision the caller answers `retry`, back to code (22, 176) |
+| **chore@3** | intent | `chore/<name>` | yes | yes; `code` | fix@3's states under chore's prefix (22) |
+| **change@6** | unit | `change/<name>` | no | yes; `apply` | a statechart kind (175) of one region, its stages named for OpenSpec's three steps: `propose`, change@5's construct; `apply`, change@5's code, with fix@3's `{{check}}` instruction; `verify`, change@5's verify, which commits its report and, as its last act, archives the change by `openspec archive <name> --yes` and delivers it archived (C.3). Then the region's final state, and the place is submitted (176). A verify finding sends it back to apply within verify's own bound, `max_send_backs`, three, and a failed submission or a conflict sends it back to apply within the submissions' bound, each counted as in fix@3. A stage ended `stopped` past its bound enters `waiting`, answered `retry`, back to apply. The newest change on a release that runs statechart kinds, so a launch naming no version there in a repository whose lock records none runs it (154, 155) (22) |
+| **fix@2** | failed landing | `fix/<name>` | yes | yes; `code` | `code`: `commits`, as fix@1's, in the mode `full`, its prompt saying its one way to ask and its way to stop short naming no work it cannot deliver past (flume record 0064) |
+| **chore@2** | intent | `chore/<name>` | yes | yes; `code` | fix@2's stage under chore's prefix (flume record 0064) |
+| **change@5** | unit | `change/<name>` | no | yes; `code` | change@4's stages, each working the change through OpenSpec's own commands (C.3). Each runs them as the repository's instructions run its tools, never through an agent program's skill or command for them. `construct` writes each part from `openspec instructions <part> --change <name> --json` until `openspec status` reads the change's planning complete. It commits the change only once `openspec validate <name> --strict` passes. `code` works through the tasks `openspec instructions apply --change <name> --json` gives, ticking each at its line once its own check passes. `verify` runs the repository's whole checks once and checks the work against the change, every task done and the strict check passing. It archives the change by `openspec archive <name> --yes`, and stops short finding with the archive's words where it refuses. The newest on a release that runs no statechart kind, so a launch naming no version there in a repository whose lock records none runs it (154, 155). (flume record 0077, proposed) |
+| **change@4** | unit | `change/<name>` | no | yes; `code` | change@3's stages, each in the mode `full`, its prompt saying its one way to ask. (flume record 0064) |
+| **fix@1** | failed landing | `fix/<name>` | yes | yes; `code` | `code`: `commits` |
+| **chore@1** | intent | `chore/<name>` | yes | yes; `code` | `code`: `commits`; fix@1's stage under a prefix of its own, so a branch's name says which it was |
+| **change@3** | unit | `change/<name>` | no | yes; `code` | `construct`: `change`, each task naming the narrowest check that shows it done, a test by name, a package's tests or a lint of the files it touched, and none running the repository's whole checks or a task group's; `code`: `tasks`, not repeating, one agent for the whole change; `verify`: `archived`, its prompt running the repository's whole checks once before it checks the work as change@2's does. (flume record 0054, accepted by the user 2026-11-06) |
+| **change@2** | unit | `change/<name>` | no | yes; `code` | `construct`: `change`; `code`: `tasks`, repeating per task group (140); `verify`: `archived`. The verify prompt checks the work against the change and commits its report as `verify.md` in the change's directory. It then archives the change on the place's branch, the report with it, or stops short finding, with what fails, which sends the place back to code (131). The code prompt, sent again with a failed submission's or a finding's words, fixes what they name and records the fix as a task of the change, ticked. The code stage's standing instructions hold what every repetition is told alike; its prompt holds the place's and the change's paths, then its group, the notes' path and its words, which come last (141, 148). |
+| **plan@1** | intent | `plan/<name>` | no | yes; `code` | `plan`: `plan`, in the agent profile's planning mode, ended by its caller's finish (163); `code`: `commits`, fix@1's code stage with the plan accepted, `{{plan}}`, in its prompt, sent again with a failed submission's words |
+| **change@1** | unit | `change/<name>` | no | yes; `code` | `construct`: `change`; `code`: `tasks`, not repeating, one agent for the whole change; `verify`: `archived`, as change@2's. Kept beside change@2 (22): a repository picks it by recording `flume/change@1` in its lock, a launch by naming `change@1`, and a place launched at it keeps it (21) |
 
 Each stage of flume's own kinds, from each kind's version after those
 above, gives its agents the mode `full` (162, 169), since it works in
@@ -4478,7 +4558,7 @@ repeating stage's notes, `notes/<stage>.md`, which `{{notes}}` names
 and flume never reads (141), the plan its caller accepted,
 `plan.md`, which `{{plan}}` names (163), the launch's parameters,
 `params`, which a command's `{{params}}` names and flume never reads
-(224), and each file a start's
+(224), the launch's input, `input`, which `{{input}}` names (228), and each file a start's
 command writes for its program beside the start's record, own settings
 among them, and a command stage's exit status and `output.log` (223),
 readable by the host's user alone (196); it goes when the
@@ -5671,10 +5751,10 @@ These are not requirements.
   name is known, and the next settle removes the document and lets go
   of its deliveries (43, 56, 62; weir 104 to 107; flume record 0061,
   accepted 2026-11-09).
-- **S130.** A repository declares update@1, whose first stage is a
-  command stage running the release's move, with an agent stage it
-  reaches only from a failure. millpond launches it at a low priority,
-  with two patch releases' notes as its brief by `--brief-file` and both
+- **S130.** A repository declares update@1, which takes an intent,
+  its first stage a command stage running the release's move, with an
+  agent stage it reaches only from a failure. millpond launches it at a
+  low priority, with its item as the intent, two patch releases' notes as its brief by `--brief-file` and both
   dependencies in one `--params-file`. The host's bound is spent on
   other places' agents, and the command stage starts at once. Its
   command reads the parameters, moves both pins, commits and exits with
@@ -5753,6 +5833,20 @@ These are not requirements.
   agent program's own spans and token counts name the place and its
   intent. No span or record holds the stop-short's words, and no metric
   names the place (216 to 220).
+- **S132.** A caller lists the kinds a repository can run with
+  `--input intent`. It offers a person three routes for an intent:
+  chore@3, plan@1, and the repository's own research kind, which
+  delivers a committed report and does not land. The person picks the
+  research kind. The caller launches it with the intent's name and its
+  statement, goals and signals by hash, and the place serves that
+  intent. A launch of change@6 with the same intent is refused naming
+  change@6, the unit it takes and the intent given, and makes nothing.
+  The caller's plan takes the research's report by its commit. Once
+  that plan is approved, each of its units is launched as change@6
+  with its intent, claims, context packet and the plan's approval by
+  hash. When the merge queue sends back the branch of a base place
+  whose kind names fix@3 as its landing fix, flume launches fix@3 with
+  that submission and its blame (4, 22, 203, 228).
 
 <!-- ANCHOR_END: scenarios -->
 <!-- ANCHOR: deliver -->

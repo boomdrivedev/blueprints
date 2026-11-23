@@ -907,7 +907,7 @@ The limit is 8 KiB unless the inbox's settings say otherwise (18).
 
 | operation | how flume satisfies it |
 |---|---|
-| make | `flume launch` with the repository; the kind, any kind flume reads, by its name as a launch names it (flume 19), `fix` or `change` for an operator's send and the rule's for a rule's send; the item's brief as the launch's; a name; and a mark naming the inbox, the item and the send's number. A rule's send also gives the launch's priority, the number `[priorities]` gives the rule's level (flume 70), and its parameters, in the one file `--params-file` names: the stated facts of each of the item's signals, one entry per signal in the order of their event times, for the kind's stages to read (131; the update-ladder talk, 2026-11-12). The name is `<item>--<n>`, n the send's number among the item's sends, from 1. flume makes a worktree at `<repository>/places/<kind>--<name>` on the branch `<prefix>/<name>`, the prefix the kind's, cut from the base's head. It refuses a launch whose branch or place stands (52, 89) |
+| make | `flume launch` with the repository; the kind, any kind flume reads, by its name as a launch names it (flume 19), `chore` or `plan` for an operator's send and the rule's for a rule's send, each a kind that takes an intent (flume 228); the item as that intent, in the one file `--input-file` names: the item's name, its brief as the statement and each of its signals, each by its content hash, and the goals by the hash of the file the repository's flume declaration names for them (flume 149); the item's brief as the launch's; a name; and a mark naming the inbox, the item and the send's number. A rule's send also gives the launch's priority, the number `[priorities]` gives the rule's level (flume 70), and its parameters, in the one file `--params-file` names: the stated facts of each of the item's signals, one entry per signal in the order of their event times, for the kind's stages to read (131; the update-ladder talk, 2026-11-12). The name is `<item>--<n>`, n the send's number among the item's sends, from 1. flume makes a worktree at `<repository>/places/<kind>--<name>` on the branch `<prefix>/<name>`, the prefix the kind's, cut from the base's head. It refuses a launch whose branch or place stands (52, 89) |
 | find | `flume status --json`: the live place of the repository under the send's name, its mark naming the item and the send, its brief the launch's (116, 122) |
 
 ### C.6 Starters
@@ -1109,7 +1109,7 @@ The rest of the stack, which a model builds on unless it says why not:
   | `moves` | writes a batch of moves in one commit |
   | `items` | lists items with their signals, briefs and sends |
   | `brief` | writes an item's brief |
-  | `send` | sends an item to flume as a fix or a change, or items that ask a question to a sounding |
+  | `send` | sends an item to flume as an intent, to a chore or a plan, or items that ask a question to a sounding |
 
 - crew calls millpond's command line as it calls sluice's, and links
   no crate.

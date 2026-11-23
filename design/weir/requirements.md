@@ -488,7 +488,8 @@ redefine these.
     deliverable, and a conversation has none. A kind that lands with no
     stages runs no agent: what its places do is its reader's rule (58).
     A statechart kind is a statechart (94).
-52. A simple kind's declaration holds its version, its stages in order,
+52. A simple kind's declaration holds its version, the one input it
+    takes, an intent, a unit or a failed landing, or none, its stages in order,
     how its places' branches are named, whether its first stage starts
     in a place that could not be made ready, and whether it lands. A
     kind that lands with stages names the stage a failed submission
@@ -524,7 +525,8 @@ redefine these.
     know, and never changes a declaration.
 57. A declaration is checked whole: a simple kind with no stage that
     does not land, a stage with no name or prompt, a field of the wrong
-    shape, a deliverable not of the seven, or a stage that repeats per
+    shape, an input not of the three, a deliverable not of the seven,
+    or a stage that repeats per
     task group and does not deliver tasks ticked, is refused naming the
     field. A statechart kind is checked as 95 says. A version left out
     reads as the first. A kind that lands with no stages declares them
@@ -562,7 +564,8 @@ redefine these.
     not the lock's, naming the kind and both hashes. Reading a lock
     changes nothing, and which locks a reader reads, and how it chooses
     among versions, are the reader's rule.
-94. A statechart kind's declaration holds its version, its title, the
+94. A statechart kind's declaration holds its version, the input it
+    takes as a simple kind's does (52), its title, the
     words a person reads for it, its label, its share of its stream's
     agents where it declares one (flume 180), and its statechart: one or more
     regions side by side, each with its initial state and its states.
@@ -589,7 +592,7 @@ redefine these.
     and regions, a region with no states or whose initial state it does
     not hold, a transition to a state its region does not hold, a guard
     of a form 94 does not name, a join that is not all, any or a count,
-    a deliverable not of the seven, or a field of the wrong shape, is
+    an input not of the three, a deliverable not of the seven, or a field of the wrong shape, is
     refused naming the field (57). Which templates and atoms there are,
     and whether a kind names only those its reader binds, are the
     reader's to say (58).
@@ -815,8 +818,9 @@ redefine these.
 
 122. A policy is a keeper's rules for one inbox, in order. A rule has a
      name no other rule of its policy has, a match (123), and one
-     outcome of three: a kind to launch, named as a launch names it,
-     with the repository it launches in; a person's turn; or a
+     outcome of three: a kind to launch that takes an intent (flume
+     228), named as a launch names it, with the repository it launches
+     in; a person's turn; or a
      drop, with its reason. A rule that launches or gives a person's
      turn has a priority, one of the five levels, and may have a window
      (129). A policy is checked whole, and one that breaks this clause
@@ -1144,6 +1148,7 @@ file the launch names.
 ```toml
 [kinds.bump]
 version = 2               # 1 when omitted (57)
+input = "unit"            # the one input it takes: intent, unit or failed-landing; none when omitted (52)
 branch = "bump"           # the prefix of its places' branches; the kind's name when omitted (52)
 starts_unready = false    # whether its first stage starts in a place that could not be made ready
 lands = true              # whether the work is submitted after the last stage
@@ -1528,7 +1533,7 @@ drop = "a stand-up"            # a drop and its reason (122)
 [[rules]]
 name = "point-releases"
 when = { fact = "level", in = ["patch", "minor"] }
-kind = "update"                # the kind it launches, named as a launch names it
+kind = "update"                # the kind it launches, named as a launch names it; one that takes an intent (122)
 repository = "~/Code/acme/web-app"   # where it launches, as a launch names it
 priority = "low"               # low, normal, elevated, high or urgent
 window = "*/30 * * * *"        # five-field cron (C.5); none when omitted, due at once (129)
