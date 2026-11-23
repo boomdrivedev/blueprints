@@ -108,11 +108,12 @@ never differently for two candidates of one branch (19). A bolt's
 branch reads a flaky key as passed so that work keeps moving; the
 shared branch reads it as not passed until a confined run settles it.
 
-A fault nobody declared, such as a launch that stalled on the host,
-still records a fail. The operator who finds the cause sets that run
-aside, with the reason (116). Its record stays, and from then on no gate
-reads it, so the key reads from its other runs. No session sets aside a
-run: one that could set aside its own fails could land past any check.
+No one sets a result aside, neither a session nor the operator (116).
+A session that could set aside its own fails could land past any check.
+A fail the host caused, such as a launch that stalled on the host, is a
+fault of sluice. sluice is fixed at that cause, so that such a run has
+no outcome and is run again, as a check that could not run or that its
+time limit ended has none (114, 66).
 
 ## Signers and trust
 

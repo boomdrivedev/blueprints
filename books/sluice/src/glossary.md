@@ -25,7 +25,6 @@ and pages, where the two differ.
 | **system** | the processor architecture and operating system a run executes on, named as the toolchain names it | system |
 | **verdict** | a gate's reading of a candidate: for each required check exactly one of passed, failed, missing or flaky | result |
 | **culprit** | the one entry a failed candidate is attributed to | the blamed submission |
-| **set aside** | an operator's record that a recorded run did not judge its check, with the reason | set aside |
 | **landing** | the branch moving to a candidate that passed | landing |
 | **executor** | what ran a check, with its identity and its host; **confined** when nothing of any session could reach the run or its records, **open** otherwise | executor |
 | **host** | a machine on which sessions, sluice or executors run | host |

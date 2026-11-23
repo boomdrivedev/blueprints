@@ -79,8 +79,6 @@ redefine these.
 - **verdict**: a gate's reading of a candidate: for each required check
   exactly one of passed, failed, missing or flaky.
 - **culprit**: the one entry a failed candidate is attributed to.
-- **set aside**: an operator's record that a recorded run did not judge
-  its check, with the reason (116).
 - **landing**: the branch moving to a candidate that passed.
 - **executor**: what ran a check, with its identity and its host;
   **confined** when it ran in a place holding exactly the candidate and
@@ -434,10 +432,10 @@ redefine these.
     pass under the same limits does not undo an earlier fail, nor a
     later fail an earlier pass, since a check that passes and fails on
     one input proves nothing by its order. A fail that was the host's
-    and not the code's leaves the key only by 114, never recorded
-    because the check said it could not run or its executor refused the
-    run something (139), or by 116, set aside by the operator with the
-    reason (S44). A
+    and not the code's leaves the key only by having no outcome: by 114,
+    where the check said it could not run or its executor refused the
+    run something (139), and otherwise by sluice's fix at its cause
+    (116, S44). A
     result under other limits says nothing of a run under these (83),
     and a result under another grant is under another key (138).
 138. A check's key holds the grant of the executor that ran it. Results
@@ -460,11 +458,14 @@ redefine these.
      it states none, passed and failed counted together, the oldest
      removed as the newest arrives, while the tail the record and a
      request's report carry inline stays bounded.
-116. An operator may set aside a recorded run, naming it and the
-     reason, by a record of its own. The run's record is kept. A run set
-     aside has no outcome (60) and is read under no key, from the
-     set-aside on. No session sets aside a run, and a set-aside counts
-     for a gate only when the gate trusts its signer (28).
+116. No result is set aside. Every result a branch's records hold is
+     read under its key, and no command, operator or session marks a
+     recorded run as one that did not judge its check. A fail the host
+     caused, and not the code, is a fault of sluice, and sluice is fixed
+     at that cause. A run the host fails that way has no outcome (60) and
+     is never recorded under its key. A check that could not run (114),
+     a check its executor refused something (139) and a check its time
+     limit ended (66) have none the same way.
 20. The culprit's session is told the failing checks and the candidate
     they failed on. No other session is told of that failure.
 118. What a request shows of its entry, on its checks or in its
@@ -719,20 +720,27 @@ redefine these.
      revision the landing expected, the forge refused the landing
      itself, and forming the chain again would form the same tree.
      sluice writes the refusal in the branch's records with the forge's
-     words whole before anything else acts on the branch. It logs the
-     refusal once, never once per round, and shows it on the branch and
-     on each entry the landing carries. Nothing is formed again for it,
-     no round pushes it again, and the entries behind it wait. Its
+     words whole before anything else acts on the branch. Each round of
+     the branch pushes the landing again, as the same landing, and
+     nothing is formed again for it. A branch whose one work in play is
+     a held landing takes its rounds at the pace of an idle repository,
+     so the landing is pushed again once a minute at most (129). Where
+     the forge takes it, it lands as the landing formed, with no run
+     (122). Where the forge refuses it with the words it gave before,
+     the round writes nothing. Where the forge gives new words, the
+     round writes them on the held landing. sluice logs the refusal once
+     for each of the forge's distinct words, never once per round. The
+     branch and each entry the landing carries show the forge's latest
+     words. The entries behind it wait. Its
      entries are no longer landing: each is withdrawn as 5 allows, by
      its submitter, its planner or the operator, and by a submission
      from its place (67). Once one leaves, sluice drops the landing, and
      the rest go back to the queue and are formed again on the branch
      (24). A wait on one of its entries ends saying the forge refused
      its landing, in the forge's words. Its submitter is told as an
-     outcome is told (50), and the refusal decides no outcome. Once the
-     forge's rule has changed, the operator asks for the landing to be
-     pushed again, and it lands as the same landing where the forge
-     takes it (122). (Added 2026-11-13: sluice record 0124.)
+     outcome is told (50), and the refusal decides no outcome. No
+     command pushes a held landing: its rounds alone push it. (sluice
+     record 0124; the user's ruling of 2026-11-23.)
 25. sluice releases every place it made for a candidate once that
     candidate's verdict is read, and never releases a session's place.
     A session learns its entry landed (50), and releasing its place is
@@ -1544,13 +1552,9 @@ not accepted, leads nothing and claims nothing (137).
 Since any instance may write the branch's state, a landing reads its
 verdict again from the signed run records before it moves the branch.
 
-A set-aside (116) is one JSON document per line in a log of its own
-beside the results log. It names the run by its key, its system and the
-time it was recorded, and gives the reason, who set it aside, and when.
-A reader of the results log alone is unchanged. On a signer's ref, a
-set-aside is a statement signed as a run record is, of sluice's own
-kind, since no catalogued kind says that a recorded run did not judge
-its check (141).
+No record sets a result aside (116), and sluice defines no signed kind
+of its own: every record a signer signs is of a kind in in-toto's
+catalogue (141).
 
 ### C.7 Policy
 
@@ -1842,13 +1846,14 @@ section asked is answered by a clause.
   a session's run of them, and a check fails. Nothing sluice asks of the
   host sets the fail aside: it is recorded under its key as any fail is,
   unless the check said it could not run or the executor reports it
-  refused the run something (114, 139), and the operator may set it
-  aside with the reason (116, S44). A later run of the same head passes,
-  and the key holds both results (19).
+  refused the run something (114, 139). Nothing sets it aside (116,
+  S44). A later run of the same head passes, and the key holds both
+  results (19).
 - **S44.** A shared branch's key holds a fail a stalled host produced
-  and a later pass. The operator sets the fail aside, with the reason.
-  The key reads passed from its passes, and the fail's record is still
-  there to read (116).
+  and a later pass. No command sets the fail aside: the key reads as
+  the branch's policy reads a flaky key, passed or not passed (19). The
+  stall is a fault of sluice, fixed in sluice so that a run a stalled
+  host fails has no outcome and is run again (114, 116).
 - **S45.** `main` holds for five minutes and tests every candidate. A
   is submitted; ten seconds later B and C are. A passes at 20m while
   A+B+C is under test, and waits. A+B+C passes at 20m10s, and `main`
