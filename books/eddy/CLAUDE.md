@@ -4,7 +4,7 @@ The source is `design/capture/design.md`: "Meetings: eddy", the
 capture contract its parts print, and the rows of the tables that name
 eddy. eddy has no statement of its own yet. When one is written under
 `design/eddy/requirements.md`, the book gains an appendix that includes
-it by anchor, as `books/sluice/` does, and the chapters cite its
+it by anchor, and the chapters cite its
 clauses in place of the design's prose.
 
 - `books/VOICE.md` binds every chapter. Plain prose, no em dashes.
