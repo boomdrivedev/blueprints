@@ -1,0 +1,26 @@
+{
+  "schema": "sluice/submission@1",
+  "id": 8,
+  "branch": "main",
+  "head": "b2d65dc9039c9ea38cb5c7d1ec5e6de3db2f3ad2",
+  "from": {
+    "agent": "boomdrive-design",
+    "worktree": "pull/14",
+    "head": "design/a-slow-layer-runs-where-its-subject-changes"
+  },
+  "submitted": "2026-11-19T20:57:28Z",
+  "after": [],
+  "priority": 0,
+  "attempt": 1,
+  "state": "landed",
+  "tested": {
+    "combination": "290682ee611cc1c1be37fad139670e7588e557a2",
+    "on": "cb2eb8e13f5daaaa774560129491fe6954be1c70",
+    "submissions": [
+      8
+    ]
+  },
+  "result": "passed",
+  "landed_as": "340ef0f9db50273156aec3995e0114d92121205f",
+  "subject": "design/a-slow-layer-runs-where-its-subject-changes"
+}

@@ -1,0 +1,26 @@
+{
+  "schema": "sluice/submission@1",
+  "id": 4,
+  "branch": "main",
+  "head": "49234a5645bc87784ef014631db67705a118385d",
+  "from": {
+    "agent": "boomdrive-design",
+    "worktree": "pull/10",
+    "head": "design/flumes-kinds-are-statecharts"
+  },
+  "submitted": "2026-11-19T18:58:22Z",
+  "after": [],
+  "priority": 0,
+  "attempt": 1,
+  "state": "landed",
+  "tested": {
+    "combination": "134989ec66e85574f12fbe99842778c146b0492f",
+    "on": "8b733469d6a8594ea9d685ea325db90188a6fc41",
+    "submissions": [
+      4
+    ]
+  },
+  "result": "passed",
+  "landed_as": "6ee0eb218864af921559aceca4df28d53f6a9221",
+  "subject": "design/flumes-kinds-are-statecharts"
+}

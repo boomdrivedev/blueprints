@@ -1,0 +1,27 @@
+{
+  "schema": "sluice/submission@1",
+  "id": 11,
+  "branch": "main",
+  "head": "9de7d637da50d009fc724c2e6df3420ba31bb443",
+  "from": {
+    "agent": "design/sluice-drops-push-and-set-aside",
+    "worktree": "pull/17",
+    "head": "design/sluice-drops-push-and-set-aside"
+  },
+  "submitted": "2026-11-23T17:20:37Z",
+  "after": [],
+  "priority": 0,
+  "attempt": 1,
+  "state": "landed",
+  "tested": {
+    "combination": "6cabdd230a2a3612c6872bdc467b3ca2198c5eac",
+    "on": "0c978401c8560f3f7aa7d30ff2da7032875288a1",
+    "submissions": [
+      11
+    ]
+  },
+  "result": "passed",
+  "landed_as": "381af92d6aa09c167e75a7905b95a4835ea7e850",
+  "subject": "design/sluice-drops-push-and-set-aside",
+  "under_test_ms": 21000
+}

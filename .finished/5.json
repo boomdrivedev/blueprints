@@ -1,0 +1,26 @@
+{
+  "schema": "sluice/submission@1",
+  "id": 5,
+  "branch": "main",
+  "head": "d6b26ca380892a7b8c019eb643b933e17a197b3f",
+  "from": {
+    "agent": "boomdrive-design",
+    "worktree": "pull/11",
+    "head": "design/flumes-kinds-follow-openspecs-commands"
+  },
+  "submitted": "2026-11-19T19:09:17Z",
+  "after": [],
+  "priority": 0,
+  "attempt": 1,
+  "state": "landed",
+  "tested": {
+    "combination": "f65a43e97db21880571c22a98c4b5ac2822124ae",
+    "on": "6ee0eb218864af921559aceca4df28d53f6a9221",
+    "submissions": [
+      5
+    ]
+  },
+  "result": "passed",
+  "landed_as": "226237a44425e368856ef02859aec4decca362e5",
+  "subject": "design/flumes-kinds-follow-openspecs-commands"
+}

@@ -1,0 +1,26 @@
+{
+  "schema": "sluice/submission@1",
+  "id": 7,
+  "branch": "main",
+  "head": "2efcdbb50fc33cc108ecef7310ff23aa1e4003ac",
+  "from": {
+    "agent": "boomdrive-design",
+    "worktree": "pull/13",
+    "head": "design/a-statechart-kinds-two-bounds"
+  },
+  "submitted": "2026-11-19T19:57:20Z",
+  "after": [],
+  "priority": 0,
+  "attempt": 1,
+  "state": "landed",
+  "tested": {
+    "combination": "f005ed3bfb3b16779a4c165dda82b72837d1010d",
+    "on": "b1a3ee93046ebd870b14c35ff03c649e82331e4b",
+    "submissions": [
+      7
+    ]
+  },
+  "result": "passed",
+  "landed_as": "cb2eb8e13f5daaaa774560129491fe6954be1c70",
+  "subject": "design/a-statechart-kinds-two-bounds"
+}

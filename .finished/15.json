@@ -1,0 +1,27 @@
+{
+  "schema": "sluice/submission@1",
+  "id": 15,
+  "branch": "main",
+  "head": "18ad9f34b37173595d74c32e6b274d0dcb18affe",
+  "from": {
+    "agent": "chore/sluices-design-leaves-blueprints",
+    "worktree": "pull/21",
+    "head": "chore/sluices-design-leaves-blueprints"
+  },
+  "submitted": "2026-11-24T02:40:27Z",
+  "after": [],
+  "priority": 0,
+  "attempt": 1,
+  "state": "landed",
+  "tested": {
+    "combination": "fd616fa69032564dfee897e49473acdaeca46c0a",
+    "on": "51cae4d957fb90d2899617c5e9449dff8c9ba4f7",
+    "submissions": [
+      15
+    ]
+  },
+  "result": "passed",
+  "landed_as": "10d41b2b1e4dc7e4c054983e162ba301790bb4af",
+  "subject": "chore/sluices-design-leaves-blueprints",
+  "under_test_ms": 36000
+}

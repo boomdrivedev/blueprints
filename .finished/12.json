@@ -1,0 +1,27 @@
+{
+  "schema": "sluice/submission@1",
+  "id": 12,
+  "branch": "main",
+  "head": "13d49aebfa298e67c1a8d4955fa3b740607c2689",
+  "from": {
+    "agent": "design/a-kind-declares-its-input",
+    "worktree": "pull/18",
+    "head": "design/a-kind-declares-its-input"
+  },
+  "submitted": "2026-11-23T19:38:23Z",
+  "after": [],
+  "priority": 0,
+  "attempt": 1,
+  "state": "landed",
+  "tested": {
+    "combination": "924881cfd43163cec3ec1d5c7cb53425d40dd01a",
+    "on": "381af92d6aa09c167e75a7905b95a4835ea7e850",
+    "submissions": [
+      12
+    ]
+  },
+  "result": "passed",
+  "landed_as": "fecab7205fbcd364c977d4c9f51e19473f344061",
+  "subject": "design/a-kind-declares-its-input",
+  "under_test_ms": 20000
+}

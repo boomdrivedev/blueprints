@@ -1,0 +1,26 @@
+{
+  "schema": "sluice/submission@1",
+  "id": 9,
+  "branch": "main",
+  "head": "5b0f39a956cbd1bae4c7f3f56a94cd60ab2e676a",
+  "from": {
+    "agent": "boomdrive-design",
+    "worktree": "pull/15",
+    "head": "design/timber-59-notes"
+  },
+  "submitted": "2026-11-19T21:04:19Z",
+  "after": [],
+  "priority": 0,
+  "attempt": 1,
+  "state": "landed",
+  "tested": {
+    "combination": "60b9449bfd3952cbd1cfe79f97687b1ee0d726c6",
+    "on": "340ef0f9db50273156aec3995e0114d92121205f",
+    "submissions": [
+      9
+    ]
+  },
+  "result": "passed",
+  "landed_as": "8e242f7a04899a1ca80e8ef84a748aeee0cb6124",
+  "subject": "design/timber-59-notes"
+}
